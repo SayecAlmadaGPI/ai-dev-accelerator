@@ -1,0 +1,61 @@
+{
+  "project": {
+    "name": "project-status-date-filter",
+    "spec_ref": "../spec.md",
+    "roadmap_ref": ".planning/roadmap.md",
+    "created": "2026-07-02",
+    "last_updated": "2026-07-02"
+  },
+  "current_milestone": "M1",
+  "current_phase": "1.1",
+  "phases": [
+    {
+      "id": "1.1",
+      "milestone": "M1",
+      "status": "en-ejecucion",
+      "owner_agent": "gsd-executor",
+      "tasks_total": 3,
+      "tasks_done": 0,
+      "tasks_blocked": 0,
+      "blocked_reason": null
+    },
+    {
+      "id": "1.2",
+      "milestone": "M1",
+      "status": "planeada",
+      "owner_agent": "gsd-executor",
+      "tasks_total": 3,
+      "tasks_done": 0,
+      "tasks_blocked": 0,
+      "blocked_reason": null
+    },
+    {
+      "id": "1.3",
+      "milestone": "M1",
+      "status": "planeada",
+      "owner_agent": "gsd-verifier",
+      "tasks_total": 2,
+      "tasks_done": 0,
+      "tasks_blocked": 0,
+      "blocked_reason": null
+    }
+  ],
+  "active_tasks": [
+    "tasks/phase-1.1-task-01.md"
+  ],
+  "blocked_items": [],
+  "verification_gates": {
+    "plan_check_done": true,
+    "post_execute_verify_done": false,
+    "ship_ready": false
+  },
+  "artifacts_produced": [],
+  "session_log": [
+    {
+      "date": "2026-07-02",
+      "session_id": "session-001",
+      "summary": "Inicialización: spec aprobada, roadmap generado con 3 fases, 8 tareas.",
+      "next_handoff": "Ejecutar phase 1.1 con /gsd-execute-phase; empezar por task-01."
+    }
+  ]
+}

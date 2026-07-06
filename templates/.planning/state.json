@@ -1,0 +1,50 @@
+{
+  "$comment": "state.json — Estado de la máquina de estados de GSD. El filesystem es la base de datos. Este archivo es la 'posición actual' del proyecto: qué fase está activa, qué tareas están pendientes, qué está bloqueado. Los agentes lo leen al arrancar para reconstruir el contexto sin releer toda la historia.",
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "project": {
+    "name": "[nombre-del-proyecto]",
+    "spec_ref": "path/to/spec.md",
+    "roadmap_ref": ".planning/roadmap.md",
+    "created": "YYYY-MM-DD",
+    "last_updated": "YYYY-MM-DD"
+  },
+  "current_milestone": "M1",
+  "current_phase": "1.1",
+  "phases": [
+    {
+      "id": "1.1",
+      "milestone": "M1",
+      "status": "planeada",
+      "owner_agent": "gsd-executor",
+      "tasks_total": 0,
+      "tasks_done": 0,
+      "tasks_blocked": 0,
+      "blocked_reason": null
+    }
+  ],
+  "active_tasks": [],
+  "blocked_items": [
+    {
+      "id": "D-1",
+      "ref": "spec.md#section-10",
+      "reason": "[NEEDS CLARIFICATION] pendiente de respuesta del propietario",
+      "blocked_since": "YYYY-MM-DD"
+    }
+  ],
+  "verification_gates": {
+    "plan_check_done": false,
+    "post_execute_verify_done": false,
+    "ship_ready": false
+  },
+  "artifacts_produced": [
+    { "type": "endpoint", "path": "src/api/projects.ts", "phase": "1.1" }
+  ],
+  "session_log": [
+    {
+      "date": "YYYY-MM-DD",
+      "session_id": "session-001",
+      "summary": "Inicialización del proyecto y generación del roadmap.",
+      "next_handoff": "Discutir preferencias de implementación de la phase 1.1 con /gsd-discuss-phase."
+    }
+  ]
+}
