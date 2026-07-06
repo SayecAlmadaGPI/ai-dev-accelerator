@@ -96,7 +96,7 @@ APÉNDICES ── Kit de Supervivencia
 
 ### Temas
 - **Agent = Model + Harness** (definición de Birgitta Böckeler / Thoughtworks).
-- **Inner Harness vs. Outer Harness:** qué controla el vendor (Cursor rules, Claude Code system prompt) vs. qué construís vos (AGENTS.md, CI, hooks).
+- **Inner Harness vs. Outer Harness:** qué controla el vendor (Cursor rules, Claude Code system prompt) vs. qué construyes tú (AGENTS.md, CI, hooks).
 - **Por qué los agentes capaces fallan:** non-determinismo, falta de estado, contexto corruptible, incentivos perversos (optimizar métricas proxy).
 - **El repositorio como system of record:** todo lo que importa debe vivir fuera de la conversación.
 - **Construcción de restricciones explícitas:** reglas que el agente no puede romper porque el entorno se lo impide, no porque se lo pedís amablemente.
@@ -122,7 +122,7 @@ APÉNDICES ── Kit de Supervivencia
 ### Temas
 - **Evolución del concepto:** de TDD/BDD a SDD en la era de agentes de IA.
 - **Tres niveles de rigor:**
-  - *Spec-First:* spec antes de codear; puede derivar después (prototipos).
+  - *Spec-First:* spec antes de programar; puede derivar después (prototipos).
   - *Spec-Anchored:* spec mantenida junto al código; tests fuerzan alineación (sweet spot).
   - *Spec-as-Source:* spec es lo único que editan humanos; código generado totalmente (dominios confiables).
 - **La spec como "super-prompt":** descompone problemas complejos en componentes modulares que caben en context windows.
