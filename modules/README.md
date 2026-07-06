@@ -9,11 +9,12 @@ para capacitación guiada.
 | Módulo | Archivo | Estado |
 |--------|---------|--------|
 | M0 — Lenguaje Operativo | [`00-lenguaje-operativo.md`](./00-lenguaje-operativo.md) | ✅ publicado |
+| M1 — Mentalidad de Harness | [`01-mentalidad-harness.md`](./01-mentalidad-harness.md) | ✅ publicado |
 | M2 — Especificar, Planificar y Ejecutar con Agentes | [`02-spec-plan-execute.md`](./02-spec-plan-execute.md) | ✅ publicado |
 
 ## Pendientes (según `BLUEPRINT.md`)
 
-- M1 — Mentalidad de Harness
+- M3 — Diseño del Entorno de Trabajo (Workbench)
 - M3 — Diseño del Entorno de Trabajo (Workbench)
 - M4 — Flujo de Trabajo y Handoffs
 - M5 — Herramientas y Protocolos de Integración
