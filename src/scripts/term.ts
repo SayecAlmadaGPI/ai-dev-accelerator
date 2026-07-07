@@ -72,8 +72,20 @@ export async function initTerm(): Promise<void> {
   await new Promise((resolve) => requestAnimationFrame(resolve));
 
   term.open(host);
+
+  // xterm mide el contenedor en open(); si aún no tiene layout calculado,
+  // el canvas queda en 0x0. Reintentamos fit() en múltiples momentos.
   safeFit();
-  term.focus();
+  requestAnimationFrame(() => {
+    safeFit();
+    term.refresh(0, term.rows - 1);
+  });
+  setTimeout(() => {
+    safeFit();
+    term.focus();
+    term.refresh(0, term.rows - 1);
+  }, 50);
+  setTimeout(() => safeFit(), 300);
 
   // Click en cualquier parte del terminal enfoca el textarea interno.
   host.addEventListener('click', () => term.focus());

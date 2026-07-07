@@ -608,9 +608,6 @@ aside[data-aside-type] {
   overflow: hidden;
   background: #0d0a08;
   box-shadow: var(--sl-shadow-md);
-  display: flex;
-  flex-direction: column;
-  height: 24rem;
 }
 .aida-term__bar {
   display: flex;
@@ -656,8 +653,7 @@ aside[data-aside-type] {
 }
 .aida-term__host {
   position: relative;
-  flex: 1;
-  min-height: 18rem;
+  height: 20rem;
   padding: 0;
 }
 .aida-term .xterm {
