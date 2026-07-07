@@ -597,9 +597,8 @@ aside[data-aside-type] {
 
 /* =============================================================================
    Fase 4c — Simulador de terminal (.aida-term*)
-   Contenedor del xterm.js + barra de selector de escenario. Reutiliza
-   tokens --sl-* (radio 14, hairline, fondo sidebar). xterm trae su propio CSS
-   (importado en term.ts); acá solo envolvemos. Sin @layer.
+   Terminal fake puro en vanilla (sin xterm.js). Pantalla scrollable +
+   línea de input fija al fondo. Mismo estilo visual, 100% confiable.
    ========================================================================== */
 .aida-term {
   margin-top: 1.5rem;
@@ -608,6 +607,9 @@ aside[data-aside-type] {
   overflow: hidden;
   background: #0d0a08;
   box-shadow: var(--sl-shadow-md);
+  display: flex;
+  flex-direction: column;
+  height: 24rem;
 }
 .aida-term__bar {
   display: flex;
@@ -616,6 +618,7 @@ aside[data-aside-type] {
   padding: 0.55rem 0.8rem;
   border-bottom: 1px solid var(--sl-color-hairline);
   background: color-mix(in srgb, var(--sl-color-bg-sidebar) 90%, transparent);
+  flex-shrink: 0;
 }
 .aida-term__sel-label {
   font-size: var(--sl-text-xs);
@@ -651,17 +654,71 @@ aside[data-aside-type] {
   border-radius: 4px;
   color: var(--sl-color-text-accent);
 }
-.aida-term__host {
-  position: relative;
-  height: 20rem;
+
+/* Pantalla de salida */
+.aida-term__screen {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--sl-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #e9e3da;
+  background: #0d0a08;
+}
+.aida-term__line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
   padding: 0;
 }
-.aida-term .xterm {
+.aida-term__line--title {
+  color: #fcd34d;
+  font-weight: 700;
+}
+.aida-term__line--warn {
+  color: #fcd34d;
+}
+.aida-term__line--error {
+  color: #ef4444;
+}
+
+/* Línea de input */
+.aida-term__inputline {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  background: #0d0a08;
+  flex-shrink: 0;
+}
+.aida-term__prompt {
+  font-family: var(--sl-font-mono);
+  font-size: 13px;
+  color: #f59e0b;
+  font-weight: 600;
+  white-space: pre;
+  flex-shrink: 0;
+}
+.aida-term__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e9e3da;
+  font-family: var(--sl-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
   padding: 0;
+  margin: 0;
+  outline: none;
+  caret-color: #fcd34d;
 }
-.aida-term .xterm-viewport {
-  background-color: #0d0a08 !important;
+.aida-term__input::placeholder {
+  color: var(--sl-color-gray-4);
+  opacity: 0.5;
 }
+
 @media (max-width: 40rem) {
   .aida-term__hint {
     display: none;

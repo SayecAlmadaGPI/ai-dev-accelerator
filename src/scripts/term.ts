@@ -1,28 +1,27 @@
-// Isla vanilla del simulador de terminal (Fase 4c). Se monta en
-// <div data-term-mount>. Carga xterm.js + addon-fit (pesado) vía import()
-// dinámico solo en esta página. Fake shell que interpreta el set curado de
-// comandos por escenario (src/data/terminal-scenarios.ts) + help/clear/ls/echo
-// globales. Sin React, patrón Fase 3/4.
+// Isla vanilla del simulador de terminal (Fase 4c rewrite).
+// Reemplaza xterm.js (pesado y frágil en static sites) por un terminal fake
+// puro en vanilla: un div de output + un input para el prompt. Mismo
+// comportamiento (help/clear/ls/echo + comandos por escenario), pero 100%
+// confiable en cualquier navegador sin dependencias pesadas.
 //
-// IMPORTANTE: xterm.js necesita que el contenedor tenga dimensiones reales
-// cuando term.open() se llama. Usamos requestAnimationFrame para esperar al
-// layout, y damos al host tabindex=0 + focus() para asegurar que reciba input.
+// Patrón: output append-only + input fijo al fondo. El input siempre tiene
+// focus. Up/Down recorren historial. Ctrl+C limpia línea. Ctrl+L limpia
+// screen. Enter ejecuta.
 
 import { scenarios, type TermScenario } from '../data/terminal-scenarios';
 
-let term: any = null;
-let fit: any = null;
 let current: TermScenario = scenarios[0];
 let line = '';
+let history: string[] = [];
+let histIdx = -1;
 
-export async function initTerm(): Promise<void> {
+export function initTerm(): void {
   if (typeof document === 'undefined') return;
   const mount = document.querySelector<HTMLElement>('[data-term-mount]');
-  if (!mount || term) return; // un solo terminal por página
+  if (!mount) return;
 
   mount.classList.add('aida-term');
 
-  // Selector de escenarios + contenedor del terminal.
   mount.innerHTML = `
     <div class="aida-term__bar">
       <label class="aida-term__sel-label" for="aida-term-sel">Escenario</label>
@@ -33,71 +32,140 @@ export async function initTerm(): Promise<void> {
       </select>
       <span class="aida-term__hint">Escribe <code>help</code> + Enter</span>
     </div>
-    <div class="aida-term__host" tabindex="0" aria-label="Terminal de práctica"></div>`;
+    <div class="aida-term__screen" aria-live="polite" aria-label="Salida del terminal"></div>
+    <div class="aida-term__inputline">
+      <span class="aida-term__prompt" aria-hidden="true"></span>
+      <input class="aida-term__input" type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Comando" />
+    </div>`;
 
-  const host = mount.querySelector<HTMLElement>('.aida-term__host')!;
+  const screen = mount.querySelector<HTMLElement>('.aida-term__screen')!;
+  const prompt = mount.querySelector<HTMLElement>('.aida-term__prompt')!;
+  const input = mount.querySelector<HTMLInputElement>('.aida-term__input')!;
 
-  // Lazy-load: xterm + addon-fit + CSS solo acá.
-  const [{ Terminal }, { FitAddon }] = await Promise.all([
-    import('@xterm/xterm'),
-    import('@xterm/addon-fit'),
-  ]);
-  await import('@xterm/xterm/css/xterm.css');
+  function setPrompt() {
+    prompt.textContent = current.prompt;
+  }
 
-  fit = new FitAddon();
-  term = new Terminal({
-    fontFamily: "'JetBrains Mono Variable', ui-monospace, monospace",
-    fontSize: 13,
-    lineHeight: 1.3,
-    cursorBlink: true,
-    convertEol: false,
-    theme: {
-      background: '#0d0a08',
-      foreground: '#e9e3da',
-      cursor: '#fcd34d',
-      selectionBackground: 'rgba(245,158,11,0.3)',
-      black: '#0d0a08',
-      brightGreen: '#22c55e',
-      brightRed: '#ef4444',
-      brightYellow: '#fcd34d',
-      brightBlue: '#f59e0b',
-      cyan: '#f59e0b',
-    },
+  function writeLine(text: string, cls?: string) {
+    const lineEl = document.createElement('div');
+    lineEl.className = 'aida-term__line' + (cls ? ' ' + cls : '');
+    // Escapar HTML pero preservar espacios
+    lineEl.innerHTML = esc(text).replace(/ /g, '&nbsp;');
+    screen.appendChild(lineEl);
+    screen.scrollTop = screen.scrollHeight;
+  }
+
+  function writeMultiline(text: string) {
+    text.split('\n').forEach((l) => writeLine(l));
+  }
+
+  function loadScenario(s: TermScenario) {
+    current = s;
+    screen.innerHTML = '';
+    line = '';
+    input.value = '';
+    history = [];
+    histIdx = -1;
+    setPrompt();
+    writeLine(s.title, 'aida-term__line--title');
+    s.intro.split('\n').forEach((l) => writeLine(l));
+    input.focus();
+  }
+
+  function runCommand(cmd: string) {
+    if (!cmd) return;
+    history.push(cmd);
+    histIdx = history.length;
+
+    const parts = cmd.split(/\s+/);
+    const head = parts[0];
+    const args = parts.slice(1).join(' ');
+
+    if (head === 'clear' || head === 'cls') {
+      screen.innerHTML = '';
+      return;
+    }
+    if (head === 'help') {
+      const keys = Object.keys(current.commands);
+      writeLine('Comandos disponibles en este escenario:');
+      writeLine('  help, clear, echo <texto>, ls [ruta]');
+      keys.forEach((k) => writeLine('  ' + k));
+      if (!keys.length) writeLine('  (ninguno específico)');
+      writeLine('');
+      writeLine('Consejo: copia y pega un comando de la lista de arriba.');
+      return;
+    }
+    if (head === 'echo') {
+      writeLine(args);
+      return;
+    }
+    if (head === 'ls') {
+      if (cmd.includes('.planning')) {
+        writeLine('roadmap.md  state.json  tasks/  phases/');
+      } else {
+        writeLine('AGENTS.md  docs/  src/  .planning/  init.sh');
+      }
+      return;
+    }
+
+    if (current.commands[cmd]) {
+      writeMultiline(current.commands[cmd]);
+      return;
+    }
+    if (current.commands[head] && !args) {
+      writeMultiline(current.commands[head]);
+      return;
+    }
+
+    const suggest = Object.keys(current.commands).find((k) => k.startsWith(head));
+    if (suggest) {
+      writeLine(`Comando no encontrado. ¿quisiste decir \`${suggest}\`?`, 'aida-term__line--warn');
+    } else {
+      writeLine(`Comando no encontrado: ${cmd}`, 'aida-term__line--error');
+      writeLine('Escribe `help` para ver los comandos disponibles.');
+    }
+  }
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const cmd = input.value.trim();
+      if (cmd) {
+        writeLine(current.prompt + cmd);
+        runCommand(cmd);
+      }
+      input.value = '';
+      line = '';
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (histIdx > 0) {
+        histIdx--;
+        input.value = history[histIdx];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (histIdx < history.length - 1) {
+        histIdx++;
+        input.value = history[histIdx];
+      } else {
+        histIdx = history.length;
+        input.value = '';
+      }
+    } else if (e.key === 'c' && e.ctrlKey) {
+      e.preventDefault();
+      input.value = '';
+      line = '';
+      writeLine('^C');
+    } else if (e.key === 'l' && e.ctrlKey) {
+      e.preventDefault();
+      screen.innerHTML = '';
+    }
   });
-  term.loadAddon(fit);
 
-  // Esperamos al próximo frame para asegurar que el layout del host
-  // tenga dimensiones reales antes de abrir xterm. Sin esto, el canvas
-  // puede crearse con tamaño 0 y no recibir input.
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-
-  term.open(host);
-
-  // xterm mide el contenedor en open(); si aún no tiene layout calculado,
-  // el canvas queda en 0x0. Reintentamos fit() en múltiples momentos.
-  safeFit();
-  requestAnimationFrame(() => {
-    safeFit();
-    term.refresh(0, term.rows - 1);
+  // Click en la pantalla enfoca el input.
+  mount.addEventListener('click', (e) => {
+    if (e.target !== input) input.focus();
   });
-  setTimeout(() => {
-    safeFit();
-    term.focus();
-    term.refresh(0, term.rows - 1);
-  }, 50);
-  setTimeout(() => safeFit(), 300);
-
-  // Click en cualquier parte del terminal enfoca el textarea interno.
-  host.addEventListener('click', () => term.focus());
-
-  // ResizeObserver + window resize mantienen el terminal a ancho.
-  const ro = new ResizeObserver(() => safeFit());
-  ro.observe(host);
-  window.addEventListener('resize', onResize);
-
-  term.onData(onData);
-
-  loadScenario(scenarios[0]);
 
   mount.querySelector<HTMLSelectElement>('.aida-term__sel')!.addEventListener(
     'change',
@@ -107,124 +175,8 @@ export async function initTerm(): Promise<void> {
       loadScenario(s);
     },
   );
-}
 
-function safeFit(): void {
-  try {
-    fit.fit();
-  } catch {
-    /* host sin layout todavía */
-  }
-}
-
-function onResize(): void {
-  safeFit();
-}
-
-function loadScenario(s: TermScenario): void {
-  current = s;
-  term.reset();
-  term.writeln(`\x1b[38;5;3m${esc(s.title)}\x1b[0m`);
-  s.intro.split('\n').forEach((l) => term.writeln(l));
-  term.writeln('');
-  writePrompt();
-  term.focus();
-}
-
-function writePrompt(): void {
-  term.write(`\x1b[38;5;3m${esc(current.prompt)}\x1b[0m`);
-}
-
-function onData(d: string): void {
-  const code = d.charCodeAt(0);
-  if (d === '\r') {
-    // Enter
-    term.write('\r\n');
-    runCommand(line.trim());
-    line = '';
-    writePrompt();
-  } else if (code === 127 || code === 8) {
-    // Backspace: xterm envía DEL (0x7f); algunos terminales BS (0x08).
-    if (line.length > 0) {
-      line = line.slice(0, -1);
-      term.write('\b \b');
-    }
-  } else if (code === 3) {
-    // Ctrl-C
-    term.write('^C\r\n');
-    line = '';
-    writePrompt();
-  } else if (code === 12) {
-    // Ctrl-L
-    term.clear();
-    writePrompt();
-  } else if (code >= 32) {
-    // Caracter imprimible (ignora otras teclas de control).
-    line += d;
-    term.write(d);
-  }
-}
-
-function runCommand(cmd: string): void {
-  if (!cmd) return;
-
-  const parts = cmd.split(/\s+/);
-  const head = parts[0];
-  const args = parts.slice(1).join(' ');
-
-  // Globales.
-  if (head === 'clear' || head === 'cls') {
-    term.clear();
-    return;
-  }
-  if (head === 'help') {
-    const keys = Object.keys(current.commands);
-    term.writeln('Comandos disponibles en este escenario:');
-    term.writeln('  help, clear, echo <texto>, ls [ruta]');
-    keys.forEach((k) => term.writeln('  ' + k));
-    if (!keys.length) term.writeln('  (ninguno específico)');
-    term.writeln('');
-    term.writeln('Consejo: copia y pega un comando de la lista de arriba.');
-    return;
-  }
-  if (head === 'echo') {
-    term.writeln(args);
-    return;
-  }
-  if (head === 'ls') {
-    if (cmd.includes('.planning')) {
-      term.writeln('roadmap.md  state.json  tasks/  phases/');
-    } else {
-      term.writeln('AGENTS.md  docs/  src/  .planning/  init.sh');
-    }
-    return;
-  }
-
-  // Búsqueda exacta (cmd completo) primero.
-  if (current.commands[cmd]) {
-    printMultiline(current.commands[cmd]);
-    return;
-  }
-  // Coincidencia por head (comando sin args en el set).
-  if (current.commands[head] && !args) {
-    printMultiline(current.commands[head]);
-    return;
-  }
-
-  // Sugerencia: ¿el head coincide con algún comando del set?
-  const suggest = Object.keys(current.commands).find((k) => k.startsWith(head));
-  if (suggest) {
-    term.writeln(
-      `\x1b[38;5;3mComando no encontrado. ¿quisiste decir \`${esc(suggest)}\`?\x1b[0m`,
-    );
-  } else {
-    term.writeln(`\x1b[38;5;1mComando no encontrado: ${esc(cmd)}\x1b[0m`);
-    term.writeln('Escribe `help` para ver los comandos disponibles.');
-  }
-}
-
-function printMultiline(text: string): void {
-  text.split('\n').forEach((l) => term.writeln(l));
+  loadScenario(scenarios[0]);
 }
 
 function esc(s: string): string {
