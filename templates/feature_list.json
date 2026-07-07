@@ -1,0 +1,58 @@
+{
+  "_comment": "feature_list.json — Puente entre Initializer Agent y Coding Agent (M4 §4.4). El initializer lee la spec, la traduce en esta lista machine-readable y se descarta; el coding agent trabaja feature por feature, marca done al verificar. NO es production data: es un template de partida — reemplaza los valores entre <>.",
+  "_comment_2": "Convención: cada feature tiene un test asociado; el coding agent no declara 'done' sin que ese test pase (verde mecánico, M6 §6.1). El orden de 'features' es sugerido, no obligatorio; el agente puede reordenar respetando dependencias.",
+  "spec_ref": "docs/specs/<nombre-de-la-spec>.md",
+  "generated_by": "initializer-agent",
+  "generated_at": "<YYYY-MM-DDTHH:MM:SSZ>",
+  "base_commit": "<SHA del commit sobre el que se generó la lista>",
+  "startup_script": "scripts/start-feature.sh",
+  "features": [
+    {
+      "id": "F1",
+      "desc": "<qué hace esta feature, en una línea>",
+      "test": "tests/<f1>.test.<ext>",
+      "depends_on": [],
+      "ac_refs": ["AC1", "AC2"],
+      "done": false,
+      "verified_by": null,
+      "notes": "<supuestos, bloqueantes, decisiones; vacío si ninguno>"
+    },
+    {
+      "id": "F2",
+      "desc": "<qué hace esta feature, en una línea>",
+      "test": "tests/<f2>.test.<ext>",
+      "depends_on": ["F1"],
+      "ac_refs": ["AC3"],
+      "done": false,
+      "verified_by": null,
+      "notes": ""
+    },
+    {
+      "id": "F3",
+      "desc": "<qué hace esta feature, en una línea>",
+      "test": "tests/<f3>.test.<ext>",
+      "depends_on": ["F1", "F2"],
+      "ac_refs": ["AC4"],
+      "done": false,
+      "verified_by": null,
+      "notes": ""
+    }
+  ],
+  "blockers": [
+    {
+      "feature": "F2",
+      "desc": "<qué no se pudo resolver; específico>",
+      "attempted": "<qué se probó>",
+      "hypothesis": "<qué se cree que pasa>",
+      "next_step": "<qué probar primero en la siguiente sesión>"
+    }
+  ],
+  "decisions": [
+    {
+      "topic": "<sobre qué se decidió>",
+      "choice": "<camino elegido>",
+      "reason": "<por qué este y no el alternativo>",
+      "alternatives": ["<camino B rechazado>"]
+    }
+  ]
+}

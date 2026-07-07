@@ -236,6 +236,11 @@ El coding agent trabaja feature por feature, marca `done: true` al
 verificar, y avanza. No necesita releer la spec cada vez: la lista ya es la
 traducción operativa de la spec.
 
+> Plantilla de partida: `templates/feature_list.json`. Incluye, además de
+> las features, los `blockers` y las `decisions` — porque el puente entre
+> los dos agentes también debe transferir lo que el initializer no pudo
+> resolver y lo que decidió, no solo la lista de tareas.
+
 ---
 
 ## 4.5 Human-in-the-loop vs. AFK
