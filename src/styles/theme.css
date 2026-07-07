@@ -1,0 +1,291 @@
+/* =============================================================================
+   AI Dev Accelerator — Design system (paleta ámbar/naranja)
+   Override de las variables --sl-* de Starlight + reglas de componente.
+   Las reglas van SIN @layer (unlayered) para ganarle a las capas
+   `starlight.base|core|components` de Starlight en la cascada.
+   Las fuentes se cargan vía `customCss` en astro.config.mjs
+   (@fontsource-variable/inter, @fontsource-variable/jetbrains-mono);
+   acá solo referenciamos los family names.
+   ========================================================================== */
+
+/* ---------- Tokens: dark (default) ---------- */
+:root {
+  /* Tipografía */
+  --sl-font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Acento ámbar */
+  --sl-color-accent: #f59e0b;
+  --sl-color-accent-high: #fcd34d;
+  --sl-color-accent-low: #3a2a0e;
+  --sl-color-text-accent: #fcd34d;
+
+  /* Extremos cálidos */
+  --sl-color-white: #f3efe8;
+  --sl-color-black: #0d0a08;
+
+  /* Superficies */
+  --sl-color-bg: #0d0a08;
+  --sl-color-bg-nav: rgba(20, 15, 9, 0.72);
+  --sl-color-bg-sidebar: #100c0a;
+  --sl-color-bg-inline-code: #1a140d;
+  --sl-color-bg-accent: #2a1d09;
+
+  /* Hairlines */
+  --sl-color-hairline-light: #1a140d;
+  --sl-color-hairline: #241c12;
+  --sl-color-hairline-shade: #2c2218;
+
+  /* Texto */
+  --sl-color-text: #e9e3da;
+
+  /* Backdrop (modal/overlay) */
+  --sl-color-backdrop-overlay: rgba(8, 6, 4, 0.66);
+
+  /* Sombras suaves y amplias */
+  --sl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sl-shadow-md: 0 4px 24px -10px rgba(0, 0, 0, 0.6);
+  --sl-shadow-lg: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+
+  /* Layout */
+  --sl-content-width: 48rem;
+  --sl-nav-height: 4rem;
+  --sl-nav-pad-x: 1rem;
+  --sl-sidebar-width: 17rem;
+  --sl-nav-gap: 0.75rem;
+}
+
+/* ---------- Tokens: light ---------- */
+:root[data-theme='light'] {
+  --sl-color-accent: #b45309;
+  --sl-color-accent-high: #d97706;
+  --sl-color-accent-low: #fef3c7;
+  --sl-color-text-accent: #b45309;
+
+  --sl-color-white: #1c1714;
+  --sl-color-black: #ffffff;
+
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: rgba(253, 250, 245, 0.78);
+  --sl-color-bg-sidebar: #fdfaf5;
+  --sl-color-bg-inline-code: #f6efe2;
+  --sl-color-bg-accent: #fef3c7;
+
+  --sl-color-hairline-light: #f3ebdd;
+  --sl-color-hairline: #ece3d6;
+  --sl-color-hairline-shade: #e3d8c6;
+
+  --sl-color-text: #2a221b;
+
+  --sl-color-backdrop-overlay: rgba(40, 30, 18, 0.4);
+
+  --sl-shadow-sm: 0 1px 2px rgba(60, 40, 10, 0.08);
+  --sl-shadow-md: 0 6px 24px -12px rgba(60, 40, 10, 0.18);
+  --sl-shadow-lg: 0 14px 40px -14px rgba(60, 40, 10, 0.22);
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--sl-color-accent);
+  color: #1a1208;
+}
+
+/* Scrollbar sutil (dark) */
+:root:not([data-theme='light']) * {
+  scrollbar-color: #2c2218 transparent;
+}
+
+/* =============================================================================
+   Header — glassy, sticky
+   ========================================================================== */
+header.header {
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  background-color: var(--sl-color-bg-nav);
+  border-bottom-color: var(--sl-color-hairline);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+/* Separador tras los social icons */
+header.header .social-icons::after {
+  border-inline-end-color: var(--sl-color-hairline);
+}
+
+/* =============================================================================
+   Site title (override component) — ver src/components/SiteTitle.astro
+   ========================================================================== */
+
+/* =============================================================================
+   Sidebar — item activo con barra ámbar
+   ========================================================================== */
+.sidebar-content a[aria-current='page'] {
+  position: relative;
+  color: var(--sl-color-text-accent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+    transparent
+  );
+  border-radius: 0 0.4rem 0.4rem 0;
+}
+.sidebar-content a[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -0.5rem;
+  inset-block: 0.25rem;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--sl-color-accent);
+}
+.sidebar-content a {
+  border-radius: 0 0.4rem 0.4rem 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.sidebar-content a:hover {
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+}
+
+/* Etiquetas de grupo del sidebar */
+.sidebar-content .group-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+  font-weight: 600;
+}
+
+/* =============================================================================
+   Cards — radio, hover lift
+   ========================================================================== */
+.sl-card,
+.card {
+  border-radius: 14px;
+  border-color: var(--sl-color-hairline);
+  background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 70%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.sl-card:hover,
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sl-shadow-lg);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-hairline));
+}
+
+/* LinkCard (variant con link) */
+.link-card {
+  border-radius: 14px;
+  border-color: var(--sl-color-hairline);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.link-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sl-shadow-lg);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 45%, var(--sl-color-hairline));
+}
+
+/* =============================================================================
+   LinkButton / CTAs — acento con degradado
+   ========================================================================== */
+.sl-link-button.primary {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  border-color: transparent;
+  color: #1a1208;
+  font-weight: 600;
+  box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--sl-color-accent) 80%, transparent);
+}
+.sl-link-button.primary:hover {
+  color: #1a1208;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.sl-link-button.secondary {
+  border-color: var(--sl-color-hairline);
+  color: var(--sl-color-white);
+}
+.sl-link-button.secondary:hover {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-text-accent);
+}
+
+/* =============================================================================
+   Asides / Badges
+   ========================================================================== */
+aside[data-aside-type] {
+  border-radius: 12px;
+  border-width: 1px;
+}
+.sl-badge {
+  border-radius: 999px;
+}
+
+/* =============================================================================
+   Código — bordes/radio coherentes
+   ========================================================================== */
+.expressive-code,
+:root .expressive-code pre {
+  border-radius: 12px;
+}
+
+/* =============================================================================
+   Focus visible — ring ámbar
+   ========================================================================== */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* =============================================================================
+   Hero (override component) — ver src/components/Hero.astro
+   El hero default NO se usa; este componente se reemplaza por completo.
+   ========================================================================== */
+
+/* Progress (Fase 3) — estilos de los chips y la card de progreso */
+.pmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--sl-text-sm);
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--sl-color-hairline);
+  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 60%, transparent);
+  color: var(--sl-color-gray-2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.pmark:hover {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-text-accent);
+}
+.pmark[data-done='true'] {
+  background: color-mix(in srgb, var(--sl-color-accent) 16%, transparent);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 55%, transparent);
+  color: var(--sl-color-text-accent);
+}
+.pmark-dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pmark[data-done='true'] .pmark-dot {
+  background: var(--sl-color-accent);
+  border-color: var(--sl-color-accent);
+  color: #1a1208;
+}

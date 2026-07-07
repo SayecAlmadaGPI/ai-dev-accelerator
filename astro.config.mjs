@@ -20,6 +20,20 @@ export default defineConfig({
           icon: 'github',
         },
       ],
+      // Design system ámbar + fonts. customCss acepta paths en src/ (no
+      // public/) y paquetes npm cuyo main es CSS (los @fontsource cargan
+      // los @font-face de Inter Variable y JetBrains Mono Variable).
+      customCss: [
+        '/src/styles/theme.css',
+        '@fontsource-variable/inter',
+        '@fontsource-variable/jetbrains-mono',
+      ],
+      // Overrides de componentes de Starlight (mapea clave -> path .astro).
+      components: {
+        SiteTitle: './src/components/SiteTitle.astro',
+        Hero: './src/components/Hero.astro',
+        PageTitle: './src/components/PageTitle.astro',
+      },
       // Desde Starlight v0.39, los grupos autogenerados van como
       // { label, items: [{ autogenerate: { directory } }] }.
       sidebar: [

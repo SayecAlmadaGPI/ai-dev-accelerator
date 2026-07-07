@@ -1,0 +1,241 @@
+---
+// Card "Tu progreso" del landing. Isle vanilla: el estado se hidrata
+// client-side desde localStorage (sin backend). La lista de ítems
+// trackeables viene de src/data/trackable.json (generado por build-content
+// desde modules/ + labs/). Escucha el evento `aida:progress` para
+// actualizarse en vivo al marcar/desmarcar desde cualquier página.
+import trackable from '../data/trackable.json';
+
+const total = trackable.length;
+const base = import.meta.env.BASE_URL;
+const modules = trackable.filter((t) => t.group === 'modules');
+const labs = trackable.filter((t) => t.group === 'labs');
+---
+
+<aside class="aida-progress" data-progress data-total={total}>
+  <div class="aida-progress__top">
+    <div class="aida-progress__heading">
+      <svg class="aida-progress__ring" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="ring-track" cx="24" cy="24" r="20"></circle>
+        <circle class="ring-arc" cx="24" cy="24" r="20" data-progress-arc></circle>
+      </svg>
+      <div>
+        <p class="aida-progress__title">Tu progreso</p>
+        <p class="aida-progress__count">
+          <strong data-progress-count>0</strong>
+          <span>/ {total} completados</span>
+        </p>
+      </div>
+    </div>
+    <div class="aida-progress__bar" aria-hidden="true"><span data-progress-bar></span></div>
+    <p class="aida-progress__hint">Persiste en este navegador. Marcá cada módulo o lab desde su página.</p>
+  </div>
+
+  <div class="aida-progress__groups">
+    <div class="aida-progress__group">
+      <p class="aida-progress__grouplabel">Módulos</p>
+      <ul>
+        {modules.map((t) => (
+          <li>
+            <a class="aida-progress__item" data-progress-item={t.slug} href={base + t.slug + '/'}>
+              <span class="aida-progress__check" aria-hidden="true"></span>
+              <span class="aida-progress__name">{t.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="aida-progress__group">
+      <p class="aida-progress__grouplabel">Labs</p>
+      <ul>
+        {labs.map((t) => (
+          <li>
+            <a class="aida-progress__item" data-progress-item={t.slug} href={base + t.slug + '/'}>
+              <span class="aida-progress__check" aria-hidden="true"></span>
+              <span class="aida-progress__name">{t.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { listDone } from '../scripts/progress';
+
+  const root = document.querySelector('[data-progress]');
+  if (root) {
+    const total = Number(root.getAttribute('data-total') || '0');
+    const CIRC = 126;
+    const countEl = root.querySelector('[data-progress-count]');
+    const arcEl = root.querySelector('[data-progress-arc]') as SVGCircleElement | null;
+    const barEl = root.querySelector('[data-progress-bar]') as HTMLElement | null;
+    const items = root.querySelectorAll('[data-progress-item]');
+
+    const render = () => {
+      const done = listDone();
+      const n = done.length;
+      if (countEl) countEl.textContent = String(n);
+      if (arcEl) arcEl.style.strokeDashoffset = String(CIRC * (1 - (total ? n / total : 0)));
+      if (barEl) barEl.style.width = `${total ? (n / total) * 100 : 0}%`;
+      items.forEach((it) => {
+        const slug = it.getAttribute('data-progress-item') || '';
+        it.setAttribute('data-done', String(done.includes(slug)));
+      });
+    };
+
+    render();
+    window.addEventListener('aida:progress', render);
+    window.addEventListener('storage', render);
+  }
+</script>
+
+<style>
+  .aida-progress {
+    margin-top: clamp(1.5rem, 1rem + 3vw, 2.5rem);
+    padding: clamp(1.25rem, 1rem + 2vw, 2rem);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 55%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--sl-shadow-md);
+  }
+  .aida-progress__top {
+    border-bottom: 1px solid var(--sl-color-hairline);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  .aida-progress__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .aida-progress__ring {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    transform: rotate(-90deg);
+  }
+  .ring-track {
+    fill: none;
+    stroke: var(--sl-color-hairline);
+    stroke-width: 4;
+  }
+  .ring-arc {
+    fill: none;
+    stroke: var(--sl-color-accent);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 126;
+    stroke-dashoffset: 126;
+    transition: stroke-dashoffset 0.4s ease;
+  }
+  .aida-progress__title {
+    margin: 0;
+    font-weight: 700;
+    font-size: var(--sl-text-lg);
+    color: var(--sl-color-white);
+    letter-spacing: -0.01em;
+  }
+  .aida-progress__count {
+    margin: 0.15rem 0 0;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+  }
+  .aida-progress__count strong {
+    color: var(--sl-color-text-accent);
+    font-size: var(--sl-text-lg);
+  }
+  .aida-progress__bar {
+    margin-top: 0.9rem;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--sl-color-hairline);
+    overflow: hidden;
+  }
+  .aida-progress__bar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    transition: width 0.4s ease;
+  }
+  .aida-progress__hint {
+    margin: 0.65rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .aida-progress__groups {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .aida-progress__groups {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .aida-progress__grouplabel {
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+  }
+  .aida-progress__groups ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .aida-progress__item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .aida-progress__item:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    color: var(--sl-color-text);
+  }
+  .aida-progress__check {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    border: 1.5px solid var(--sl-color-gray-4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .aida-progress__item[data-done='true'] {
+    color: var(--sl-color-text);
+  }
+  .aida-progress__item[data-done='true'] .aida-progress__check {
+    background: var(--sl-color-accent);
+    border-color: var(--sl-color-accent);
+  }
+  .aida-progress__item[data-done='true'] .aida-progress__check::after {
+    content: '✓';
+    color: #1a1208;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .aida-progress__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

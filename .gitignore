@@ -44,3 +44,7 @@ public/labs/
 public/cheatsheets/
 public/templates/
 public/examples/
+
+# --- trackable.json: GENERADO por build-content (Fase 3) ---
+# Lista de páginas trackeables derivada del filesystem; se regenera en cada build.
+src/data/trackable.json

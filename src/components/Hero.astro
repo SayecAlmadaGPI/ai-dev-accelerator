@@ -1,0 +1,128 @@
+---
+// Override del Hero de Starlight: hero premium tipo SaaS.
+// Lee el bloque `hero:` del frontmatter (title, tagline, actions) que
+// scripts/build-content.mjs inyecta en el index.md raíz. Mantiene el
+// <h1 id="_top" data-page-title> para que TOC / skip-link / document.title
+// sigan funcionando (mismo contract que el Hero default).
+import { LinkButton } from '@astrojs/starlight/components';
+import ProgressOverview from './ProgressOverview.astro';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { title = data.title, tagline, actions = [] } = data.hero || {};
+---
+
+<section class="aida-hero">
+  <div class="aida-hero__bg" aria-hidden="true"></div>
+  <div class="aida-hero__inner">
+    <div class="aida-hero__copy">
+      <p class="aida-hero__eyebrow">Curso operativo · 11 módulos · 5 labs</p>
+      <h1 id="_top" data-page-title class="aida-hero__title" set:html={title} />
+      {tagline && <p class="aida-hero__tagline" set:html={tagline} />}
+      {
+        actions.length > 0 && (
+          <div class="aida-hero__actions">
+            {actions.map(({ icon, link: href, text, variant }) => (
+              <LinkButton {href} variant={variant} icon={icon?.name}>
+                {text}
+              </LinkButton>
+            ))}
+          </div>
+        )
+      }
+    </div>
+    <ProgressOverview />
+  </div>
+</section>
+
+<style>
+  .aida-hero {
+    position: relative;
+    overflow: hidden;
+    margin-block-end: 2.5rem;
+  }
+  .aida-hero__bg {
+    position: absolute;
+    inset: -10% -5% 0 -5%;
+    pointer-events: none;
+    background:
+      radial-gradient(55% 50% at 18% 8%, rgba(245, 158, 11, 0.20), transparent 70%),
+      radial-gradient(45% 45% at 92% 18%, rgba(251, 191, 36, 0.14), transparent 70%),
+      radial-gradient(50% 60% at 72% 95%, rgba(217, 119, 6, 0.12), transparent 72%);
+    filter: blur(2px);
+  }
+  .aida-hero::after {
+    /* hairline superior sutil */
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--sl-color-accent) 50%, transparent),
+      transparent
+    );
+  }
+  .aida-hero__inner {
+    position: relative;
+    padding-block: clamp(2.5rem, calc(1rem + 9vmin), 6rem);
+    padding-inline: 0;
+  }
+  .aida-hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+    max-width: 46rem;
+  }
+  .aida-hero__eyebrow {
+    margin: 0;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sl-color-text-accent);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+  }
+  .aida-hero__title {
+    margin: 0;
+    font-size: clamp(var(--sl-text-3xl), calc(0.5rem + 6vw), var(--sl-text-6xl));
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    color: var(--sl-color-white);
+  }
+  .aida-hero__tagline {
+    margin: 0;
+    font-size: clamp(var(--sl-text-base), calc(0.25rem + 1.5vw), var(--sl-text-xl));
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+    max-width: 42ch;
+  }
+  .aida-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Gradient text helper — alcanza al <span class="aida-grad"> inyectado
+     vía set:html (que el scope de Astro no puede alcanzar). */
+  :global(.aida-grad) {
+    background: linear-gradient(120deg, #fcd34d 0%, #f59e0b 55%, #ea580c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  @media (min-width: 50rem) {
+    .aida-hero__copy {
+      align-items: flex-start;
+    }
+  }
+</style>

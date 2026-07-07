@@ -1,0 +1,36 @@
+---
+// Chip "Marcar como completado" / "✓ Completado". Isle vanilla (sin React):
+// el estado se hidrata client-side desde localStorage. Se inyecta solo en
+// páginas trackeables (modules/labs) vía el override de PageTitle.
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+<button class="pmark" type="button" data-pmark data-slug={slug} aria-pressed="false">
+  <span class="pmark-dot" aria-hidden="true"></span>
+  <span class="pmark-label">Marcar como completado</span>
+</button>
+
+<script>
+  import { getDone, toggleDone } from '../scripts/progress';
+
+  function wire(btn: Element) {
+    const slug = btn.getAttribute('data-slug') || '';
+    const label = btn.querySelector('.pmark-label');
+    const render = () => {
+      const done = getDone(slug);
+      btn.setAttribute('data-done', String(done));
+      btn.setAttribute('aria-pressed', String(done));
+      if (label) label.textContent = done ? '✓ Completado' : 'Marcar como completado';
+    };
+    render();
+    btn.addEventListener('click', () => {
+      toggleDone(slug);
+      render();
+    });
+  }
+
+  document.querySelectorAll('[data-pmark]').forEach(wire);
+</script>

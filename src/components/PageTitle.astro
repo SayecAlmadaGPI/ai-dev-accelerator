@@ -1,0 +1,40 @@
+---
+// Override del PageTitle de Starlight: mantiene el <h1 id="_top"> (skip-link,
+// document.title) y agrega el chip ProgressMark SOLO en páginas trackeables
+// (modules/labs). El slug se deriva del pathname (stripping el base) para que
+// coincida con el de src/data/trackable.json.
+import trackable from '../data/trackable.json';
+import ProgressMark from './ProgressMark.astro';
+
+const title = Astro.locals.starlightRoute.entry.data.title;
+const base = import.meta.env.BASE_URL;
+let slug = Astro.url.pathname;
+if (slug.startsWith(base)) slug = slug.slice(base.length);
+slug = slug.replace(/\/+$/, '');
+const trackableSlugs = trackable.map((t) => t.slug);
+const isTrackable = trackableSlugs.includes(slug);
+---
+
+<div class="aida-pagetitle">
+  <h1 id="_top">{title}</h1>
+  {isTrackable && <ProgressMark slug={slug} />}
+</div>
+
+<style>
+  .aida-pagetitle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .aida-pagetitle h1 {
+    margin: 0;
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--sl-color-white);
+  }
+</style>

@@ -83,6 +83,16 @@ function isInternal(href) {
 
 // srcRelDir: dir del archivo fuente relativo a ROOT (posix), ej. 'modules',
 // 'cheatsheets', 'templates/mcp-server-template', '' (raíz).
+// Slug sin base ni trailing slash (igual que el interno de hrefToUrl).
+function slugFromRelPath(relPath) {
+  let p = relPath.replace(/\.(md|mdx)$/, '');
+  if (p.endsWith('/README')) p = p.slice(0, -'/README'.length);
+  if (p === 'README') p = '';
+  return p.toLowerCase();
+}
+
+// srcRelDir: dir del archivo fuente relativo a ROOT (posix), ej. 'modules',
+// 'cheatsheets', 'templates/mcp-server-template', '' (raíz).
 function hrefToUrl(href, srcRelDir) {
   const hashIdx = href.indexOf('#');
   let linkPath = href, anchor = '';
@@ -149,6 +159,17 @@ async function walk(srcAbsDir, relDir, destAbsDir, publicAbsDir, collector) {
       await writeFile(path.join(destAbsDir, destName), out, 'utf8');
       copied++;
       collector.mdPages.push(relPath);
+      // Trackeables (Fase 3): modules/*.md (no README) y labs/lab-*/README.md.
+      const lowerName = e.name.toLowerCase();
+      const isModule = relDir === 'modules' && lowerName !== 'readme.md';
+      const isLab = relDir.startsWith('labs/lab-') && lowerName === 'readme.md';
+      if (isModule || isLab) {
+        collector.trackables.push({
+          slug: slugFromRelPath(relPath),
+          title: deriveTitle(content),
+          group: isModule ? 'modules' : 'labs',
+        });
+      }
     } else {
       await mkdir(publicAbsDir, { recursive: true });
       await copyFile(srcAbs, path.join(publicAbsDir, e.name));
@@ -197,9 +218,42 @@ async function copyRootFile(srcName, destName) {
   copied++;
 }
 
+// Index raíz (de README.md): además del frontmatter `title:`, inyecta un
+// bloque `hero:` (title con gradient text, tagline, 2 CTA) para que
+// Starlight renderice el Hero override. Los links llevan el prefijo BASE.
+// El body del README (sin su H1, que pasa a ser el `title` de página) se
+// renderiza debajo del hero. `template: doc` (default) deja el sidebar
+// visible para la navegación del curso.
+async function copyRootIndex() {
+  const content = await readFile(path.join(ROOT, 'README.md'), 'utf8');
+  const pageTitle = deriveTitle(content) || 'AI Accelerated Development';
+  const { body } = splitForOutput(content, 'index');
+  const heroTitle = "AI <span class='aida-grad'>Accelerated</span> Development";
+  const tagline =
+    'Spec-Driven Development como hilo conductor. Especifica, diseña el harness y verifica — sin depender del agente.';
+  const fm =
+    '---\n' +
+    `title: ${JSON.stringify(pageTitle)}\n` +
+    'hero:\n' +
+    `  title: ${JSON.stringify(heroTitle)}\n` +
+    `  tagline: ${JSON.stringify(tagline)}\n` +
+    '  actions:\n' +
+    `    - text: ${JSON.stringify('Empezar por M0')}\n` +
+    `      link: ${JSON.stringify(BASE + 'modules/00-lenguaje-operativo/')}\n` +
+    '      variant: primary\n' +
+    '      icon: right-arrow\n' +
+    `    - text: ${JSON.stringify('Ver el blueprint')}\n` +
+    `      link: ${JSON.stringify(BASE + 'blueprint/')}\n` +
+    '      variant: secondary\n' +
+    '---\n\n';
+  const out = fm + rewriteLinks(body, '');
+  await writeFile(path.join(DOCS, 'index.md'), out, 'utf8');
+  copied++;
+}
+
 async function main() {
   await cleanGenerated();
-  const collector = { mdPages: [], assets: [] };
+  const collector = { mdPages: [], assets: [], trackables: [] };
 
   for (const dir of CONTENT_DIRS) {
     const src = path.join(ROOT, dir);
@@ -212,11 +266,25 @@ async function main() {
     }
   }
 
-  await copyRootFile('README.md', 'index.md');
+  await copyRootIndex();
   await copyRootFile('BLUEPRINT.md', 'blueprint.md');
 
+  // trackable.json (Fase 3): lista de páginas trackeables para el
+  // ProgressOverview del landing y el filtro de PageTitle. Derivado del
+  // filesystem (modules + labs), no hardcodeado. Gitignored.
+  const sortedTrackables = [
+    ...collector.trackables.filter((t) => t.group === 'modules').sort((a, b) => a.slug.localeCompare(b.slug)),
+    ...collector.trackables.filter((t) => t.group === 'labs').sort((a, b) => a.slug.localeCompare(b.slug)),
+  ];
+  await mkdir(path.join(ROOT, 'src', 'data'), { recursive: true });
+  await writeFile(
+    path.join(ROOT, 'src', 'data', 'trackable.json'),
+    JSON.stringify(sortedTrackables, null, 2),
+    'utf8',
+  );
+
   console.log(
-    `build-content: ${copied} páginas, ${assets} assets, ${indexes} índices generados, ${skipped} dirs saltados.`,
+    `build-content: ${copied} páginas, ${assets} assets, ${indexes} índices generados, ${skipped} dirs saltados, ${sortedTrackables.length} trackeables.`,
   );
   console.log(`  -> ${DOCS}`);
 }

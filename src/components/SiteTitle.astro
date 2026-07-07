@@ -1,0 +1,68 @@
+---
+// Override del SiteTitle de Starlight: marca SVG inline (tile ámbar con
+// doble chevron ">>" = aceleración) + wordmark. No usa config.logo (que
+// es image-based); la marca vive acá como SVG inline.
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+---
+
+<a href={siteTitleHref} class="site-title sl-flex">
+  <svg class="aida-mark" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="aida-mark-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fbbf24"></stop>
+        <stop offset="1" stop-color="#f59e0b"></stop>
+      </linearGradient>
+    </defs>
+    <rect x="1" y="1" width="26" height="26" rx="7" fill="url(#aida-mark-grad)"></rect>
+    <path
+      d="M8.5 8 L14.5 14 L8.5 20"
+      fill="none"
+      stroke="#1a1208"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+    <path
+      d="M14.5 8 L20.5 14 L14.5 20"
+      fill="none"
+      stroke="#1a1208"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.5"
+    ></path>
+  </svg>
+  <span translate="no">{siteTitle}</span>
+</a>
+
+<style>
+  .site-title {
+    align-items: center;
+    gap: var(--sl-nav-gap);
+    font-size: var(--sl-text-h4);
+    font-weight: 700;
+    color: var(--sl-color-text);
+    text-decoration: none;
+    white-space: nowrap;
+    min-width: 0;
+    letter-spacing: -0.01em;
+  }
+  .site-title:hover {
+    color: var(--sl-color-text-accent);
+  }
+  .site-title span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .aida-mark {
+    height: calc(var(--sl-nav-height) - 2 * var(--sl-nav-pad-y) - 0.25rem);
+    width: auto;
+    flex-shrink: 0;
+    border-radius: 6px;
+    filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.35));
+    transition: transform 0.2s ease;
+  }
+  .site-title:hover .aida-mark {
+    transform: translateY(-1px) scale(1.04);
+  }
+</style>
