@@ -28,6 +28,14 @@ export default defineConfig({
         '@fontsource-variable/inter',
         '@fontsource-variable/jetbrains-mono',
       ],
+      // PWA (Fase 4b): manifest + theme-color. hrefs con base prefijada porque
+      // los assets en public/ se sirven bajo /ai-dev-accelerator/.
+      head: [
+        { tag: 'link', attrs: { rel: 'manifest', href: '/ai-dev-accelerator/manifest.webmanifest' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#f59e0b' } },
+        { tag: 'link', attrs: { rel: 'icon', href: '/ai-dev-accelerator/icon.svg', type: 'image/svg+xml' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/ai-dev-accelerator/icon.svg' } },
+      ],
       // Overrides de componentes de Starlight (mapea clave -> path .astro).
       components: {
         SiteTitle: './src/components/SiteTitle.astro',

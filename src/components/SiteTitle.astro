@@ -71,7 +71,14 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   // Boot de islas vanilla (Fase 4). Feature detection + import() dinámico por
   // mount-point: cada feature se code-splittea y solo carga en la página que
   // la necesita. Patrón consistente con Fase 3 (query [data-*], sin React).
+  const base = import.meta.env.BASE_URL;
   if (document.querySelector('[data-quiz-mount]')) {
     import('../scripts/quiz.ts').then((m) => m.initQuizzes());
+  }
+  // Notas: drawer flotante en toda página (carga siempre, módulo chico).
+  import('../scripts/notes.ts').then((m) => m.initNotes(base));
+  // PWA: registro del service worker en toda página.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(base + 'sw.js', { scope: base });
   }
 </script>

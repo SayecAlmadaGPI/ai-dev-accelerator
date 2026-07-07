@@ -1,0 +1,15 @@
+{
+  "name": "AI Dev Accelerator",
+  "short_name": "AI Dev Acc",
+  "description": "Spec-Driven Development como hilo conductor. Especifica, diseña el harness y verifica.",
+  "start_url": "/ai-dev-accelerator/",
+  "scope": "/ai-dev-accelerator/",
+  "display": "standalone",
+  "background_color": "#0d0a08",
+  "theme_color": "#f59e0b",
+  "lang": "es",
+  "icons": [
+    { "src": "/ai-dev-accelerator/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/ai-dev-accelerator/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

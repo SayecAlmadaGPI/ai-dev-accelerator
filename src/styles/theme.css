@@ -459,3 +459,137 @@ aside[data-aside-type] {
   font-size: var(--sl-text-sm);
   opacity: 0.7;
 }
+
+/* =============================================================================
+   Fase 4b — Notas (.aida-notes*)
+   Drawer flotante (botón bottom-right + panel lateral derecho) que guarda una
+   nota por página en IndexedDB. Reutiliza tokens --sl-* y el patrón de botón
+   .sl-link-button. Sin @layer. Persiste en body entre navegaciones.
+   ========================================================================== */
+.aida-notes-fab {
+  position: fixed;
+  inset-block-end: 1.2rem;
+  inset-inline-end: 1.2rem;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  border-radius: 999px;
+  box-shadow: var(--sl-shadow-md);
+}
+.aida-notes-fab svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.aida-notes-drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 70;
+  width: min(24rem, 92vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--sl-color-bg-sidebar);
+  border-inline-start: 1px solid var(--sl-color-hairline);
+  box-shadow: var(--sl-shadow-lg);
+  transform: translateX(100%);
+  transition: transform 0.22s ease;
+}
+:root[dir='rtl'] .aida-notes-drawer,
+.aida-notes-drawer[dir='rtl'] {
+  transform: translateX(-100%);
+}
+.aida-notes-drawer.is-open {
+  transform: translateX(0);
+}
+.aida-notes__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+.aida-notes__title {
+  font-weight: 700;
+  font-size: var(--sl-text-h4);
+}
+.aida-notes__slug {
+  font-size: var(--sl-text-xs);
+  font-family: var(--sl-font-mono);
+  color: var(--sl-color-text-accent);
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aida-notes__close {
+  margin-inline-start: auto;
+  background: transparent;
+  border: none;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  border-radius: 6px;
+}
+.aida-notes__close:hover {
+  color: var(--sl-color-text-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+}
+.aida-notes__ta {
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  color: var(--sl-color-text);
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-base);
+  line-height: 1.55;
+  resize: none;
+  min-height: 12rem;
+}
+.aida-notes__ta:focus {
+  outline: none;
+}
+.aida-notes__ta::placeholder {
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.6;
+}
+.aida-notes__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--sl-color-hairline);
+}
+.aida-notes__ind {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+}
+.aida-notes__ind[data-state='ok'] {
+  color: #22c55e;
+}
+.aida-notes__ind[data-state='err'] {
+  color: #ef4444;
+}
+.aida-notes__ind[data-state='edit'] {
+  color: var(--sl-color-text-accent);
+}
+.aida-notes__clear {
+  margin-inline-start: auto;
+  font-size: var(--sl-text-xs);
+  padding: 0.35rem 0.7rem;
+}
+@media (max-width: 30rem) {
+  .aida-notes-fab span {
+    display: none;
+  }
+  .aida-notes-fab {
+    padding: 0.6rem;
+  }
+}
