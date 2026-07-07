@@ -16,12 +16,13 @@ para capacitación guiada.
 | M5 — Herramientas y Protocolos de Integración | [`05-herramientas-mcp.md`](./05-herramientas-mcp.md) | ✅ publicado |
 | M6 — Verificación y Control de Calidad | [`06-verificacion.md`](./06-verificacion.md) | ✅ publicado |
 | M7 — Failure Modes y Defensa Práctica | [`07-failure-modes.md`](./07-failure-modes.md) | ✅ publicado |
+| M8 — Casos de Uso End-to-End | [`08-casos-uso.md`](./08-casos-uso.md) | ✅ publicado |
+| M9 — Evaluación de Modelos y Navegación del Ecosistema | [`09-evaluacion-modelos.md`](./09-evaluacion-modelos.md) | ✅ publicado |
 | M10 — Seguridad, Governance y Compliance | [`10-seguridad-governance.md`](./10-seguridad-governance.md) | ✅ publicado |
 
 ## Pendientes (según `BLUEPRINT.md`)
 
-- M8 — Casos de Uso End-to-End
-- M9 — Evaluación de Modelos y Navegación del Ecosistema
+- (ninguno pendiente — todos los módulos M0–M10 publicados)
 
 ## Convención de cada módulo
 

@@ -17,10 +17,16 @@ partida. El curso **AI Accelerated Development** los organiza por fase.
 | [lab-02 — Spec-Driven Feature](./lab-02-spec-driven-feature/) | Implementar un feature de extremo a extremo desde la spec. | M2, M3, M6 | ✅ publicado |
 | [lab-03 — MCP Integration](./lab-03-mcp-integration/) | Conectar un agente a DB y API vía MCP, con seguridad. | M5, M6, M10 | ✅ publicado |
 
-## Pendientes (Fase 4)
+## Labs publicados (Fase 4 — Especialización)
 
-- lab-04 — Failure Mode Hunt (5 bugs inyectados; M7, M6).
-- lab-05 — Model Evaluation (3 modelos en tu codebase; M9).
+| Lab | Foco | Módulos que ejercita | Estado |
+|-----|------|----------------------|--------|
+| [lab-04 — Failure Mode Hunt](./lab-04-failure-mode-hunt/) | Cazar 5 bugs (uno por clase de la taxonomía M7), fixear con protocolo, postmortem. | M7, M6, M8 §8.7 | ✅ publicado |
+| [lab-05 — Model Evaluation](./lab-05-model-evaluation/) | Evaluar 3 modelos en tu codebase con prueba ciega y decidir adopción. | M9, M1 | ✅ publicado |
+
+## Pendientes
+
+- (ninguno pendiente — labs 01-05 publicados)
 
 ## Cómo hacer un lab
 
