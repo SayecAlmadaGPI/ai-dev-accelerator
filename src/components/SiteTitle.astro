@@ -66,3 +66,12 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
     transform: translateY(-1px) scale(1.04);
   }
 </style>
+
+<script>
+  // Boot de islas vanilla (Fase 4). Feature detection + import() dinámico por
+  // mount-point: cada feature se code-splittea y solo carga en la página que
+  // la necesita. Patrón consistente con Fase 3 (query [data-*], sin React).
+  if (document.querySelector('[data-quiz-mount]')) {
+    import('../scripts/quiz.ts').then((m) => m.initQuizzes());
+  }
+</script>

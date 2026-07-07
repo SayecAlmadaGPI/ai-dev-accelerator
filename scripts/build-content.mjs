@@ -150,7 +150,17 @@ async function walk(srcAbsDir, relDir, destAbsDir, publicAbsDir, collector) {
     if (ext === '.md' || ext === '.mdx') {
       const content = await readFile(srcAbs, 'utf8');
       const { fm, body } = splitForOutput(content, path.basename(e.name, ext));
-      const out = fm + rewriteLinks(body, relDir);
+      // Trackeables (Fase 3): modules/*.md (no README) y labs/lab-*/README.md.
+      const lowerName = e.name.toLowerCase();
+      const isModule = relDir === 'modules' && lowerName !== 'readme.md';
+      const isLab = relDir.startsWith('labs/lab-') && lowerName === 'readme.md';
+      let out = fm + rewriteLinks(body, relDir);
+      // Quiz mount-point (Fase 4a): se inyecta al final de cada módulo. La isla
+      // vanilla (src/scripts/quiz.ts) lo detecta y monta el quiz ahí.
+      if (isModule) {
+        const slug = slugFromRelPath(relPath);
+        out += `\n\n<!-- quiz -->\n<div data-quiz-mount data-slug="${slug}"></div>\n`;
+      }
       // README.md -> index.md: Astro no colapsa README a índice de directorio,
       // solo `index`. Renombrando logramos que labs/README.md sirva en /labs/
       // (slugToParam quita el `/index` final). Demás archivos, en minúsculas.
@@ -159,10 +169,6 @@ async function walk(srcAbsDir, relDir, destAbsDir, publicAbsDir, collector) {
       await writeFile(path.join(destAbsDir, destName), out, 'utf8');
       copied++;
       collector.mdPages.push(relPath);
-      // Trackeables (Fase 3): modules/*.md (no README) y labs/lab-*/README.md.
-      const lowerName = e.name.toLowerCase();
-      const isModule = relDir === 'modules' && lowerName !== 'readme.md';
-      const isLab = relDir.startsWith('labs/lab-') && lowerName === 'readme.md';
       if (isModule || isLab) {
         collector.trackables.push({
           slug: slugFromRelPath(relPath),
