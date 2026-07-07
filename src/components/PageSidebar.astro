@@ -43,6 +43,25 @@ let difficulty = 'Principiante';
 const modNum = parseInt(slug.match(/modules\/(\d+)/)?.[1] || '0', 10);
 if (modNum >= 7) difficulty = 'Avanzado';
 else if (modNum >= 4) difficulty = 'Intermedio';
+
+// Widgets de práctica contextual embebidos en el panel derecho.
+// Cada slug puede tener uno o más widgets (terminal fake o playground).
+interface Widget { type: 'sim' | 'play'; id: string; label: string }
+const widgets: Widget[] = [];
+if (slug === 'modules/02-spec-plan-execute')
+  widgets.push({ type: 'play', id: 'filterByDate', label: 'filterByDate en vivo' });
+if (slug === 'modules/03-workbench')
+  widgets.push({ type: 'sim', id: 'm3-workbench', label: 'Workbench interactivo' });
+if (slug === 'modules/06-verificacion') {
+  widgets.push({ type: 'play', id: 'mutation-testing', label: 'Mutation testing mini' });
+  widgets.push({ type: 'sim', id: 'm6-verify', label: 'Verificación interactiva' });
+}
+if (slug === 'labs/lab-01-baseline-vs-harness')
+  widgets.push({ type: 'sim', id: 'lab-01', label: 'Lab 01 interactivo' });
+if (slug === 'labs/lab-02-spec-driven-feature') {
+  widgets.push({ type: 'sim', id: 'lab-02', label: 'Lab 02 interactivo' });
+  widgets.push({ type: 'play', id: 'task-store', label: 'task-store en vivo' });
+}
 ---
 
 {
@@ -131,6 +150,25 @@ else if (modNum >= 4) difficulty = 'Intermedio';
             <p class="rp-card__title">Contenido</p>
             <TableOfContents />
           </div>
+
+          {/* Práctica contextual embebida */}
+          {widgets.length > 0 && (
+            <div class="rp-card rp-practice">
+              <p class="rp-card__title">Práctica en línea</p>
+              {widgets.map((w) => (
+                <details class="rp-practice__item" open={widgets.length === 1}>
+                  <summary class="rp-practice__summary">{w.label}</summary>
+                  <div class="rp-practice__body">
+                    {w.type === 'sim' ? (
+                      <div data-term-mount data-scenario={w.id} ></div>
+                    ) : (
+                      <div data-playground-mount data-example={w.id} ></div>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -297,6 +335,87 @@ else if (modNum >= 4) difficulty = 'Intermedio';
     color: var(--sl-color-white);
     font-weight: 600;
     border-left-color: var(--sl-color-accent);
+  }
+
+  /* Práctica contextual embebida */
+  .rp-practice {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .rp-practice__item {
+    border: 1px solid var(--sl-color-hairline-shade);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .rp-practice__summary {
+    padding: 0.5rem 0.7rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+  }
+  .rp-practice__summary::-webkit-details-marker {
+    display: none;
+  }
+  .rp-practice__body {
+    padding: 0.5rem;
+  }
+
+  /* Overrides compactos para terminal y playground dentro del panel derecho */
+  .rp-practice__body :global(.aida-term) {
+    height: 14rem;
+    margin-top: 0;
+    border-radius: 8px;
+  }
+  .rp-practice__body :global(.aida-term__bar) {
+    padding: 0.35rem 0.5rem;
+    gap: 0.4rem;
+  }
+  .rp-practice__body :global(.aida-term__sel-label) {
+    display: none;
+  }
+  .rp-practice__body :global(.aida-term__hint) {
+    display: none;
+  }
+  .rp-practice__body :global(.aida-term__screen) {
+    padding: 0.4rem 0.5rem;
+    font-size: 11px;
+  }
+  .rp-practice__body :global(.aida-term__inputline) {
+    padding: 0.35rem 0.5rem;
+  }
+  .rp-practice__body :global(.aida-term__prompt),
+  .rp-practice__body :global(.aida-term__input) {
+    font-size: 11px;
+  }
+
+  .rp-practice__body :global(.aida-pg) {
+    margin-top: 0;
+    gap: 0.4rem;
+  }
+  .rp-practice__body :global(.aida-pg__bar) {
+    gap: 0.4rem;
+  }
+  .rp-practice__body :global(.aida-pg__sel-label) {
+    display: none;
+  }
+  .rp-practice__body :global(.aida-pg__editor) {
+    min-height: 6rem;
+    padding: 0.5rem;
+    font-size: 11px;
+  }
+  .rp-practice__body :global(.aida-pg__out) {
+    min-height: 3rem;
+    max-height: 8rem;
+    padding: 0.5rem;
+    font-size: 11px;
+  }
+  .rp-practice__body :global(.aida-pg__controls) {
+    gap: 0.4rem;
   }
 
   @media (min-width: 72rem) {

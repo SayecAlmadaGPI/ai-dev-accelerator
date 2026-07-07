@@ -1,33 +1,31 @@
-// Isla vanilla del simulador de terminal (Fase 4c rewrite).
-// Reemplaza xterm.js (pesado y frágil en static sites) por un terminal fake
-// puro en vanilla: un div de output + un input para el prompt. Mismo
-// comportamiento (help/clear/ls/echo + comandos por escenario), pero 100%
-// confiable en cualquier navegador sin dependencias pesadas.
-//
-// Patrón: output append-only + input fijo al fondo. El input siempre tiene
-// focus. Up/Down recorren historial. Ctrl+C limpia línea. Ctrl+L limpia
-// screen. Enter ejecuta.
+// Isla vanilla del simulador de terminal (Fase 4c).
+// Soporta múltiples instancias (querySelectorAll). Lee data-scenario para
+// precargar un escenario específico. Cada instancia encapsula su propio estado.
 
 import { scenarios, type TermScenario } from '../data/terminal-scenarios';
 
-let current: TermScenario = scenarios[0];
-let line = '';
-let history: string[] = [];
-let histIdx = -1;
-
 export function initTerm(): void {
   if (typeof document === 'undefined') return;
-  const mount = document.querySelector<HTMLElement>('[data-term-mount]');
-  if (!mount) return;
+  document.querySelectorAll<HTMLElement>('[data-term-mount]').forEach((mount) => {
+    if ((mount as any).__termMounted) return;
+    (mount as any).__termMounted = true;
+    mountTerm(mount);
+  });
+}
 
-  mount.classList.add('aida-term');
+function mountTerm(host: HTMLElement): void {
+  const scenarioId = host.dataset.scenario;
+  const startScenario =
+    scenarios.find((s) => s.id === scenarioId) || scenarios[0];
 
-  mount.innerHTML = `
+  host.classList.add('aida-term');
+
+  host.innerHTML = `
     <div class="aida-term__bar">
-      <label class="aida-term__sel-label" for="aida-term-sel">Escenario</label>
-      <select id="aida-term-sel" class="aida-term__sel">
+      <label class="aida-term__sel-label" for="aida-term-sel-${uniqueId()}">Escenario</label>
+      <select id="aida-term-sel-${uniqueId()}" class="aida-term__sel">
         ${scenarios
-          .map((s) => `<option value="${s.id}">${esc(s.title)}</option>`)
+          .map((s) => `<option value="${s.id}"${s.id === startScenario.id ? ' selected' : ''}>${esc(s.title)}</option>`)
           .join('')}
       </select>
       <span class="aida-term__hint">Escribe <code>help</code> + Enter</span>
@@ -38,9 +36,13 @@ export function initTerm(): void {
       <input class="aida-term__input" type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" aria-label="Comando" />
     </div>`;
 
-  const screen = mount.querySelector<HTMLElement>('.aida-term__screen')!;
-  const prompt = mount.querySelector<HTMLElement>('.aida-term__prompt')!;
-  const input = mount.querySelector<HTMLInputElement>('.aida-term__input')!;
+  const screen = host.querySelector<HTMLElement>('.aida-term__screen')!;
+  const prompt = host.querySelector<HTMLElement>('.aida-term__prompt')!;
+  const input = host.querySelector<HTMLInputElement>('.aida-term__input')!;
+
+  let current: TermScenario = startScenario;
+  let history: string[] = [];
+  let histIdx = -1;
 
   function setPrompt() {
     prompt.textContent = current.prompt;
@@ -49,7 +51,6 @@ export function initTerm(): void {
   function writeLine(text: string, cls?: string) {
     const lineEl = document.createElement('div');
     lineEl.className = 'aida-term__line' + (cls ? ' ' + cls : '');
-    // Escapar HTML pero preservar espacios
     lineEl.innerHTML = esc(text).replace(/ /g, '&nbsp;');
     screen.appendChild(lineEl);
     screen.scrollTop = screen.scrollHeight;
@@ -62,13 +63,12 @@ export function initTerm(): void {
   function loadScenario(s: TermScenario) {
     current = s;
     screen.innerHTML = '';
-    line = '';
-    input.value = '';
     history = [];
     histIdx = -1;
     setPrompt();
     writeLine(s.title, 'aida-term__line--title');
     s.intro.split('\n').forEach((l) => writeLine(l));
+    input.value = '';
     input.focus();
   }
 
@@ -119,7 +119,10 @@ export function initTerm(): void {
 
     const suggest = Object.keys(current.commands).find((k) => k.startsWith(head));
     if (suggest) {
-      writeLine(`Comando no encontrado. ¿quisiste decir \`${suggest}\`?`, 'aida-term__line--warn');
+      writeLine(
+        `Comando no encontrado. ¿quisiste decir \`${suggest}\`?`,
+        'aida-term__line--warn',
+      );
     } else {
       writeLine(`Comando no encontrado: ${cmd}`, 'aida-term__line--error');
       writeLine('Escribe `help` para ver los comandos disponibles.');
@@ -135,7 +138,6 @@ export function initTerm(): void {
         runCommand(cmd);
       }
       input.value = '';
-      line = '';
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (histIdx > 0) {
@@ -154,7 +156,6 @@ export function initTerm(): void {
     } else if (e.key === 'c' && e.ctrlKey) {
       e.preventDefault();
       input.value = '';
-      line = '';
       writeLine('^C');
     } else if (e.key === 'l' && e.ctrlKey) {
       e.preventDefault();
@@ -162,12 +163,11 @@ export function initTerm(): void {
     }
   });
 
-  // Click en la pantalla enfoca el input.
-  mount.addEventListener('click', (e) => {
+  host.addEventListener('click', (e) => {
     if (e.target !== input) input.focus();
   });
 
-  mount.querySelector<HTMLSelectElement>('.aida-term__sel')!.addEventListener(
+  host.querySelector<HTMLSelectElement>('.aida-term__sel')!.addEventListener(
     'change',
     (e) => {
       const id = (e.target as HTMLSelectElement).value;
@@ -176,7 +176,12 @@ export function initTerm(): void {
     },
   );
 
-  loadScenario(scenarios[0]);
+  loadScenario(startScenario);
+}
+
+let idCounter = 0;
+function uniqueId() {
+  return 't' + ++idCounter;
 }
 
 function esc(s: string): string {
