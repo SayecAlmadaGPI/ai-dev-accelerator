@@ -610,7 +610,7 @@ aside[data-aside-type] {
   box-shadow: var(--sl-shadow-md);
   display: flex;
   flex-direction: column;
-  min-height: 22rem;
+  height: 24rem;
 }
 .aida-term__bar {
   display: flex;

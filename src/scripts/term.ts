@@ -3,6 +3,10 @@
 // dinámico solo en esta página. Fake shell que interpreta el set curado de
 // comandos por escenario (src/data/terminal-scenarios.ts) + help/clear/ls/echo
 // globales. Sin React, patrón Fase 3/4.
+//
+// IMPORTANTE: xterm.js necesita que el contenedor tenga dimensiones reales
+// cuando term.open() se llama. Usamos requestAnimationFrame para esperar al
+// layout, y damos al host tabindex=0 + focus() para asegurar que reciba input.
 
 import { scenarios, type TermScenario } from '../data/terminal-scenarios';
 
@@ -29,7 +33,7 @@ export async function initTerm(): Promise<void> {
       </select>
       <span class="aida-term__hint">Escribe <code>help</code> + Enter</span>
     </div>
-    <div class="aida-term__host"></div>`;
+    <div class="aida-term__host" tabindex="0" aria-label="Terminal de práctica"></div>`;
 
   const host = mount.querySelector<HTMLElement>('.aida-term__host')!;
 
@@ -61,11 +65,21 @@ export async function initTerm(): Promise<void> {
     },
   });
   term.loadAddon(fit);
+
+  // Esperamos al próximo frame para asegurar que el layout del host
+  // tenga dimensiones reales antes de abrir xterm. Sin esto, el canvas
+  // puede crearse con tamaño 0 y no recibir input.
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+
   term.open(host);
   safeFit();
+  term.focus();
+
+  // Click en cualquier parte del terminal enfoca el textarea interno.
+  host.addEventListener('click', () => term.focus());
 
   // ResizeObserver + window resize mantienen el terminal a ancho.
-  const ro = new ResizeObserver(safeFit);
+  const ro = new ResizeObserver(() => safeFit());
   ro.observe(host);
   window.addEventListener('resize', onResize);
 
@@ -102,6 +116,7 @@ function loadScenario(s: TermScenario): void {
   s.intro.split('\n').forEach((l) => term.writeln(l));
   term.writeln('');
   writePrompt();
+  term.focus();
 }
 
 function writePrompt(): void {
