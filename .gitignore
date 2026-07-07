@@ -24,3 +24,23 @@ desktop.ini
 # --- Claude Code: datos locales de sesión (no transcripciones) ---
 # Las sesiones viven en ~/.claude, no aquí; esto es por si llegan a caer.
 .claude/sessions/
+
+# --- Astro / Starlight build artifacts ---
+dist/
+.astro/
+
+# --- Contenido GENERADO por copy-on-build (scripts/build-content.mjs) ---
+# La fuente canónica es la raíz del repo; esto se regenera en cada build.
+# NO ignorar src/content/docs/_native/ (paginas hand-authored, commiteadas).
+src/content/docs/modules/
+src/content/docs/labs/
+src/content/docs/cheatsheets/
+src/content/docs/templates/
+src/content/docs/examples/
+src/content/docs/index.md
+src/content/docs/blueprint.md
+public/modules/
+public/labs/
+public/cheatsheets/
+public/templates/
+public/examples/
