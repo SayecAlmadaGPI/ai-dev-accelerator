@@ -1,11 +1,11 @@
 <!--
   harness-design-checklist.md — 20 preguntas para evaluar tu entorno
   --------------------------------------------------------------
-  Uso: marcase cada casilla honestamente. No es un examen para aprobar
+  Uso: marca cada casilla honestamente. No es un examen para aprobar
   con 20/20; es un diagnóstico. Menos de 10 = tu entorno es más "deseo"
   que harness. 15+ = zona confiable. 18+ = harness maduro.
 
-  Recorréla de arriba a abajo: el orden va de lo más estructural
+  Recórrela de arriba a abajo: el orden va de lo más estructural
   (system of record) a lo más operativo (contexto y continuidad).
   Las secciones bajas dependen de las altas: no tiene sentido pulir
   los sensores si tu estado vive en la conversación.
@@ -29,7 +29,7 @@
 - [ ] **A3.** Las decisiones de diseño están documentadas en `docs/decisions/` (o similar), no en "lo que discutimos".
 - [ ] **A4.** Una sesión nueva puede reconstruir el estado sin releer la conversación anterior.
 
-> Si fallás A1-A4, lo demás no importa: tu estado se evapora al cerrar la sesión. Arrreglá esto primero.
+> Si fallas A1-A4, lo demás no importa: tu estado se evapora al cerrar la sesión. Arregla esto primero.
 
 ## B. Restricciones explícitas (¿el agente sabe qué respetar?)
 
@@ -57,7 +57,7 @@
 - [ ] **E2.** Cada regla de texto que se incumple repetidamente se "promueve" a check determinista o a generador.
 - [ ] **E3.** Las acciones destructivas (borrado, rewrite de migraciones, force-push) tienen sandbox o worktree aislado.
 
-## F. Contexto y continuidad (¿gestionás la smart zone?)
+## F. Contexto y continuidad (¿gestionas la smart zone?)
 
 - [ ] **F1.** Compactás proactivamente (~60% de contexto) antes de esperar al autocompact (~83%).
 - [ ] **F2.** Las reglas críticas de seguridad viven en `CLAUDE.local.md` (o equivalente que sobrevive a la compaction).
@@ -69,10 +69,10 @@
 
 | Puntaje | Diagnóstico | Acción sugerida |
 |---------|-------------|-----------------|
-| 0-9 | **Deseo, no harness.** El estado vive en la conversación; el agente improvisa. | Arrancá por A1-A4 (system of record) y B1 (AGENTS.md mínimo). |
-| 10-14 | **Harness básico.** Confiable para tareas chicas, frágil para sesiones largas. | Cerrá D1-D2 (sensores computacionales) y F1 (compactación proactiva). |
-| 15-17 | **Harness confiable.** Sobrevive sesiones largas y cambios de herramienta. | Subí E1-E2 (promover prosa a checks) y D3 (review-agent inferencial). |
-| 18-20 | **Harness maduro.** Confiabilidad por defecto, no por vigilancia. | Mantené; revisá trimestralmente porque el ecosistema cambia. |
+| 0-9 | **Deseo, no harness.** El estado vive en la conversación; el agente improvisa. | Arranca por A1-A4 (system of record) y B1 (AGENTS.md mínimo). |
+| 10-14 | **Harness básico.** Confiable para tareas chicas, frágil para sesiones largas. | Cierra D1-D2 (sensores computacionales) y F1 (compactación proactiva). |
+| 15-17 | **Harness confiable.** Sobrevive sesiones largas y cambios de herramienta. | Sube E1-E2 (promover prosa a checks) y D3 (review-agent inferencial). |
+| 18-20 | **Harness maduro.** Confiabilidad por defecto, no por vigilancia. | Mantén; revisa trimestralmente porque el ecosistema cambia. |
 
 ---
 
@@ -84,7 +84,7 @@
 
 <!--
   Recordatorio: este checklist no es estático. Cada vez que una regla
-  de texto se incumpla, volvé a esta lista y preguntate si esa regla
+  de texto se incumpla, vuelve a esta lista y pregúntate si esa regla
   merece ascender a un check determinista o a un generador. El harness
   madura de abajo hacia arriba.
 -->
