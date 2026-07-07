@@ -6,6 +6,7 @@
 // sigan funcionando (mismo contract que el Hero default).
 import { LinkButton } from '@astrojs/starlight/components';
 import ProgressOverview from './ProgressOverview.astro';
+import ModuleDashboard from './ModuleDashboard.astro';
 
 const { data } = Astro.locals.starlightRoute.entry;
 const { title = data.title, tagline, actions = [] } = data.hero || {};
@@ -31,6 +32,7 @@ const { title = data.title, tagline, actions = [] } = data.hero || {};
       }
     </div>
     <ProgressOverview />
+    <ModuleDashboard />
   </div>
 </section>
 

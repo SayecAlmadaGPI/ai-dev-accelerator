@@ -5,6 +5,7 @@
 // desde modules/ + labs/). Escucha el evento `aida:progress` para
 // actualizarse en vivo al marcar/desmarcar desde cualquier página.
 import trackable from '../data/trackable.json';
+import ProgressRing from './ProgressRing.astro';
 
 const total = trackable.length;
 const base = import.meta.env.BASE_URL;
@@ -37,8 +38,8 @@ const labs = trackable.filter((t) => t.group === 'labs');
       <ul>
         {modules.map((t) => (
           <li>
-            <a class="aida-progress__item" data-progress-item={t.slug} href={base + t.slug + '/'}>
-              <span class="aida-progress__check" aria-hidden="true"></span>
+            <a class="aida-progress__item" href={base + t.slug + '/'}>
+              <ProgressRing slug={t.slug} size="sm" />
               <span class="aida-progress__name">{t.title}</span>
             </a>
           </li>
@@ -50,8 +51,8 @@ const labs = trackable.filter((t) => t.group === 'labs');
       <ul>
         {labs.map((t) => (
           <li>
-            <a class="aida-progress__item" data-progress-item={t.slug} href={base + t.slug + '/'}>
-              <span class="aida-progress__check" aria-hidden="true"></span>
+            <a class="aida-progress__item" href={base + t.slug + '/'}>
+              <ProgressRing slug={t.slug} size="sm" />
               <span class="aida-progress__name">{t.title}</span>
             </a>
           </li>
@@ -71,7 +72,6 @@ const labs = trackable.filter((t) => t.group === 'labs');
     const countEl = root.querySelector('[data-progress-count]');
     const arcEl = root.querySelector('[data-progress-arc]') as SVGCircleElement | null;
     const barEl = root.querySelector('[data-progress-bar]') as HTMLElement | null;
-    const items = root.querySelectorAll('[data-progress-item]');
 
     const render = () => {
       const done = listDone();
@@ -79,10 +79,6 @@ const labs = trackable.filter((t) => t.group === 'labs');
       if (countEl) countEl.textContent = String(n);
       if (arcEl) arcEl.style.strokeDashoffset = String(CIRC * (1 - (total ? n / total : 0)));
       if (barEl) barEl.style.width = `${total ? (n / total) * 100 : 0}%`;
-      items.forEach((it) => {
-        const slug = it.getAttribute('data-progress-item') || '';
-        it.setAttribute('data-done', String(done.includes(slug)));
-      });
     };
 
     render();
@@ -209,30 +205,8 @@ const labs = trackable.filter((t) => t.group === 'labs');
     background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
     color: var(--sl-color-text);
   }
-  .aida-progress__check {
-    width: 1.05rem;
-    height: 1.05rem;
+  .aida-progress__item .pr {
     flex-shrink: 0;
-    border-radius: 999px;
-    border: 1.5px solid var(--sl-color-gray-4);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease;
-  }
-  .aida-progress__item[data-done='true'] {
-    color: var(--sl-color-text);
-  }
-  .aida-progress__item[data-done='true'] .aida-progress__check {
-    background: var(--sl-color-accent);
-    border-color: var(--sl-color-accent);
-  }
-  .aida-progress__item[data-done='true'] .aida-progress__check::after {
-    content: '✓';
-    color: #1a1208;
-    font-size: 0.7rem;
-    font-weight: 800;
-    line-height: 1;
   }
   .aida-progress__name {
     overflow: hidden;

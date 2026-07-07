@@ -1,0 +1,130 @@
+---
+// Dashboard de módulos (rediseño). Lee los archivos fuente de modules/ en
+// build-time para extraer título (H1) y descripción (primera oración del
+// body). Muestra cada módulo como card con ProgressRing mini, número y link.
+// Paleta ámbar existente. Sin React.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import ProgressRing from './ProgressRing.astro';
+
+const ROOT = path.resolve('.');
+const MODS = path.join(ROOT, 'modules');
+const BASE = import.meta.env.BASE_URL;
+
+function extractMeta(filePath: string) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const titleMatch = content.match(/^#\s+(.+)$/m);
+  const title = titleMatch ? titleMatch[1].trim() : path.basename(filePath, '.md');
+
+  // Descripción: primera oración del body (después del H1), truncada.
+  const body = content.replace(/^#\s+[^\n]+\n*/, '').trim();
+  const sentenceMatch = body.match(/^[^.!?]+[.!?]/);
+  let description = sentenceMatch ? sentenceMatch[0].trim() : '';
+  if (description.length > 140) description = description.slice(0, 137) + '…';
+
+  const numMatch = path.basename(filePath).match(/^(\d+)/);
+  const number = numMatch ? parseInt(numMatch[1], 10) : 99;
+
+  const slugBase = path.basename(filePath, '.md');
+  const slug = `modules/${slugBase}`;
+
+  return { slug, title, description, number };
+}
+
+const files = fs
+  .readdirSync(MODS)
+  .filter((f) => f.endsWith('.md') && !f.toLowerCase().startsWith('readme'))
+  .sort((a, b) => {
+    const na = parseInt(a.match(/^(\d+)/)?.[1] || '99', 10);
+    const nb = parseInt(b.match(/^(\d+)/)?.[1] || '99', 10);
+    return na - nb;
+  });
+
+const items = files.map((f) => extractMeta(path.join(MODS, f)));
+---
+
+<section class="mdash" aria-labelledby="mdash-title">
+  <h2 id="mdash-title" class="mdash__title">Módulos del curso</h2>
+  <div class="mdash__grid">
+    {
+      items.map((it) => (
+        <a class="mdash__card sl-card" href={`${BASE}${it.slug}/`}>
+          <div class="mdash__top">
+            <span class="mdash__num">{String(it.number).padStart(2, '0')}</span>
+            <ProgressRing slug={it.slug} size="sm" />
+          </div>
+          <h3 class="mdash__name">{it.title}</h3>
+          {it.description && <p class="mdash__desc">{it.description}</p>}
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .mdash {
+    margin-top: 2.5rem;
+  }
+  .mdash__title {
+    font-size: var(--sl-text-xl);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.25rem;
+    color: var(--sl-color-white);
+  }
+  .mdash__grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+  .mdash__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.1rem 1.2rem;
+    border-radius: 14px;
+    border: 1px solid var(--sl-color-hairline);
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 60%, transparent);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: var(--sl-shadow-sm);
+  }
+  .mdash__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sl-shadow-md);
+    border-color: color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
+  }
+  .mdash__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mdash__num {
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sl-color-text-accent);
+    background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+  }
+  .mdash__name {
+    margin: 0;
+    font-size: var(--sl-text-base);
+    font-weight: 600;
+    color: var(--sl-color-white);
+    line-height: 1.35;
+  }
+  .mdash__desc {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -1,0 +1,129 @@
+---
+// Anillo de progreso SVG (rediseño inspirado en timeline e-learning).
+// Reemplaza el dot simple de ProgressMark. Muestra porcentaje basado en:
+//   - 100% = completado (aida:done:<slug>)
+//   - quiz% = score del quiz / total preguntas (aida:quiz:<slug>)
+//   - 0%   = pendiente
+// Hidrata client-side desde localStorage. Se usa en PageTitle (grande) y
+// en cards del dashboard (pequeño, via CSS scale).
+import { quizBySlug } from '../data/quizzes';
+
+interface Props {
+  slug: string;
+  size?: 'md' | 'sm';
+}
+const { slug, size = 'md' } = Astro.props;
+const quiz = quizBySlug[slug];
+const total = quiz ? quiz.questions.length : 0;
+const hasQuiz = Boolean(quiz);
+---
+
+<div class={`pr pr--${size}`} data-pr-slug={slug} data-pr-total={total} data-pr-hasquiz={String(hasQuiz)}>
+  <svg class="pr__svg" viewBox="0 0 44 44" aria-hidden="true">
+    <circle class="pr__track" cx="22" cy="22" r="18" />
+    <circle class="pr__arc" cx="22" cy="22" r="18" data-pr-arc />
+  </svg>
+  <span class="pr__pct" data-pr-pct>0%</span>
+  <span class="pr__label" data-pr-label>Pendiente</span>
+</div>
+
+<script>
+  const CIRC = 2 * Math.PI * 18; // ~113.1
+  const roots = document.querySelectorAll<HTMLElement>('[data-pr-slug]');
+  roots.forEach((el) => {
+    const slug = el.getAttribute('data-pr-slug') || '';
+    const total = Number(el.getAttribute('data-pr-total') || '0');
+    const done = localStorage.getItem(`aida:done:${slug}`) === 'true';
+    const score = parseInt(localStorage.getItem(`aida:quiz:${slug}`) || '0', 10);
+
+    let pct = 0;
+    let label = 'Pendiente';
+    let arcColor = 'var(--pr-clr-pending)';
+
+    if (done) {
+      pct = 100;
+      label = 'Completado';
+      arcColor = 'var(--pr-clr-done)';
+    } else if (total > 0 && score > 0) {
+      pct = Math.round((score / total) * 100);
+      label = `Quiz ${score}/${total}`;
+      arcColor = 'var(--pr-clr-progress)';
+    }
+
+    const arc = el.querySelector<SVGCircleElement>('[data-pr-arc]');
+    if (arc) {
+      arc.style.strokeDashoffset = String(CIRC * (1 - pct / 100));
+      arc.style.stroke = arcColor;
+    }
+
+    const pctEl = el.querySelector<HTMLElement>('[data-pr-pct]');
+    if (pctEl) pctEl.textContent = `${pct}%`;
+
+    const labelEl = el.querySelector<HTMLElement>('[data-pr-label]');
+    if (labelEl) labelEl.textContent = label;
+  });
+</script>
+
+<style>
+  .pr {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .pr__svg {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    transform: rotate(-90deg);
+  }
+  .pr__track {
+    fill: none;
+    stroke: var(--sl-color-hairline);
+    stroke-width: 3.5;
+  }
+  .pr__arc {
+    fill: none;
+    stroke: var(--pr-clr-progress);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-dasharray: 113.1;
+    stroke-dashoffset: 113.1;
+    transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+  }
+  .pr__pct {
+    font-weight: 700;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-white);
+    line-height: 1;
+  }
+  .pr__label {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    line-height: 1;
+  }
+
+  /* Tamaño pequeño (cards del dashboard) */
+  .pr--sm {
+    gap: 0.35rem;
+  }
+  .pr--sm .pr__svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .pr--sm .pr__track,
+  .pr--sm .pr__arc {
+    stroke-width: 4.5;
+  }
+  .pr--sm .pr__pct {
+    font-size: var(--sl-text-xs);
+  }
+  .pr--sm .pr__label {
+    font-size: 0.65rem;
+  }
+
+  :root {
+    --pr-clr-done: #22c55e;
+    --pr-clr-progress: #f59e0b;
+    --pr-clr-pending: var(--sl-color-gray-4);
+  }
+</style>
