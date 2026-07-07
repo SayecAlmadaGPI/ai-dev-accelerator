@@ -99,7 +99,7 @@ APÉNDICES ── Kit de Supervivencia
 - **Inner Harness vs. Outer Harness:** qué controla el vendor (Cursor rules, Claude Code system prompt) vs. qué construyes tú (AGENTS.md, CI, hooks).
 - **Por qué los agentes capaces fallan:** non-determinismo, falta de estado, contexto corruptible, incentivos perversos (optimizar métricas proxy).
 - **El repositorio como system of record:** todo lo que importa debe vivir fuera de la conversación.
-- **Construcción de restricciones explícitas:** reglas que el agente no puede romper porque el entorno se lo impide, no porque se lo pedís amablemente.
+- **Construcción de restricciones explícitas:** reglas que el agente no puede romper porque el entorno se lo impide, no porque se lo pides amablemente.
 - **Diseño de circuitos de control:** feedforward (guías), feedback (sensores), y la jerarquía de enforcement.
 
 ### Artefactos

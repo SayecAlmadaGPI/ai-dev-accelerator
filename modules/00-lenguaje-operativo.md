@@ -31,8 +31,8 @@ Estos términos describen la **caja negra** con la que hablas. No necesitas sabe
 **En la práctica:** un archivo de 1000 líneas de TypeScript son ~10.000-15.000 tokens. Eso ya es ~1% de una ventana de 1M.
 
 ### Training vs. Inference
-**Definición:** *training* es cuando el modelo aprende (lo hace el proveedor, una sola vez por versión); *inference* es cuando el modelo predice (lo que pasa cada vez que le mandás un mensaje).
-**Por qué te importa:** el conocimiento del modelo está *congelado* en el training. En inference no aprende nada nuevo — solo predice. Cuando le pedís "recuerda que X", no está aprendiendo; está usando el contexto de la conversación. Si borras el contexto, "olvida".
+**Definición:** *training* es cuando el modelo aprende (lo hace el proveedor, una sola vez por versión); *inference* es cuando el modelo predice (lo que pasa cada vez que le mandas un mensaje).
+**Por qué te importa:** el conocimiento del modelo está *congelado* en el training. En inference no aprende nada nuevo — solo predice. Cuando le pides "recuerda que X", no está aprendiendo; está usando el contexto de la conversación. Si borras el contexto, "olvida".
 **En la práctica:** por eso un agente que "aprendió" tu códigobase en una sesión no sabe nada en la siguiente, salvo que persistas ese conocimiento en archivos (de eso viven M1 y M4).
 
 ### Next-token prediction
@@ -51,7 +51,7 @@ Estos términos describen la **caja negra** con la que hablas. No necesitas sabe
 **En la práctica:** elegir effort es como elegir cuánto tiempo dejar pensar a un colaborador antes de que empiece a escribir.
 
 ### Prefix cache
-**Definición:** un prefijo idéntico de tu input que el proveedor ya procesó antes y guarda listo para reusar. Si mandás el mismo system prompt otra vez, no se re-procesa.
+**Definición:** un prefijo idéntico de tu input que el proveedor ya procesó antes y guarda listo para reusar. Si mandas el mismo system prompt otra vez, no se re-procesa.
 **Por qué te importa:** es la diferencia entre $300/día y $30/día en muchas cargas de trabajo reales. El prompt caching (Módulo 9) puede reducir el costo de input entre un 50% y un 90% cuando hay prefijos repetidos.
 **En la práctica:** mantener tu system prompt / AGENTS.md estable entre llamadas activa el cache. Cambiar una línea al principio invalida todo el cache del prefijo.
 
@@ -129,7 +129,7 @@ Cómo el agente percibe el mundo y actúa sobre él. Sin herramientas, un agente
 
 ### Permission request / Permission mode
 **Definición:** cuando el agente quiere ejecutar una acción sensible (escribir archivo, correr comando, hacer red), pide permiso. El *permission mode* define la política: auto-aprobar, preguntar siempre, denegar.
-**Por qué te importa:** es tu control de seguridad *durante* la ejecución. El modo que elijas cambia qué tan autónomo es el agente y cuánto riesgo asumís.
+**Por qué te importa:** es tu control de seguridad *durante* la ejecución. El modo que elijas cambia qué tan autónomo es el agente y cuánto riesgo asumes.
 **En la práctica:** `read-only` para explorar, `propose-then-commit` para cambios que tú apruebas, `full-agent` para tareas largas AFK. Elegir mal el modo es la causa #1 de "el agente borró algo que no debía".
 
 ### Sandbox
@@ -144,9 +144,9 @@ Cómo el agente percibe el mundo y actúa sobre él. Sin herramientas, un agente
 Los nombres de lo que sale mal. Saber el nombre es el primer paso para reconocerlo y reaccionar (el Módulo 7 profundiza).
 
 ### Sycophancy (complacencia)
-**Definición:** la tendencia del modelo a estar de acuerdo con vos, aunque estés equivocado. Si sugerís una mala idea, tiende a validarla en lugar de cuestionarla.
+**Definición:** la tendencia del modelo a estar de acuerdo contigo, aunque estés equivocado. Si sugieres una mala idea, tiende a validarla en lugar de cuestionarla.
 **Por qué te importa:** te da una falsa sensación de validación. El agente que dice "sí, buena idea" a todo no es un buen colaborador; es un espejo.
-**En la práctica:** si le decís "¿no es mejor usar Redis aquí?", probablemente diga "sí, excelente", aunque Mongo fuera la mejor opción. La validación no es señal de corrección.
+**En la práctica:** si le dices "¿no es mejor usar Redis aquí?", probablemente diga "sí, excelente", aunque Mongo fuera la mejor opción. La validación no es señal de corrección.
 
 ### Hallucination: factuality vs. faithfulness
 **Definición:** dos tipos distintos de alucinación. *Factuality* es inventar hechos que no son ciertos (una API que no existe). *Faithfulness* es desviarse de lo que pediste, aunque el contenido sea verdadero.
@@ -262,7 +262,7 @@ Cómo se organiza el trabajo humano-agente. Estos términos describen *modalidad
 **En la práctica:** refactor de migraciones de DB, cambios en producción, touching del schema. Donde un error cuesta caro, HITL.
 
 ### AFK (away from keyboard)
-**Definición:** modo en el que delegás una tarea y te apartáss; el agente trabaja solo y vuelve con un resultado (un PR, un diff, un reporte).
+**Definición:** modo en el que delegas una tarea y te apartas; el agente trabaja solo y vuelve con un resultado (un PR, un diff, un reporte).
 **Por qué te importa:** es el modo para tareas largas y bien especificadas. Máxima velocidad, máximo riesgo si la spec es mala.
 **En la práctica:** solo es seguro en AFK lo que tiene una buena spec + verificación automática. Sin spec, AFK es "esperar y rezar".
 
@@ -284,7 +284,7 @@ Cómo se organiza el trabajo humano-agente. Estos términos describen *modalidad
 ### Design concept
 **Definición:** una descripción de alto nivel de una solución antes de comprometerse con la implementación. No es una spec; es una hipótesis de diseño.
 **Por qué te importa:** es la etapa donde el agente puede equivocarse barato. Descartar un design concept cuesta minutos; descartar una implementación cuesta horas.
-**En la práctica:** pedirle al agente "dame tres design concepts para esto" antes de "implementalo" explora el espacio de soluciones sin quemar tokens en implementaciones que vas a tirar.
+**En la práctica:** pedirle al agente "dame tres design concepts para esto" antes de "implémentalo" explora el espacio de soluciones sin quemar tokens en implementaciones que vas a tirar.
 
 ### Grilling
 **Definición:** la práctica de cuestionar sistemáticamente el output del agente: "¿por qué elegiste esto?", "¿qué pasa si el input es vacío?", "¿verificaste que X existe?".

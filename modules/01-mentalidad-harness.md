@@ -131,11 +131,11 @@ Observan lo que el agente **hizo** y ayudan a corregir. Hay dos sub-tipos:
 
 > **Toda regla de texto que valga la pena conservar debería aspirar a convertirse en un check determinista o en un generador.**
 
-Una regla que dice "usá el patrón repository" es *prosa frágil*: el modelo puede ignorarla. Un analizador que falla el build cuando no se usa es *enforcement*. Mejor aún: un generador que scaffoldea la forma correcta hace que el error sea **estructuralmente imposible**.
+Una regla que dice "usa el patrón repository" es *prosa frágil*: el modelo puede ignorarla. Un analizador que falla el build cuando no se usa es *enforcement*. Mejor aún: un generador que scaffoldea la forma correcta hace que el error sea **estructuralmente imposible**.
 
 | Nivel de enforcement | Ejemplo | Confianza |
 |----------------------|---------|-----------|
-| Prosa en AGENTS.md | "usá el patrón repository" | Baja (advisory) |
+| Prosa en AGENTS.md | "usa el patrón repository" | Baja (advisory) |
 | Regla scoped | `.claude/rules/` que carga solo con archivos del repo | Media |
 | Check determinista | Linter / typecheck / test estructural | Alta |
 | Generador | `dotnet new` / scaffolder que produce la forma correcta | Máxima (el error no puede ocurrir) |
@@ -246,7 +246,7 @@ Y mirando hacia adelante:
 - [ ] ¿Las reglas críticas de seguridad viven en `CLAUDE.local.md` (sobreviven a compaction)?
 - [ ] ¿Usas subagentes con contexto fresco para verificación, en lugar del agente principal saturado?
 
-> Si marcás menos de 10 casillas, tu entorno es más "deseo" que harness. Si marcás 15+, estás en zona confiable. 18+ es harness maduro.
+> Si marcas menos de 10 casillas, tu entorno es más "deseo" que harness. Si marcas 15+, estás en zona confiable. 18+ es harness maduro.
 
 ---
 

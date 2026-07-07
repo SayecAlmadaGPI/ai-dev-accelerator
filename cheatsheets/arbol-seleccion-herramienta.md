@@ -51,7 +51,7 @@ El flujo acota; el desempate lo gana:
 ## Veredicto de una línea
 
 - El flujo acota; el desempate lo dan MCP + harness inner + portabilidad.
-- Antes de comprometerte: blindá la capa portable.
+- Antes de comprometerte: blinda la capa portable.
 
 **Fondo:** M9 §9.4.3, M1 (agent = model + harness), M3 §3.9 (portabilidad).
 Ver también la [cheatsheet de selección de tooling](./seleccion-de-tooling.md).

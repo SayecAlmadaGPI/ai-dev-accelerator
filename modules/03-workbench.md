@@ -40,7 +40,7 @@ No hay una spec universal formal, pero hay un consenso práctico:
 
 - **Comandos:** cómo correr tests, build, lint, migrate. Con el comando exacto, no "usa el linter".
 - **Reglas de estilo que difieren de los defaults:** si el repo prohíbe `any` en TypeScript o exige inmutabilidad, dilo.
-- **Instrucciones de testing:** dónde viven los tests, qué cobertura esperás, qué convenciones de naming.
+- **Instrucciones de testing:** dónde viven los tests, qué cobertura esperas, qué convenciones de naming.
 - **Etiqueta del repo:** branching, PR expectations, tamaño de commit.
 - **Decisiones arquitectónicas estables:** "los repos usan el patrón repository", "el state vive en X".
 - **Gotchas:** lo que rompes una vez y no quieres volver a romper.
@@ -49,7 +49,7 @@ No hay una spec universal formal, pero hay un consenso práctico:
 ### Qué NO poner
 
 - **Lo que el agente puede inferir del código.** Si `package.json` ya dice que usas Jest, no hace falta repetirlo.
-- **Convenciones estándar del lenguaje.** "Usá camelCase en JS" es ruido.
+- **Convenciones estándar del lenguaje.** "Usa camelCase en JS" es ruido.
 - **Documentación de API detallada.** Va en `docs/`, referenciada con un context pointer.
 - **Información que cambia frecuentemente.** Cada cambio invalida el cache del prefijo (M0) y compite por slots.
 - **Secretos.** Nunca.
@@ -130,7 +130,7 @@ Un subagent es un agente secundario con **contexto aislado** que el agente princ
 ### Para qué sirven de verdad
 
 - **Investigación:** "releva qué hace este módulo y vuelve con un resumen" — el subagent lee 50 archivos sin llenar el contexto del principal.
-- **Revisión adversarial:** "revisá este diff contra la spec" — un subagent fresco detecta cosas que el principal, saturado, ya no ve.
+- **Revisión adversarial:** "revisa este diff contra la spec" — un subagent fresco detecta cosas que el principal, saturado, ya no ve.
 - **Verificación:** "corre los tests e interpreta el output" — aislado del contexto de implementación, menos sesgado a decir "verde".
 - **Paralelismo:** fan-out a N subagents sobre archivos independientes (ver M5 y el patrón de workflows).
 
@@ -145,7 +145,7 @@ Cada subagent puede tener su propio system prompt, set de tools y permisos. Un r
 
 ### Trampa común: usar el agente principal saturado para revisar
 
-El error más frecuente es pedirle al *mismo* agente que acaba de implementar que "revisá lo que hiciste". El agente tiene contexto cargado y sesgo de confirmación; va a validar su propio trabajo. Un subagent fresco, con solo el diff y la spec, es mucho más honesto.
+El error más frecuente es pedirle al *mismo* agente que acaba de implementar que "revisa lo que hiciste". El agente tiene contexto cargado y sesgo de confirmación; va a validar su propio trabajo. Un subagent fresco, con solo el diff y la spec, es mucho más honesto.
 
 > Regla: el que implementó no revisa. El que revisa arranca con contexto fresco.
 

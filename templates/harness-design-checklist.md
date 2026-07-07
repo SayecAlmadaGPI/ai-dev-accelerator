@@ -59,9 +59,9 @@
 
 ## F. Contexto y continuidad (¿gestionas la smart zone?)
 
-- [ ] **F1.** Compactás proactivamente (~60% de contexto) antes de esperar al autocompact (~83%).
+- [ ] **F1.** Compactas proactivamente (~60% de contexto) antes de esperar al autocompact (~83%).
 - [ ] **F2.** Las reglas críticas de seguridad viven en `CLAUDE.local.md` (o equivalente que sobrevive a la compaction).
-- [ ] **F3.** Usás subagentes con contexto fresco para verificación, en lugar del agente principal ya saturado.
+- [ ] **F3.** Usas subagentes con contexto fresco para verificación, en lugar del agente principal ya saturado.
 
 ---
 
