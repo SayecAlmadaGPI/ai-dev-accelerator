@@ -53,6 +53,7 @@ export default defineConfig({
         { label: 'Ejemplos', items: [{ autogenerate: { directory: 'examples' } }] },
         { slug: 'blueprint', label: 'Blueprint' },
         { slug: 'simulador', label: 'Simulador' },
+        { slug: 'playground', label: 'Playground' },
       ],
     }),
   ],

@@ -375,6 +375,10 @@ más tests.
 
 ---
 
+> **Practica esto:** el [Playground](../playground/) corre en el navegador un
+> mini de mutation testing (M6.3.4) y el ciclo TDD red → green, para que veas
+> qué atrapa un sensor que el agente no atrapa solo.
+
 ## 6.11 Referencias
 
 - **Claude Code Docs — Best Practices**

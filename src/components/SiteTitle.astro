@@ -78,6 +78,9 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   if (document.querySelector('[data-term-mount]')) {
     import('../scripts/term.ts').then((m) => m.initTerm());
   }
+  if (document.querySelector('[data-playground-mount]')) {
+    import('../scripts/playground.ts').then((m) => m.initPlayground());
+  }
   // Notas: drawer flotante en toda página (carga siempre, módulo chico).
   import('../scripts/notes.ts').then((m) => m.initNotes(base));
   // PWA: registro del service worker en toda página.

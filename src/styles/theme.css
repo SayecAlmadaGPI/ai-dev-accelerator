@@ -665,3 +665,127 @@ aside[data-aside-type] {
     display: none;
   }
 }
+
+/* =============================================================================
+   Fase 4d — Playground JS (.aida-pg*)
+   Editor textarea mono + dropdown de ejemplos + boton Ejecutar + panel de
+   output. El iframe de ejecucion esta oculto (sandbox allow-scripts). Reutiliza
+   tokens --sl-* y el boton .sl-link-button. Sin @layer.
+   ========================================================================== */
+.aida-pg {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.aida-pg__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.aida-pg__sel-label {
+  font-size: var(--sl-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  font-weight: 600;
+}
+.aida-pg__sel {
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-sm);
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  background: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-text);
+  cursor: pointer;
+}
+.aida-pg__sel:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 1px;
+}
+.aida-pg__editor {
+  width: 100%;
+  min-height: 14rem;
+  margin: 0;
+  padding: 0.9rem 1rem;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  color: var(--sl-color-text);
+  background: #0d0a08;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 12px;
+  resize: vertical;
+  tab-size: 2;
+}
+.aida-pg__editor:focus {
+  outline: none;
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sl-color-accent) 25%, transparent);
+}
+.aida-pg__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.aida-pg__btn {
+  font-size: var(--sl-text-sm);
+}
+.aida-pg__state {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+}
+.aida-pg__state[data-state='ok'] {
+  color: #22c55e;
+}
+.aida-pg__state[data-state='err'] {
+  color: #ef4444;
+}
+.aida-pg__state[data-state='edit'] {
+  color: var(--sl-color-text-accent);
+}
+.aida-pg__out {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  min-height: 6rem;
+  max-height: 22rem;
+  overflow: auto;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  color: var(--sl-color-text);
+  background: #0d0a08;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.aida-pg__out:empty::before {
+  content: 'La salida de console.log aparece aquí.';
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.6;
+  font-style: italic;
+}
+.aida-pg__line {
+  margin: 0;
+  padding: 0.05rem 0;
+}
+.aida-pg__line--error {
+  color: #ef4444;
+}
+.aida-pg__line--warn {
+  color: #fcd34d;
+}
+.aida-pg__line--info,
+.aida-pg__line--debug {
+  color: var(--sl-color-gray-2, var(--sl-color-text));
+  opacity: 0.9;
+}
+.aida-pg__frame {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 0;
+  visibility: hidden;
+}

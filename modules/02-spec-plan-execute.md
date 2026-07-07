@@ -330,6 +330,10 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 
 ---
 
+> **Practica esto:** el [Playground](../playground/) ejecuta en el navegador los
+> ejemplos de este módulo (filterByDate, el task-store, invariante + sensor,
+> TDD red → green). Sentir las invariantes en código vale más que leerlas.
+
 ## Referencias de este módulo
 
 - **SDD — metodología:** [GitHub Spec Kit (blog)](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/), [repo](https://github.com/github/spec-kit), [paper AIWare 2026](https://arxiv.org/pdf/2602.00180), [SDD Flow comunitario](https://github.com/Ataden/SDD_Flow).

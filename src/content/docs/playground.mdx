@@ -1,0 +1,26 @@
+---
+title: Playground
+---
+
+# Playground de JavaScript
+
+> **Objetivo:** ejecutar los ejemplos del curso en el navegador, sin instalar
+> nada. El código corre en un **iframe aislado** (`allow-scripts`, sin
+> `allow-same-origin`): no puede tocar el DOM del sitio ni tus cookies. La
+> salida de `console.*` se captura y se muestra en el panel.
+
+1. Elige un **ejemplo** del desplegable (se carga en el editor) o escribe el
+   tuyo.
+2. Pulsa **Ejecutar** (o `Ctrl`/`Cmd` + `Enter`).
+3. Lee la salida en el panel inferior; los errores se muestran en rojo.
+
+Los ejemplos son ports de la prosa del curso: `filterByDate`, el task-store
+del lab-02, el demo de invariante + sensor, un mini de mutation testing y el
+ciclo TDD red → green. Úsalos para **sentir** las invariantes en vez de solo
+leerlas — que es el argumento del curso.
+
+**Nota de seguridad:** el sandbox aísla el código del sitio, pero un bucle
+infinito en tu código puede congelar la pestaña. Si eso pasa, recarga la
+página. Los ejemplos del desplegable son finitos y seguros.
+
+<div data-playground-mount></div>
