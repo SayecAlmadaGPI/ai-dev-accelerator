@@ -365,6 +365,7 @@ aside[data-aside-type] {
   opacity: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  pointer-events: none;
 }
 .aida-quiz__opt-mark {
   flex-shrink: 0;
@@ -607,6 +608,9 @@ aside[data-aside-type] {
   overflow: hidden;
   background: #0d0a08;
   box-shadow: var(--sl-shadow-md);
+  display: flex;
+  flex-direction: column;
+  min-height: 22rem;
 }
 .aida-term__bar {
   display: flex;
@@ -651,8 +655,10 @@ aside[data-aside-type] {
   color: var(--sl-color-text-accent);
 }
 .aida-term__host {
-  padding: 0.6rem 0.8rem 0.8rem;
+  position: relative;
+  flex: 1;
   min-height: 18rem;
+  padding: 0;
 }
 .aida-term .xterm {
   padding: 0;

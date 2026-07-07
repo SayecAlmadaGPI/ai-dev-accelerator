@@ -11,6 +11,7 @@ import { examples } from '../data/playground-examples';
 let iframe: HTMLIFrameElement | null = null;
 let out: HTMLElement | null = null;
 let runBtn: HTMLButtonElement | null = null;
+let runTimer: ReturnType<typeof setTimeout> | null = null;
 
 export function initPlayground(): void {
   if (typeof document === 'undefined') return;
@@ -96,9 +97,9 @@ function run(code: string, state: HTMLElement): void {
   iframe.srcdoc = buildSrcDoc(code);
   document.body.appendChild(iframe);
 
-  // Timeout de seguridad: si no responde en 5s, lo marcamos (no podemos matar
-  // un bucle infinito dentro del iframe, pero avisamos al usuario).
-  setTimeout(() => {
+  // Timeout de seguridad: si no responde en 5s, avisamos al usuario.
+  if (runTimer) clearTimeout(runTimer);
+  runTimer = setTimeout(() => {
     if (runBtn && runBtn.disabled) {
       state.textContent = 'Ejecutando (paso de 5s; posible bucle infinito)';
     }
@@ -112,6 +113,7 @@ function onMessage(e: MessageEvent): void {
   if (!d || d.__pg !== 1) return;
 
   if (d.done) {
+    if (runTimer) { clearTimeout(runTimer); runTimer = null; }
     if (runBtn) runBtn.disabled = false;
     const state = document.querySelector<HTMLElement>('.aida-pg__state');
     if (state) {
