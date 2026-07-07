@@ -14,14 +14,14 @@ para capacitación guiada.
 | M3 — Diseño del Entorno de Trabajo | [`03-workbench.md`](./03-workbench.md) | ✅ publicado |
 | M4 — Flujo de Trabajo y Handoffs | [`04-handoffs.md`](./04-handoffs.md) | ✅ publicado |
 | M5 — Herramientas y Protocolos de Integración | [`05-herramientas-mcp.md`](./05-herramientas-mcp.md) | ✅ publicado |
+| M6 — Verificación y Control de Calidad | [`06-verificacion.md`](./06-verificacion.md) | ✅ publicado |
+| M7 — Failure Modes y Defensa Práctica | [`07-failure-modes.md`](./07-failure-modes.md) | ✅ publicado |
+| M10 — Seguridad, Governance y Compliance | [`10-seguridad-governance.md`](./10-seguridad-governance.md) | ✅ publicado |
 
 ## Pendientes (según `BLUEPRINT.md`)
 
-- M6 — Verificación y Control de Calidad
-- M7 — Failure Modes y Defensa Práctica
 - M8 — Casos de Uso End-to-End
 - M9 — Evaluación de Modelos y Navegación del Ecosistema
-- M10 — Seguridad, Governance y Compliance
 
 ## Convención de cada módulo
 

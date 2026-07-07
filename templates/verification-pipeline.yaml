@@ -1,0 +1,147 @@
+# verification-pipeline.yaml — Pipeline de CI pensado para agentes
+# --------------------------------------------------------------------------
+# Diferencia con un CI tradicional: asume que el agente intentará declarar
+# victoria prematura, y por eso verifica contra la spec, no solo contra
+# "los tests pasan". Ver M6 §6.8.
+#
+# Principio de orden: fallar temprano y barato. typecheck cuesta
+# milisegundos; e2e cuesta minutos. Si typecheck falla, no corras e2e.
+#
+# Este archivo es un esqueleto genérico (GitHub Actions). Adapta los
+# comandos a tu stack real (refleja los mismos que en AGENTS.md §1).
+# --------------------------------------------------------------------------
+
+name: agent-verification
+
+on:
+  pull_request:
+    # El pipeline corre en PRs: el agente commitea en rama, abre PR, el
+    # pipeline es el sensor independiente que valida.
+  push:
+    branches: [main]
+
+# Evita pipelines duplicados corriendo en paralelo sobre el mismo PR.
+concurrency:
+  group: agent-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # --- Etapa 1: sensores computacionales, ordenados por costo ----------
+  # typecheck -> lint -> build -> tests(unit -> integration -> e2e).
+  # Cada etapa es un gate: si falla, las siguientes no corren.
+  sensors-computational:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reproducir entorno (init.sh del M3)
+        # El entorno de verificación debe ser reproducible desde cero.
+        # Si init.sh no puede recrearlo, "a mí me funciona" no es
+        # verificación (M6 §6.7 environment mismatch).
+        run: bash init.sh --check
+
+      - name: Typecheck (barato, falla rápido)
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests unitarios
+        run: npm run test:unit
+
+      - name: Tests de integración (DB real en container, no mocks)
+        # Integration-first (M6 §6.3.3): DB real sobre mocks para atrapar
+        # drift de schema y contratos rotos que los mocks ocultan.
+        run: npm run test:integration
+
+  # --- Etapa 2: diff guard (detención de test gaming y scope creep) ---
+  diff-guard:
+    runs-on: ubuntu-latest
+    # Depende de los sensores: no tiene sentido revisar el diff si los
+    # tests no pasan.
+    needs: sensors-computational
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # necesita el histórico para el diff.
+
+      - name: Paths críticas no tocadas sin gate
+        # Migraciones, configs de prod, specs aprobadas: el agente no
+        # las toca sin gate explícito (M3 §2.3, M6 §6.8).
+        run: |
+          CRITICAL="db/migrations/.*_applied|infra/prod/|docs/specs/.*approved"
+          if git diff --name-only origin/main...HEAD | grep -E "$CRITICAL"; then
+            echo "Se tocaron paths críticas sin gate. Requiere aprobación humana."
+            exit 1
+          fi
+
+      - name: Detección de test gaming (volumen test vs src)
+        # Heurística bruta: si el agente cambió mucho test y poco src en
+        # un "fix", señal de que modificó el test para que pase (M6 §6.6).
+        # No es veredicto; es señal que prioriza el review humano.
+        run: |
+          TEST_LINES=$(git diff --numstat origin/main...HEAD -- 'tests/**' | awk '{s+=$1+$2} END {print s+0}')
+          SRC_LINES=$(git diff --numstat origin/main...HEAD -- 'src/**' | awk '{s+=$1+$2} END {print s+0}')
+          echo "test lines: $TEST_LINES, src lines: $SRC_LINES"
+          if [ "$SRC_LINES" -gt 0 ] && [ "$TEST_LINES" -gt 0 ]; then
+            RATIO=$((TEST_LINES * 100 / SRC_LINES))
+            if [ "$RATIO" -gt 300 ]; then
+              echo "::warning::Ratio test/src alto ($RATIO%): revisar test gaming."
+            fi
+          fi
+
+      - name: Golden tests no alterados
+        # Los tests que codifican los AC de specs aprobadas no se tocan
+        # sin justificación explícita (nuevo spec). Ver M6 §6.6.2.
+        run: |
+          GOLDEN="tests/golden/"
+          if git diff --name-only origin/main...HEAD | grep -q "^$GOLDEN"; then
+            echo "Se alteraron golden tests. Requiere spec de cambio."
+            exit 1
+          fi
+
+  # --- Etapa 3: spec compliance (sensor inferencial apoyado en hechos) --
+  spec-compliance:
+    runs-on: ubuntu-latest
+    needs: sensors-computational
+    # Solo corre si el PR tiene una spec referenciada.
+    if: contains(github.event.pull_request.body, 'docs/specs/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Review-agent diff vs spec
+        # Sensor inferencial (M6 §6.4): un LLM compara diff <-> spec,
+        # apoyado en el output de la etapa 1. Su valor es interpretar la
+        # señal computacional, no reemplazarla.
+        # Implementación real: llama a tu review-agent (acción custom o
+        # script) con el diff y la spec referenciada en el body del PR.
+        run: |
+          echo "TODO: invocar review-agent con diff y spec."
+          # ./scripts/review-agent.sh --diff HEAD~1 --spec $(extract_spec_ref)
+
+  # --- Etapa 4: gate DONE/VERIFIED -----------------------------------
+  done-verified-gate:
+    runs-on: ubuntu-latest
+    needs: [sensors-computational, diff-guard]
+    steps:
+      - uses: actions/checkout@v4
+      - name: El PR incluye reporte DONE/VERIFIED completo
+        # Exige el schema de M6 §6.5: partes 1-4 presentes.
+        # Implementación: parsea el body del PR o un archivo
+        # DONE_VERIFIED.md commiteado en la rama.
+        run: |
+          BODY="${{ github.event.pull_request.body }}"
+          for SEC in "Qué se verificó" "Qué NO se verificó" "Supuestos" "revisa el humano"; do
+            if ! echo "$BODY" | grep -q "$SEC"; then
+              echo "Falta sección del schema DONE/VERIFIED: $SEC"
+              exit 1
+            fi
+          done
+
+  # --- Etapa 5: human gate (lo irreducible) --------------------------
+  # No es un job: es la aprobación requerida del PR. La parte 4 del
+  # reporte DONE/VERIFIED prioriza la atención del revisor.
+  # En GitHub: branch protection rule que exige review approval + status
+  # checks de las etapas anteriores.
