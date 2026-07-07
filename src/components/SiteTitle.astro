@@ -71,16 +71,40 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   // Boot de islas vanilla (Fase 4). Feature detection + import() dinámico por
   // mount-point: cada feature se code-splittea y solo carga en la página que
   // la necesita. Patrón consistente con Fase 3 (query [data-*], sin React).
+  //
+  // Usamos MutationObserver para detectar mount-points que aparezcan después
+  // del parsing inicial (Astro view transitions, streaming, etc.).
   const base = import.meta.env.BASE_URL;
-  if (document.querySelector('[data-quiz-mount]')) {
-    import('../scripts/quiz.ts').then((m) => m.initQuizzes());
+
+  const booted = new Set<string>();
+  function bootFeature(selector: string, initFn: () => void): void {
+    if (booted.has(selector)) return;
+    const el = document.querySelector(selector);
+    if (el) {
+      booted.add(selector);
+      initFn();
+      return;
+    }
+    const mo = new MutationObserver(() => {
+      if (document.querySelector(selector)) {
+        booted.add(selector);
+        initFn();
+        mo.disconnect();
+      }
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
   }
-  if (document.querySelector('[data-term-mount]')) {
-    import('../scripts/term.ts').then((m) => m.initTerm());
-  }
-  if (document.querySelector('[data-playground-mount]')) {
-    import('../scripts/playground.ts').then((m) => m.initPlayground());
-  }
+
+  bootFeature('[data-quiz-mount]', () =>
+    import('../scripts/quiz.ts').then((m) => m.initQuizzes()),
+  );
+  bootFeature('[data-term-mount]', () =>
+    import('../scripts/term.ts').then((m) => m.initTerm()),
+  );
+  bootFeature('[data-playground-mount]', () =>
+    import('../scripts/playground.ts').then((m) => m.initPlayground()),
+  );
+
   // Notas: drawer flotante en toda página (carga siempre, módulo chico).
   import('../scripts/notes.ts').then((m) => m.initNotes(base));
   // PWA: registro del service worker en toda página.
