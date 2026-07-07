@@ -52,6 +52,7 @@ export default defineConfig({
         { label: 'Plantillas', items: [{ autogenerate: { directory: 'templates' } }] },
         { label: 'Ejemplos', items: [{ autogenerate: { directory: 'examples' } }] },
         { slug: 'blueprint', label: 'Blueprint' },
+        { slug: 'simulador', label: 'Simulador' },
       ],
     }),
   ],

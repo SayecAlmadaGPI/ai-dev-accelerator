@@ -593,3 +593,75 @@ aside[data-aside-type] {
     padding: 0.6rem;
   }
 }
+
+/* =============================================================================
+   Fase 4c — Simulador de terminal (.aida-term*)
+   Contenedor del xterm.js + barra de selector de escenario. Reutiliza
+   tokens --sl-* (radio 14, hairline, fondo sidebar). xterm trae su propio CSS
+   (importado en term.ts); acá solo envolvemos. Sin @layer.
+   ========================================================================== */
+.aida-term {
+  margin-top: 1.5rem;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d0a08;
+  box-shadow: var(--sl-shadow-md);
+}
+.aida-term__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 90%, transparent);
+}
+.aida-term__sel-label {
+  font-size: var(--sl-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  font-weight: 600;
+}
+.aida-term__sel {
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-sm);
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  background: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-text);
+  cursor: pointer;
+}
+.aida-term__sel:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 1px;
+}
+.aida-term__hint {
+  margin-inline-start: auto;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.8;
+}
+.aida-term__hint code {
+  font-family: var(--sl-font-mono);
+  background: var(--sl-color-bg-inline-code);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  color: var(--sl-color-text-accent);
+}
+.aida-term__host {
+  padding: 0.6rem 0.8rem 0.8rem;
+  min-height: 18rem;
+}
+.aida-term .xterm {
+  padding: 0;
+}
+.aida-term .xterm-viewport {
+  background-color: #0d0a08 !important;
+}
+@media (max-width: 40rem) {
+  .aida-term__hint {
+    display: none;
+  }
+}
