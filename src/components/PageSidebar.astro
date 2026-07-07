@@ -1,0 +1,314 @@
+---
+// Override de PageSidebar (rediseño e-learning).
+// Panel derecho con metadata del módulo/lab actual, recursos relacionados,
+// tags, y TOC. Estilo plataforma e-learning (imagen 1: panel derecho con
+// info del curso, instructor, tags, descripción, contenido).
+import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
+import TableOfContents from 'virtual:starlight/components/TableOfContents';
+import ProgressRing from './ProgressRing.astro';
+import trackable from '../data/trackable.json';
+import { quizBySlug } from '../data/quizzes';
+
+const base = import.meta.env.BASE_URL;
+const { toc, entry, hasSidebar } = Astro.locals.starlightRoute;
+const title = entry.data.title;
+
+// Derivar slug actual (igual que PageTitle)
+let slug = Astro.url.pathname;
+if (slug.startsWith(base)) slug = slug.slice(base.length);
+slug = slug.replace(/\/+$/, '');
+
+const isTrackable = trackable.some((t) => t.slug === slug);
+const quiz = quizBySlug[slug];
+const relatedLabs = trackable.filter((t) => t.group === 'labs');
+
+// Tags simples basados en el título.
+const tags: string[] = [];
+if (slug.includes('modules/00')) tags.push('Fundamentos');
+else if (slug.includes('modules/01')) tags.push('Mentalidad', 'Harness');
+else if (slug.includes('modules/02')) tags.push('Spec-Driven', 'SDD');
+else if (slug.includes('modules/03')) tags.push('Workbench');
+else if (slug.includes('modules/04')) tags.push('Handoffs');
+else if (slug.includes('modules/05')) tags.push('MCP', 'Tools');
+else if (slug.includes('modules/06')) tags.push('Verificación', 'Testing');
+else if (slug.includes('modules/07')) tags.push('Failure Modes');
+else if (slug.includes('modules/08')) tags.push('Casos de Uso');
+else if (slug.includes('modules/09')) tags.push('Evaluación', 'Benchmarks');
+else if (slug.includes('modules/10')) tags.push('Seguridad', 'Governance');
+else if (slug.includes('lab-')) tags.push('Práctica', 'Lab');
+else tags.push('Curso');
+
+// Nivel de dificultad basado en el número de módulo.
+let difficulty = 'Principiante';
+const modNum = parseInt(slug.match(/modules\/(\d+)/)?.[1] || '0', 10);
+if (modNum >= 7) difficulty = 'Avanzado';
+else if (modNum >= 4) difficulty = 'Intermedio';
+---
+
+{
+  toc && (
+    <>
+      <div class="lg:sl-hidden">
+        <MobileTableOfContents />
+      </div>
+      <div class="right-sidebar-panel sl-hidden lg:sl-block">
+        <div class="sl-container">
+          {/* Metadata card */}
+          {isTrackable && (
+            <div class="rp-card rp-meta">
+              <div class="rp-meta__top">
+                <ProgressRing slug={slug} />
+                <div class="rp-meta__title">{title}</div>
+              </div>
+
+              <div class="rp-meta__grid">
+                <div class="rp-meta__cell">
+                  <span class="rp-meta__label">Nivel</span>
+                  <span class="rp-meta__value">{difficulty}</span>
+                </div>
+                <div class="rp-meta__cell">
+                  <span class="rp-meta__label">Quiz</span>
+                  <span class="rp-meta__value">{quiz ? `${quiz.questions.length} preguntas` : '—'}</span>
+                </div>
+                <div class="rp-meta__cell">
+                  <span class="rp-meta__label">Tipo</span>
+                  <span class="rp-meta__value">{slug.includes('lab-') ? 'Lab práctico' : 'Módulo teórico'}</span>
+                </div>
+                <div class="rp-meta__cell">
+                  <span class="rp-meta__label">Labs</span>
+                  <span class="rp-meta__value">{relatedLabs.length}</span>
+                </div>
+              </div>
+
+              {tags.length > 0 && (
+                <div class="rp-tags">
+                  {tags.map((t) => (
+                    <span class="rp-tag">{t}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Acciones rápidas */}
+          {isTrackable && (
+            <div class="rp-card rp-actions">
+              <p class="rp-card__title">Acciones rápidas</p>
+              <a class="rp-action" href={`${base}simulador/`}>
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>Simulador</span>
+              </a>
+              <a class="rp-action" href={`${base}playground/`}>
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <span>Playground</span>
+              </a>
+              <button class="rp-action" type="button" onclick="document.querySelector('.aida-notes-fab')?.click()">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <span>Notas</span>
+              </button>
+            </div>
+          )}
+
+          {/* Recursos relacionados (solo en módulos) */}
+          {isTrackable && !slug.includes('lab-') && relatedLabs.length > 0 && (
+            <div class="rp-card rp-related">
+              <p class="rp-card__title">Labs relacionados</p>
+              <ul class="rp-related__list">
+                {relatedLabs.slice(0, 3).map((lab) => (
+                  <li>
+                    <a class="rp-related__link" href={`${base}${lab.slug}/`}>
+                      <span class="rp-related__dot" />
+                      <span>{lab.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* TOC */}
+          <div class="rp-toc">
+            <p class="rp-card__title">Contenido</p>
+            <TableOfContents />
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+<style>
+  .right-sidebar-panel {
+    padding: 1rem var(--sl-sidebar-pad-x);
+  }
+  .sl-container {
+    width: calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x));
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Cards del panel derecho */
+  .rp-card {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--sl-color-hairline);
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 60%, transparent);
+  }
+  .rp-card__title {
+    margin: 0 0 0.7rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sl-color-gray-3);
+  }
+
+  /* Metadata */
+  .rp-meta__top {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--sl-color-hairline-shade);
+  }
+  .rp-meta__title {
+    font-weight: 700;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-white);
+    line-height: 1.3;
+  }
+  .rp-meta__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 0.8rem;
+  }
+  .rp-meta__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .rp-meta__label {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+  .rp-meta__value {
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+  .rp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.8rem;
+  }
+  .rp-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sl-color-text-accent);
+    background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  /* Acciones */
+  .rp-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .rp-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: start;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .rp-action:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  /* Recursos relacionados */
+  .rp-related__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .rp-related__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.4rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .rp-related__link:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+    color: var(--sl-color-white);
+  }
+  .rp-related__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sl-color-accent);
+    flex-shrink: 0;
+  }
+
+  /* TOC */
+  .rp-toc :global(h2) {
+    display: none; /* ocultamos el h2 "En esta página" de Starlight */
+  }
+  .rp-toc :global(:where(a)) {
+    display: block;
+    font-size: var(--sl-text-xs);
+    text-decoration: none;
+    color: var(--sl-color-gray-3);
+    overflow-wrap: anywhere;
+    padding: 0.3rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.6rem;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .rp-toc :global(:where(a):hover) {
+    color: var(--sl-color-white);
+    border-left-color: color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
+  }
+  .rp-toc :global(:where(a[aria-current='true'])) {
+    color: var(--sl-color-white);
+    font-weight: 600;
+    border-left-color: var(--sl-color-accent);
+  }
+
+  @media (min-width: 72rem) {
+    .sl-container {
+      max-width: calc(
+        (
+          (
+              100vw - var(--sl-sidebar-width) - 2 * var(--sl-content-pad-x) - 2 *
+                var(--sl-sidebar-pad-x)
+            ) * 0.25
+        )
+      );
+    }
+  }
+</style>

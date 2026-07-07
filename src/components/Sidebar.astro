@@ -1,0 +1,297 @@
+---
+// Override de Sidebar (rediseño e-learning).
+// Sidebar con secciones accordion estilo plataforma e-learning. Cada grupo
+// es una "fase" colapsable. Los items de módulos/labs muestran un anillo de
+// progreso mini. El grupo activo se abre automáticamente.
+import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
+import ProgressRing from './ProgressRing.astro';
+import trackable from '../data/trackable.json';
+
+const { sidebar } = Astro.locals.starlightRoute;
+const base = import.meta.env.BASE_URL;
+
+// Determina si un href es un módulo o lab para mostrar el anillo.
+function isTrackableHref(href: string): string | null {
+  const slug = href.replace(base, '').replace(/\/$/, '');
+  const found = trackable.find((t) => t.slug === slug);
+  return found ? slug : null;
+}
+
+// Fases visuales para los grupos (mapeo de label -> nro de fase).
+const phaseMap: Record<string, string> = {
+  'Módulos': 'Fase 1',
+  'Labs': 'Fase 2',
+  'Cheatsheets': 'Fase 3',
+  'Plantillas': 'Fase 4',
+  'Ejemplos': 'Fase 5',
+};
+---
+
+<nav class="aida-sidebar" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
+    <div class="aida-sidebar__header">
+      <span class="aida-sidebar__brand">Contenido</span>
+      <span class="aida-sidebar__count">{trackable.length} lecciones</span>
+    </div>
+    <ul class="aida-sidebar__list">
+      {
+        sidebar.map((group) => {
+          if (group.type !== 'group') {
+            // Item simple (ej. Inicio, Blueprint)
+            const slug = isTrackableHref(group.href || '');
+            return (
+              <li class="aida-sidebar__item">
+                <a
+                  class="aida-sidebar__link"
+                  href={group.href}
+                  aria-current={group.isCurrent ? 'page' : undefined}
+                >
+                  {slug && <ProgressRing slug={slug} size="sm" />}
+                  <span>{group.label}</span>
+                </a>
+              </li>
+            );
+          }
+
+          const phaseLabel = phaseMap[group.label] || group.label;
+          const isOpen = group.entries.some((e: any) =>
+            e.type === 'link' ? e.isCurrent : false,
+          );
+
+          return (
+            <li class="aida-sidebar__group">
+              <details open={isOpen} class="aida-sidebar__details">
+                <summary class="aida-sidebar__summary">
+                  <span class="aida-sidebar__phase">{phaseLabel}</span>
+                  <span class="aida-sidebar__group-title">{group.label}</span>
+                  <span class="aida-sidebar__badge">{group.entries.length}</span>
+                  <svg class="aida-sidebar__caret" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </summary>
+                <ul class="aida-sidebar__sublist">
+                  {group.entries.map((entry: any) => {
+                    if (entry.type !== 'link') return null;
+                    const slug = isTrackableHref(entry.href);
+                    const numMatch = entry.label.match(/Módulo\s+(\d+)/);
+                    const num = numMatch ? numMatch[1] : '';
+                    return (
+                      <li class="aida-sidebar__subitem">
+                        <a
+                          class="aida-sidebar__sublink"
+                          href={entry.href}
+                          aria-current={entry.isCurrent ? 'page' : undefined}
+                        >
+                          <span class="aida-sidebar__num">{num || '•'}</span>
+                          {slug && <ProgressRing slug={slug} size="sm" />}
+                          <span class="aida-sidebar__item-label">{entry.label.replace(/^Módulo \d+ — /, '')}</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </details>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>
+
+<style>
+  .aida-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .aida-sidebar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--sl-color-hairline-shade);
+    margin-bottom: 0.25rem;
+  }
+  .aida-sidebar__brand {
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--sl-color-gray-3);
+  }
+  .aida-sidebar__count {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-4);
+  }
+
+  .aida-sidebar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  /* Item simple (Inicio, Blueprint, etc.) */
+  .aida-sidebar__item {
+    margin: 0;
+  }
+  .aida-sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .aida-sidebar__link:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+    color: var(--sl-color-white);
+  }
+  .aida-sidebar__link[aria-current='page'] {
+    background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+    color: var(--sl-color-white);
+    font-weight: 600;
+    border-left: 2px solid var(--sl-color-accent);
+  }
+
+  /* Grupo accordion */
+  .aida-sidebar__group {
+    margin: 0;
+  }
+  .aida-sidebar__details {
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .aida-sidebar__details:hover {
+    border-color: var(--sl-color-hairline-shade);
+  }
+  .aida-sidebar__details[open] {
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 80%, transparent);
+    border-color: var(--sl-color-hairline-shade);
+  }
+
+  .aida-sidebar__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.6rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+  .aida-sidebar__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .aida-sidebar__phase {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--sl-color-text-accent);
+    background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .aida-sidebar__group-title {
+    font-weight: 600;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-white);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .aida-sidebar__badge {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-hairline);
+    padding: 0.1rem 0.35rem;
+    border-radius: 999px;
+    min-width: 1.2rem;
+    text-align: center;
+  }
+  .aida-sidebar__caret {
+    flex-shrink: 0;
+    color: var(--sl-color-gray-3);
+    transition: transform 0.2s ease;
+  }
+  .aida-sidebar__details[open] .aida-sidebar__caret {
+    transform: rotate(180deg);
+  }
+
+  .aida-sidebar__sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0.15rem 0.4rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .aida-sidebar__subitem {
+    margin: 0;
+  }
+  .aida-sidebar__sublink {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .aida-sidebar__sublink:hover {
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
+    color: var(--sl-color-white);
+  }
+  .aida-sidebar__sublink[aria-current='page'] {
+    background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+  .aida-sidebar__sublink[aria-current='page'] .aida-sidebar__num {
+    background: var(--sl-color-accent);
+    color: #1a1208;
+  }
+
+  .aida-sidebar__num {
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-hairline);
+    width: 1.3rem;
+    height: 1.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .aida-sidebar__item-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  /* Ajustes responsive */
+  @media (min-width: 50rem) {
+    .aida-sidebar__link,
+    .aida-sidebar__summary,
+    .aida-sidebar__sublink {
+      font-size: var(--sl-text-sm);
+    }
+  }
+</style>

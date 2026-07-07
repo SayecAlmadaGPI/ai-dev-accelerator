@@ -1,0 +1,216 @@
+---
+// Override de PageFrame (rediseño e-learning).
+// Agrega un toggle para colapsar el sidebar, lo que expande el área de
+// contenido. El estado se persiste en localStorage (key: aida:sidebar:collapsed).
+// También registra el ancho del viewport para ajustes responsive.
+import MobileMenuToggle from 'virtual:starlight/components/MobileMenuToggle';
+
+const { hasSidebar } = Astro.locals.starlightRoute;
+const base = import.meta.env.BASE_URL;
+---
+
+<div class="page sl-flex" data-page-frame>
+	<header class="header"><slot name="header" /></header>
+	{
+		hasSidebar && (
+			<nav class="sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')} data-sidebar-nav>
+				<MobileMenuToggle />
+				<button
+					type="button"
+					class="sidebar-toggle"
+					aria-label="Contraer o expandir menú lateral"
+					aria-expanded="true"
+					data-sidebar-toggle
+				>
+					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M11 17l-5-5 5-5" class="toggle-chevron-left" />
+						<path d="M18 17l-5-5 5-5" class="toggle-chevron-right" />
+						<path d="M3 12h18" class="toggle-bar" />
+					</svg>
+				</button>
+				<div id="starlight__sidebar" class="sidebar-pane" data-sidebar-pane>
+					<div class="sidebar-content sl-flex">
+						<slot name="sidebar" />
+					</div>
+				</div>
+			</nav>
+		)
+	}
+	<div class="main-frame" data-main-frame><slot /></div>
+</div>
+
+<script>
+	(function () {
+		const STORAGE_KEY = 'aida:sidebar:collapsed';
+		const frame = document.querySelector('[data-page-frame]');
+		const toggle = document.querySelector('[data-sidebar-toggle]');
+		const pane = document.querySelector('[data-sidebar-pane]');
+		if (!frame || !toggle || !pane) return;
+
+		function setCollapsed(collapsed: boolean) {
+			frame.classList.toggle('sidebar-is-collapsed', collapsed);
+			toggle.setAttribute('aria-expanded', String(!collapsed));
+			pane.setAttribute('aria-hidden', String(collapsed));
+			try { localStorage.setItem(STORAGE_KEY, String(collapsed)); } catch {}
+		}
+
+		const stored = localStorage.getItem(STORAGE_KEY);
+		if (stored === 'true') setCollapsed(true);
+
+		toggle.addEventListener('click', () => {
+			setCollapsed(!frame.classList.contains('sidebar-is-collapsed'));
+		});
+	})();
+</script>
+
+<style>
+	.page {
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.header {
+		z-index: var(--sl-z-index-navbar);
+		position: fixed;
+		inset-inline-start: 0;
+		inset-block-start: 0;
+		width: 100%;
+		height: var(--sl-nav-height);
+		border-bottom: 1px solid var(--sl-color-hairline-shade);
+		padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
+		padding-inline-end: var(--sl-nav-pad-x);
+		background-color: var(--sl-color-bg-nav);
+	}
+
+	:global([data-has-sidebar]) .header {
+		padding-inline-end: calc(
+			var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size)
+		);
+	}
+
+	/* Botón de colapso del sidebar */
+	.sidebar-toggle {
+		display: none;
+		position: fixed;
+		z-index: calc(var(--sl-z-index-navbar) + 1);
+		inset-inline-start: calc(var(--sl-sidebar-width) - 14px);
+		inset-block-start: calc(var(--sl-nav-height) + 12px);
+		width: 28px;
+		height: 28px;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 1px solid var(--sl-color-hairline-shade);
+		background: var(--sl-color-bg-sidebar);
+		color: var(--sl-color-gray-2);
+		cursor: pointer;
+		transition: left 0.3s ease, background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+		box-shadow: var(--sl-shadow-sm);
+	}
+	.sidebar-toggle:hover {
+		background: var(--sl-color-accent);
+		color: #1a1208;
+		transform: scale(1.08);
+	}
+	.sidebar-toggle:focus-visible {
+		outline: 2px solid var(--sl-color-accent);
+		outline-offset: 2px;
+	}
+
+	/* Icono del toggle: muestra/oculta paths según estado */
+	.sidebar-toggle .toggle-chevron-right {
+		display: none;
+	}
+	.sidebar-toggle .toggle-bar {
+		display: none;
+	}
+
+	.sidebar-is-collapsed .sidebar-toggle {
+		inset-inline-start: 12px;
+	}
+	.sidebar-is-collapsed .sidebar-toggle .toggle-chevron-left {
+		display: none;
+	}
+	.sidebar-is-collapsed .sidebar-toggle .toggle-chevron-right {
+		display: block;
+	}
+	.sidebar-is-collapsed .sidebar-toggle .toggle-bar {
+		display: none;
+	}
+
+	.sidebar-pane {
+		visibility: var(--sl-sidebar-visibility, hidden);
+		position: fixed;
+		z-index: var(--sl-z-index-menu);
+		inset-block: var(--sl-nav-height) 0;
+		inset-inline-start: 0;
+		width: 100%;
+		background-color: var(--sl-color-black);
+		overflow-y: auto;
+		scrollbar-gutter: stable;
+		transition: transform 0.3s ease, width 0.3s ease;
+	}
+
+	:global([aria-expanded='true']) ~ .sidebar-pane {
+		--sl-sidebar-visibility: visible;
+	}
+
+	.sidebar-content {
+		height: 100%;
+		min-height: max-content;
+		padding: 1rem var(--sl-sidebar-pad-x) 0;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.main-frame {
+		padding-top: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height));
+		padding-inline-start: var(--sl-content-inline-start);
+		transition: padding-inline-start 0.3s ease;
+	}
+
+	/* === DESKTOP >= 50rem === */
+	@media (min-width: 50rem) {
+		:global([data-has-sidebar]) .header {
+			padding-inline-end: var(--sl-nav-pad-x);
+		}
+		.sidebar-toggle {
+			display: flex;
+		}
+		.sidebar-pane {
+			--sl-sidebar-visibility: visible;
+			width: var(--sl-sidebar-width);
+			background-color: var(--sl-color-bg-sidebar);
+			border-inline-end: 1px solid var(--sl-color-hairline-shade);
+		}
+
+		/* Sidebar colapsado: oculta el contenido pero mantiene el toggle */
+		.sidebar-is-collapsed .sidebar-pane {
+			transform: translateX(-100%);
+			width: 0;
+		}
+		:global([dir='rtl']) .sidebar-is-collapsed .sidebar-pane {
+			transform: translateX(100%);
+		}
+		.sidebar-is-collapsed .main-frame {
+			padding-inline-start: 0;
+		}
+		:global([data-has-sidebar]) .sidebar-is-collapsed .header {
+			padding-inline-start: calc(var(--sl-nav-pad-x) + 44px);
+		}
+	}
+
+	@media (min-width: 50em) {
+		.sidebar-content::after {
+			content: '';
+			padding-bottom: 1px;
+		}
+	}
+
+	/* En pantallas anchas el main-pane crece al colapsar */
+	@media (min-width: 72rem) {
+		.sidebar-is-collapsed [data-main-frame] :global(.main-pane) {
+			width: 100%;
+		}
+	}
+</style>

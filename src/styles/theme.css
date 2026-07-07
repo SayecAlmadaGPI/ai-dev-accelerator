@@ -789,3 +789,79 @@ aside[data-aside-type] {
   border: 0;
   visibility: hidden;
 }
+
+/* =============================================================================
+   Rediseño e-learning — Layout de tres columnas (sidebar | main | right-panel)
+   Sidebar colapsable con toggle, panel derecho rico, área central expansible.
+   ========================================================================== */
+
+/* Aumentar el ancho del sidebar para el nuevo diseño */
+@media (min-width: 50rem) {
+  :root {
+    --sl-sidebar-width: 18rem;
+  }
+}
+
+/* Ajustes del header cuando el sidebar está colapsado */
+.sidebar-is-collapsed [data-has-sidebar] .header {
+  padding-inline-start: var(--sl-nav-pad-x);
+}
+
+/* El main-frame sin padding-left cuando el sidebar está colapsado */
+.sidebar-is-collapsed .main-frame {
+  padding-inline-start: 0;
+}
+
+/* Ajustes del contenido principal cuando el sidebar está colapsado */
+@media (min-width: 72rem) {
+  .sidebar-is-collapsed [data-has-sidebar][data-has-toc] .main-pane {
+    width: min(
+      calc(100% - var(--sl-sidebar-width)),
+      calc(
+        var(--sl-content-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2
+      )
+    );
+  }
+}
+
+/* En pantallas muy anchas, expandir el main-pane al colapsar el sidebar */
+@media (min-width: 90rem) {
+  .sidebar-is-collapsed [data-has-sidebar][data-has-toc] .main-pane {
+    width: min(
+      calc(100% - var(--sl-sidebar-width)),
+      calc(var(--sl-content-width) + 8rem)
+    );
+  }
+}
+
+/* Ajustes del right-sidebar-panel para que no se solape con el drawer de notas */
+.right-sidebar-panel {
+  z-index: 1;
+}
+
+/* Suavizar transiciones del layout */
+.main-frame,
+.main-pane,
+.sidebar-pane {
+  transition: width 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+}
+
+/* Mejorar la scrollbar del sidebar */
+.sidebar-pane::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-pane::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-pane::-webkit-scrollbar-thumb {
+  background: var(--sl-color-hairline);
+  border-radius: 999px;
+}
+.sidebar-pane::-webkit-scrollbar-thumb:hover {
+  background: var(--sl-color-gray-4);
+}
+
+/* Ocultar scrollbar en el panel derecho (como el default de Starlight) */
+.right-sidebar .sl-container::-webkit-scrollbar {
+  display: none;
+}

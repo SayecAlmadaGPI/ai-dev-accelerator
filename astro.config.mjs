@@ -41,6 +41,9 @@ export default defineConfig({
         SiteTitle: './src/components/SiteTitle.astro',
         Hero: './src/components/Hero.astro',
         PageTitle: './src/components/PageTitle.astro',
+        PageFrame: './src/components/PageFrame.astro',
+        Sidebar: './src/components/Sidebar.astro',
+        PageSidebar: './src/components/PageSidebar.astro',
       },
       // Desde Starlight v0.39, los grupos autogenerados van como
       // { label, items: [{ autogenerate: { directory } }] }.
