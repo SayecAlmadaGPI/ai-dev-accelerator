@@ -926,32 +926,10 @@ aside[data-aside-type] {
 }
 
 /* =============================================================================
-   Panel derecho colapsable (solo en páginas con widgets de práctica)
+   Panel derecho mas ancho en paginas con widgets de practica
    ========================================================================== */
 
-/* Ocultar panel derecho cuando está contraído */
-html[data-right-panel-collapsed] .right-sidebar-container {
-  display: none;
-}
-
-/* Expandir el contenido principal cuando el panel derecho está contraído */
-@media (min-width: 72rem) {
-  html[data-right-panel-collapsed] .main-pane {
-    width: min(
-      calc(100% - var(--sl-sidebar-width)),
-      var(--sl-content-width)
-    ) !important;
-  }
-}
-
-/* Sin sidebar izquierdo: usar todo el ancho disponible */
-@media (min-width: 72rem) {
-  html[data-right-panel-collapsed]:not([data-has-sidebar]) .main-pane {
-    width: var(--sl-content-width) !important;
-  }
-}
-
-/* En páginas con widgets, hacer el panel derecho más ancho por defecto */
+/* En paginas con widgets, hacer el panel derecho mas ancho */
 @media (min-width: 72rem) {
   html[data-has-widgets] .right-sidebar-panel .sl-container {
     max-width: calc(
@@ -963,9 +941,4 @@ html[data-right-panel-collapsed] .right-sidebar-container {
       )
     );
   }
-}
-
-/* El panel derecho necesita position: relative para que el toggle se posicione */
-.right-sidebar-panel {
-  position: relative;
 }
