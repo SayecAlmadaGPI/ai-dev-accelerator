@@ -69,6 +69,8 @@ mejor SWE-bench.
 |------|--------------------|------------------|-----|-------|--------|------------|------------------------------------|
 | [Tool A] | [cuál] | [sí/no] | [sí/no] | [sí/no] | [sí/no] | [por sesión/token] | [alta/media/baja] |
 | [Tool B] | ... | ... | ... | ... | ... | ... | ... |
+| OpenCode (open-source, Anomaly) | 75+ proveedores vía Models.dev | ✅ (BYO key, Copilot, ChatGPT, locales) | ✅ nativo | ⚠️ vía plugins | ✅ agents/skills/commands | gratis + BYO | alta (lee `AGENTS.md`) |
+| Pi (open-source, Earendil, MIT) | 15+ proveedores (Anthropic, OpenAI, Ollama, llama.cpp) | ✅ (BYO key) | ❌ vía extensión | ❌ construible | ✅ skills/extensiones | gratis + BYO | alta (lee `AGENTS.md`); inner harness lo escribes tú |
 
 ## Decisión de adopción (resumen)
 

@@ -32,9 +32,11 @@ No hay una spec universal formal, pero hay un consenso práctico:
 | **Codex** | `AGENTS.md` | Soporte de primera clase; carga desde `~/.codex/`, raíz del repo y working dir. |
 | **Cursor** | `AGENTS.md` y `CLAUDE.md` | Junto con `.cursor/rules`. |
 | **Claude Code** | `CLAUDE.md` | Lectura oficial. Truco cross-tool: `ln -s AGENTS.md CLAUDE.md` para un único archivo canónico. |
+| **OpenCode** | `AGENTS.md` (nativo) | `/init` lo genera y recomienda commitearlo. Config inner en `opencode.json` / `opencode.jsonc`. |
+| **Pi** | `AGENTS.md` y `CLAUDE.md` (+ `SYSTEM.md` por proyecto) | Multi-proveedor; compactación automática; sesiones en árbol. |
 | **Aider** | `CONVENTIONS.md` / indicado en `.aider.conf.yml` | Convención propia. |
 
-**Recomendación práctica:** escribe un único `AGENTS.md` canónico y enlázalo como `CLAUDE.md` (o usa `@imports`) para que Claude Code lo lea. Así tienes una sola fuente de verdad que funciona en varias herramientas.
+**Recomendación práctica:** escribe un único `AGENTS.md` canónico y enlázalo como `CLAUDE.md` (o usa `@imports`) para que Claude Code lo lea. Así tienes una sola fuente de verdad que funciona en varias herramientas (incluidas OpenCode y Pi, que lo leen nativamente).
 
 ### Qué SÍ poner
 
@@ -292,6 +294,14 @@ Lo que es portable entre herramientas (invierte primero) vs. lo que no:
 | Test suites y mutation tests | |
 
 > La inversión en la columna izquierda sobrevive a que cambies de herramienta. La columna derecha es la capa fina, barata de reconstruir.
+
+> **Dónde caen OpenCode y Pi en esta tabla:** ambas leen `AGENTS.md`
+> nativamente (columna izquierda — portable), así que tu capa portable
+> les aplica de entrada. La capa inner es lo que te ata: **OpenCode** la
+> declara en `opencode.json` (agents, commands, rules, permisos, plugins);
+> **Pi** la construyes como extensiones TypeScript (sin MCP, subagents ni
+> permisos nativos por diseño — los añades tú). Para el desglose por
+> dimensión, ver `templates/cross-tool-compatibility-matrix.md` §3.
 
 ---
 

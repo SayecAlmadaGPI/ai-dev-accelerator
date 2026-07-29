@@ -1,6 +1,6 @@
 <!--
-  seleccion-de-tooling.md — ¿Claude Code, Cursor, Codex o Aider?
-  --------------------------------------------------------------
+  seleccion-de-tooling.md — ¿Claude Code, Cursor, Codex, Aider, OpenCode o Pi?
+  ---------------------------------------------------------------------
   Cheatsheet de decisión (Apéndice B). Versión consulta-rápida de M9 §9.4.3.
 
   Principio: decides una COMBINACIÓN modelo+harness, no un modelo aislado
@@ -8,7 +8,7 @@
   en harness afilado.
 -->
 
-# ¿Claude Code, Cursor, Codex o Aider?
+# ¿Claude Code, Cursor, Codex, Aider, OpenCode o Pi?
 
 > **Decisión rápida:** no compares modelos aisladamente; compara
 > *combinaciones* modelo+harness. El harness inner (hooks, skills,
@@ -27,6 +27,8 @@
 | **Portabilidad del harness** | ¿Tu AGENTS.md/planning sobrevive al cambio? (M3 §3.9) | Lo que no es portable te ata. |
 | **Cost model** | Por sesión, por token, suscripción. | Cost-per-quality para tu volumen (M9 §9.3.3). |
 | **Lock-in** | ¿Puedes moverte sin reescribir el harness? | Invierte primero en la capa portable (M3 §3.9). |
+| **Open-source** | ¿El agente es open-source? | Hedging de lock-in del proveedor. |
+| **BYO modelo / proveedor** | ¿Traes tu propia API key o cuenta (Copilot, ChatGPT, Ollama)? | Multi-proveedor real, no solo el del vendor. |
 
 ## Regla de oro
 
@@ -40,7 +42,13 @@
 - No decidas por "el modelo más nuevo"; decide por la combinación
   modelo+harness que mejor resuelve TUS tareas a tu costo.
 - Antes de comprometerte: ¿tu harness portable sobrevive al cambio? Si
-  no, blindalo antes.
+  no, blíndalo antes.
+- **OpenCode** si quieres open-source + traer tu propio modelo o cuenta
+  (Copilot, ChatGPT, Ollama) sin atarte a un proveedor; te da MCP, agents
+  y permisos de fábrica.
+- **Pi** si quieres un chasis mínimo que extender a medida: el inner
+  harness (MCP, subagents, permisos, hooks) lo construyes tú con
+  extensiones. Caso límite del M1.
 
 **Fondo:** M9 §9.4.3, M1 (agent = model + harness), M3 §3.9 (portabilidad).
 Ver también el [árbol de selección de herramienta](./arbol-seleccion-herramienta.md).

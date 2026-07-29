@@ -27,6 +27,11 @@
 │      ¿Trabajo multi-archivo no trivial?
 │      └─ Aider suele ir archivo a archivo; valora si encaja.
 │
+├─ ¿Open-source + traer tu propio modelo o cuenta (sin vendor lock-in)?
+│  └─ → OpenCode (MCP nativo, 75+ proveedores, login Copilot/ChatGPT, locales).
+│      ¿Prefieres un chasis mínimo que tú extiendas, no baterías incluidas?
+│      └─ SÍ → Pi ("primitives, not features": MCP/subagents/permisos como extensiones).
+│
 └─ Ejecución de tickets end-to-end, integrado a repos en la nube.
    └─ → Codex (agente de tarea completa, orientado a issue).
        ¿Necesitas control de permisos y sandbox por comando?
@@ -38,7 +43,8 @@
 El flujo acota; el desempate lo gana:
 
 1. **¿Soporta MCP?** Si tu integración al mundo real depende de MCP
-   (M5), una tool sin soporte nativo te bloquea.
+   (M5), una tool sin soporte nativo te bloquea. Pi no trae MCP nativo
+   (lo añades vía extensión); OpenCode, Cursor y Claude Code sí.
 2. **¿El harness inner es afilado?** Hooks, skills, subagents, permisos
    por tool (M3). Es la mitad del rendimiento.
 3. **¿Tu harness portable sobrevive al cambio?** AGENTS.md, specs,

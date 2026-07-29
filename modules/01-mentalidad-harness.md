@@ -77,6 +77,19 @@ Invierte primero en la **capa portable** (AGENTS.md, MCP servers, CI, hooks, gen
 
 > Un test en CI es portabilidad pura. Una regla `.cursor/rules` es deuda con Cursor. Prioriza la primera.
 
+> **Caso límite — Pi (`pi.dev`):** existe un agente de código, open-source
+> y MIT (por Earendil), que lleva la tesis `agent = model + harness` al
+> extremo. Pi **no trae** MCP, subagents, plan mode, permission gates ni
+> background bash *por diseño* — su lema es *"primitives, not features"*.
+> El inner harness es, literalmente, tu trabajo: lo construyes como
+> extensiones TypeScript (`pi install <npm|git|path>`). Donde Claude Code
+> te da el harness de fábrica, Pi te da el chasis y te enseña, en carne
+> propia, por qué el harness es tu responsabilidad. No es mejor ni peor;
+> es la ilustración más pura de este módulo: dos agentes con el mismo
+> modelo y distinto harness rinden distinto, y aquí uno de los harnesses
+> lo escribes tú. (Para el desglose por dimensión frente a otras tools,
+> ver `templates/cross-tool-compatibility-matrix.md` §3.)
+
 ---
 
 ## 1.3 El repositorio como system of record

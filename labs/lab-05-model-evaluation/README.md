@@ -40,6 +40,15 @@ el lab sea instructivo (no tres clones):
 > Si los tres son "el más caro de cada proveedor", el lab pierde valor:
 > no aprendes a discriminar por cost-per-quality. Mezcla perfiles.
 
+> **Vehículo recomendado para la prueba ciega:** un agente open-source
+> multi-proveedor como **OpenCode** te deja correr los 3 modelos sobre el
+> mismo codebase con tus propias cuentas o keys (Copilot, ChatGPT, API key
+> propia, Ollama local) sin atarte a un proveedor. La capa portable
+> (`AGENTS.md`, specs) se mantiene idéntica entre corridas; solo cambia
+> el modelo — justo lo que aísla la prueba ciega (M9 §9.4.2). Para el
+> desglose por dimensión del harness, ver
+> `templates/cross-tool-compatibility-matrix.md` §3.
+
 ## Parte 1 — Lee sus releases sin hype
 
 Para cada modelo, llena la tabla de `templates/model-comparison-cheatsheet.md`:

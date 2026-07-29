@@ -201,10 +201,10 @@ El paso que la mayoría salta. Toma 5-10 tareas *reales* de tu codebase
 ### 9.4.3 Comparativa de herramientas (no solo de modelos)
 
 El modelo es la mitad; la tool (Claude Code, Cursor, Codex, Aider,
-Copilot) es la otra. La comparativa relevante no es "qué modelo" sino
-"qué combinación modelo+harness". Un modelo superior en un harness
-flojo puede rendir menos que uno inferior en un harness afilado (M1:
-agent = model + harness).
+Copilot, OpenCode, Pi) es la otra. La comparativa relevante no es "qué
+modelo" sino "qué combinación modelo+harness". Un modelo superior en un
+harness flojo puede rendir menos que uno inferior en un harness afilado
+(M1: agent = model + harness).
 
 | Dimensión | Qué comparar |
 |-----------|--------------|
@@ -213,9 +213,17 @@ agent = model + harness).
 | MCP support | §9 con M5. |
 | Cost model | Por sesión, por token, suscripción. |
 | Lock-in | ¿Tu harness portable sobrevive al cambio? (M3 §3.9). |
+| Open-source | ¿El agente es open-source? Hedging de lock-in del proveedor. |
+| BYO modelo / proveedor | ¿Traes tu propia API key o cuenta (Copilot, ChatGPT, Ollama)? Multi-proveedor real, no solo el modelo del vendor. |
+| MCP nativo | ¿MCP viene de fábrica o lo añades vía extensión? (M5) |
 
 > El error clásico: comparar modelos aisladamente cuando vas a usarlos
-> *dentro* de un harness. Compara combinaciones.
+> *dentro* de un harness. Compara combinaciones. Las dos herramientas
+> open-source multi-proveedor que abren el panorama más allá de Claude
+> Code son **OpenCode** (MCP nativo, BYO cuenta Copilot/ChatGPT, 75+
+> proveedores vía Models.dev) y **Pi** (MCP vía extensión, 15+ proveedores
+> con Ollama/llama.cpp, chasis mínimo que tú extiendes). Para el desglose
+> por dimensión del harness, ver `templates/cross-tool-compatibility-matrix.md` §3.
 
 ### 9.4.4 Cuándo cambiar de modelo: heurísticas
 

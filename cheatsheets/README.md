@@ -16,7 +16,7 @@ versión consulta-rápida.
 | [modo-afk-o-hitl](./modo-afk-o-hitl.md) | ¿Trabajo human-in-the-loop o away-from-keyboard? | M4 §4.5 |
 | [una-sesion-o-varias](./una-sesion-o-varias.md) | ¿Sigo en esta sesión o cierro y arranco otra? | M4 §4.2 |
 | [rag-o-long-context](./rag-o-long-context.md) | ¿RAG o meter todo en la ventana? | M9 §9.5.2 |
-| [seleccion-de-tooling](./seleccion-de-tooling.md) | ¿Claude Code, Cursor, Codex o Aider? | M9 §9.4.3 |
+| [seleccion-de-tooling](./seleccion-de-tooling.md) | ¿Claude Code, Cursor, Codex, Aider, OpenCode o Pi? | M9 §9.4.3 |
 | [cuando-cambiar-de-modelo](./cuando-cambiar-de-modelo.md) | ¿Cambio de modelo en este release? | M9 §9.4.4 |
 | [benchmark-importa-mi-caso](./benchmark-importa-mi-caso.md) | ¿Este benchmark importa para mi caso? | M9 §9.2 |
 

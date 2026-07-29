@@ -114,6 +114,17 @@ export const quizzes: Quiz[] = [
         answer: 3,
         explain: 'La capacidad no es el cuello de botella. Lo son la no determinación, la atención finita y el contexto corruptible. El harness crea un entorno donde la capacidad se aprovecha sin desviarse.',
       },
+      {
+        q: 'Pi (pi.dev) no trae MCP, subagents ni permisos nativos por diseño ("primitives, not features"). ¿Qué enseña esto sobre la tesis del módulo?',
+        options: [
+          'Que Pi es un agente inferior porque le falta harness.',
+          'Que el inner harness es responsabilidad tuya: el agente es model + harness, y aquí el harness lo construyes tú con extensiones.',
+          'Que el modelo es lo único que importa y Pi demuestra que sin harness basta.',
+          'Que los agentes open-source siempre son peores que los cerrados.',
+        ],
+        answer: 1,
+        explain: 'Pi lleva "agent = model + harness" al extremo: te da el chasis y tú añades MCP/subagents/permisos como extensiones. Es el caso límite donde el harness es, literalmente, tu trabajo.',
+      },
     ],
   },
   {
@@ -513,6 +524,17 @@ export const quizzes: Quiz[] = [
         ],
         answer: 1,
         explain: 'En sesiones largas el caching es el ahorro más grande: el mismo system prompt/historial reusado cuesta una fracción del input normal (10-25%).',
+      },
+      {
+        q: 'Tu integración al mundo real depende de MCP y no quieres atarte a un proveedor. ¿Qué combinación prioriza mejor esas dos restricciones?',
+        options: [
+          'Cualquier modelo top de SWE-bench; el harness no importa.',
+          'Un agente open-source multi-proveedor con MCP nativo (p. ej. OpenCode), manteniendo tu capa portable (AGENTS.md, specs) independiente del modelo.',
+          'Pi con MCP nativo de fábrica y sin extensiones.',
+          'Un modelo cerrado atado a un solo proveedor, sin AGENTS.md.',
+        ],
+        answer: 1,
+        explain: 'Decides una combinación modelo+harness, no un modelo aislado. Open-source + BYO modelo + MCP nativo cubre las dos restricciones, y la capa portable (AGENTS.md) sobrevive al cambio. Pi no trae MCP nativo (lo añades vía extensión), por eso no encaja cuando MCP es "sí o sí".',
       },
     ],
   },

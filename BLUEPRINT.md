@@ -617,6 +617,10 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [Scrimba — Claude Code vs Codex vs Cursor](https://scrimba.com/articles/claude-code-vs-codex-vs-cursor/)
 - [Agent Harness Comparison — DEV Community](https://dev.to/arihantdeva/agent-harness-comparison-claude-code-aider-cursor-agent-codex-cli-33n5)
 - [Claude Code vs Cursor vs Aider — DEV Community](https://dev.to/sameer_saleem/claude-code-vs-cursor-vs-aider-the-2026-battle-for-your-terminal-and-ide-3cb4)
+- **Herramientas open-source multi-proveedor (BYO modelo):**
+  - [OpenCode — opencode.ai](https://opencode.ai) · [docs](https://opencode.ai/docs) — agente open-source multi-interfaz (terminal + IDE + desktop), 75+ proveedores vía Models.dev, MCP nativo, lee `AGENTS.md`.
+  - [Pi — pi.dev](https://pi.dev) · [repo earendil-works/pi](https://github.com/earendil-works/pi) — chasis mínimo extensible (MIT); MCP/subagents/permisos se añaden como extensiones TS. Caso límite del M1.
+  - Desglose por dimensión del harness (comandos, extensiones, hooks, memoria, subagents, MCP, permisos, modelo, open-source): `templates/cross-tool-compatibility-matrix.md` §3.
 
 ### Surveys Académicos y Revisiones Sistemáticas
 - [LLM-Based Multi-Agent Systems for Code Generation — Tampere University](https://arxiv.org/html/2604.16321v1) — 114 estudios, 37 benchmarks.
@@ -633,12 +637,60 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 
 ---
 
+## 🗒️ Changelog de contenido
+
+Registro de cambios de **contenido** (no de código del sitio). Cada
+entrada lista qué se modificó y en qué archivo, para auditar la evolución
+del material. El sitio se regenera por copy-on-build desde la raíz del
+repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados acá
+se propaga al sitio sin tocar `src/content/docs/`.
+
+### 2026-07-29 — Ampliación del panorama de herramientas (OpenCode + Pi)
+
+**Tesis del cambio:** el curso estaba centrado en Claude Code. Se abre el
+panorama a herramientas open-source multi-proveedor que materializan la
+tesis `agent = model + harness` desde otro ángulo:
+
+- **OpenCode** (`opencode.ai`, por Anomaly) — agente open-source
+  multi-interfaz (terminal + IDE + desktop), multi-proveedor (75+ vía
+  Models.dev), BYO modelo/cuenta, MCP nativo, `AGENTS.md` nativo (`/init`).
+- **Pi** (`pi.dev`, por Earendil, MIT) — chasis mínimo extensible
+  (*"primitives, not features"*): MCP, subagents, plan mode y permisos no
+  son nativos por diseño; se construyen como extensiones TS (`pi install`).
+- Se incorpora también **Cursor** a la comparativa de **dimensiones del
+  harness** (ya estaba en otras tablas).
+
+Ninguna de las dos reemplaza la metodología SDD/harness; la ilustran. Pi
+es el caso límite donde el inner harness es literalmente tu trabajo (M1).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `modules/03-workbench.md` | §"Cross-tool" + §3.9 | Filas OpenCode/Pi en tabla cross-tool; columnas OpenCode/Pi en tabla portable vs. inner. |
+| `modules/09-evaluacion-modelos.md` | §9.4.3 | Lista de herramientas ampliada (añade OpenCode, Pi); dimensiones open-source / BYO modelo / MCP nativo. |
+| `modules/01-mentalidad-harness.md` | §1.2 (Inner vs Outer) | Callout: Pi como caso límite de `agent = model + harness`. |
+| `templates/cross-tool-compatibility-matrix.md` | §1, §2, nueva §3 | Notas OpenCode/Pi en §1 (portable) y §2 (inner); nueva §3 "Dimensiones del harness por tool" (Claude Code / Cursor / OpenCode / Pi × comandos · extensiones · hooks · memoria · subagents · MCP · permisos · modelo · open-source). |
+| `cheatsheets/seleccion-de-tooling.md` | título + veredictos | Título ampliado (añade OpenCode, Pi); veredictos BYO modelo / chasis DIY. |
+| `cheatsheets/arbol-seleccion-herramienta.md` | flujo + desempate | Ramas OpenCode y Pi; nota MCP nativo. |
+| `templates/model-comparison-cheatsheet.md` | tabla harness | Filas OpenCode y Pi. |
+| `BLUEPRINT.md` | esta sección + §Notas + §Comparativas | Changelog; marca "Local-First AI" parcialmente cubierto vía OpenCode/Pi; links oficiales de OpenCode y Pi en "Comparativas de Herramientas". |
+| `src/data/quizzes.ts` | M1 + M9 | Pregunta M1 (Pi como caso límite del harness) y pregunta M9 (BYO modelo + MCP nativo + portabilidad). |
+| `labs/lab-05-model-evaluation/README.md` | nota "Vehículo recomendado" | OpenCode como vehículo de la prueba ciega (BYO key, mismo codebase, capa portable idéntica). |
+
+> **Convención:** las dimensiones del harness (comandos, extensiones, hooks,
+> memoria, subagents, MCP, permisos, selección de modelo) son ordinales
+> direccionales (✅/⚠️/❌), no absolutos; las herramientas cambian, las
+> dimensiones no. Revisa la versión vigente de cada tool antes de decidir.
+> El ecosistema cambia cada 3-6 meses: esta entrada tiene la misma
+> caducidad implícita que el resto del blueprint.
+
+---
+
 ## 📝 Notas para Futuras Versiones del Blueprint
 
 - [ ] Incorporar prácticas específicas de `Augment Code` y `Devin` cuando haya más literatura abierta.
 - [ ] Añadir módulo de "Agent Economics" (cost tracking, budget governance, FinOps para LLMs) si el público lo demanda.
 - [ ] Explorar integración con `OpenAI Codex` async/cloud workflows como caso de uso en M8.
-- [ ] Considerar sección de "Local-First AI" (Ollama, llama.cpp, local models) para entornos regulados.
+- [ ] Considerar sección de "Local-First AI" (Ollama, llama.cpp, local models) para entornos regulados. **(parcialmente cubierto 2026-07-29: OpenCode y Pi soportan modelos locales vía Ollama/llama.cpp — ver la tabla de dimensiones del harness en `templates/cross-tool-compatibility-matrix.md` §3)**
 - [ ] Traducción a español: decidir si el material base se escribe en español con términos en inglés, o bilingüe completo.
 - [ ] Mantener un changelog de referencias: el ecosistema cambia cada 3-6 meses; este blueprint necesita caducidad explícita.
 
