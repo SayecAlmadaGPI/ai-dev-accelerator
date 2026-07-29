@@ -32,12 +32,13 @@ export default defineConfig({
       // los assets en public/ se sirven bajo /ai-dev-accelerator/.
       head: [
         { tag: 'link', attrs: { rel: 'manifest', href: '/ai-dev-accelerator/manifest.webmanifest' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#f59e0b' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#d4a056' } },
         { tag: 'link', attrs: { rel: 'icon', href: '/ai-dev-accelerator/icon.svg', type: 'image/svg+xml' } },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/ai-dev-accelerator/icon.svg' } },
       ],
       // Overrides de componentes de Starlight (mapea clave -> path .astro).
       components: {
+        Head: './src/components/Head.astro',
         SiteTitle: './src/components/SiteTitle.astro',
         Hero: './src/components/Hero.astro',
         PageTitle: './src/components/PageTitle.astro',

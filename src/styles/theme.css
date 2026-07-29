@@ -14,30 +14,30 @@
   --sl-font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  /* Acento ámbar */
-  --sl-color-accent: #f59e0b;
-  --sl-color-accent-high: #fcd34d;
-  --sl-color-accent-low: #3a2a0e;
-  --sl-color-text-accent: #fcd34d;
+  /* Acento ámbar refinado — tono cognac profundo, menos saturado */
+  --sl-color-accent: #d4a056;
+  --sl-color-accent-high: #e6c188;
+  --sl-color-accent-low: #2a1f12;
+  --sl-color-text-accent: #d4a056;
 
   /* Extremos cálidos */
   --sl-color-white: #f3efe8;
-  --sl-color-black: #0d0a08;
+  --sl-color-black: #0a0807;
 
   /* Superficies */
-  --sl-color-bg: #0d0a08;
-  --sl-color-bg-nav: rgba(20, 15, 9, 0.72);
-  --sl-color-bg-sidebar: #100c0a;
-  --sl-color-bg-inline-code: #1a140d;
-  --sl-color-bg-accent: #2a1d09;
+  --sl-color-bg: #0a0807;
+  --sl-color-bg-nav: rgba(18, 13, 9, 0.78);
+  --sl-color-bg-sidebar: #0e0b09;
+  --sl-color-bg-inline-code: #16110c;
+  --sl-color-bg-accent: #211810;
 
   /* Hairlines */
-  --sl-color-hairline-light: #1a140d;
-  --sl-color-hairline: #241c12;
-  --sl-color-hairline-shade: #2c2218;
+  --sl-color-hairline-light: #16110c;
+  --sl-color-hairline: #221a12;
+  --sl-color-hairline-shade: #2a2016;
 
   /* Texto */
-  --sl-color-text: #e9e3da;
+  --sl-color-text: #e6e0d6;
 
   /* Backdrop (modal/overlay) */
   --sl-color-backdrop-overlay: rgba(8, 6, 4, 0.66);
@@ -57,31 +57,31 @@
 
 /* ---------- Tokens: light ---------- */
 :root[data-theme='light'] {
-  --sl-color-accent: #b45309;
-  --sl-color-accent-high: #d97706;
-  --sl-color-accent-low: #fef3c7;
-  --sl-color-text-accent: #b45309;
+  --sl-color-accent: #a06a2c;
+  --sl-color-accent-high: #c4894a;
+  --sl-color-accent-low: #fdf6e8;
+  --sl-color-text-accent: #8a5a22;
 
   --sl-color-white: #1c1714;
-  --sl-color-black: #ffffff;
+  --sl-color-black: #fdfaf5;
 
-  --sl-color-bg: #ffffff;
-  --sl-color-bg-nav: rgba(253, 250, 245, 0.78);
-  --sl-color-bg-sidebar: #fdfaf5;
-  --sl-color-bg-inline-code: #f6efe2;
-  --sl-color-bg-accent: #fef3c7;
+  --sl-color-bg: #fdfaf5;
+  --sl-color-bg-nav: rgba(251, 247, 238, 0.84);
+  --sl-color-bg-sidebar: #f9f4ec;
+  --sl-color-bg-inline-code: #f3ecdf;
+  --sl-color-bg-accent: #f5ead2;
 
-  --sl-color-hairline-light: #f3ebdd;
-  --sl-color-hairline: #ece3d6;
-  --sl-color-hairline-shade: #e3d8c6;
+  --sl-color-hairline-light: #f0e8d8;
+  --sl-color-hairline: #e8dfcd;
+  --sl-color-hairline-shade: #ddd2bd;
 
   --sl-color-text: #2a221b;
 
   --sl-color-backdrop-overlay: rgba(40, 30, 18, 0.4);
 
-  --sl-shadow-sm: 0 1px 2px rgba(60, 40, 10, 0.08);
-  --sl-shadow-md: 0 6px 24px -12px rgba(60, 40, 10, 0.18);
-  --sl-shadow-lg: 0 14px 40px -14px rgba(60, 40, 10, 0.22);
+  --sl-shadow-sm: 0 1px 2px rgba(60, 40, 10, 0.06);
+  --sl-shadow-md: 0 6px 22px -12px rgba(60, 40, 10, 0.14);
+  --sl-shadow-lg: 0 14px 36px -14px rgba(60, 40, 10, 0.18);
 }
 
 /* ---------- Base ---------- */
@@ -90,13 +90,18 @@ html {
 }
 
 body {
-  font-feature-settings: 'cv11', 'ss01';
+  font-feature-settings: 'cv11', 'ss01', 'cv05';
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* Números tabulares en código y metadatos numéricos */
+code, pre, .aida-term__screen, .aida-pg__editor, .aida-pg__out {
+  font-variant-numeric: tabular-nums;
+}
+
 ::selection {
-  background: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 85%, transparent);
   color: #1a1208;
 }
 
@@ -109,11 +114,11 @@ body {
    Header — glassy, sticky
    ========================================================================== */
 header.header {
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
-  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
   background-color: var(--sl-color-bg-nav);
-  border-bottom-color: var(--sl-color-hairline);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--sl-color-hairline-shade);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 /* Separador tras los social icons */
@@ -172,49 +177,50 @@ header.header .social-icons::after {
   border-radius: 14px;
   border-color: var(--sl-color-hairline);
   background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 70%, transparent);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .sl-card:hover,
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--sl-shadow-lg);
-  border-color: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-hairline));
+  box-shadow: var(--sl-shadow-md);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 35%, var(--sl-color-hairline));
+  background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 82%, transparent);
 }
 
 /* LinkCard (variant con link) */
 .link-card {
   border-radius: 14px;
   border-color: var(--sl-color-hairline);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .link-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--sl-shadow-lg);
-  border-color: color-mix(in srgb, var(--sl-color-accent) 45%, var(--sl-color-hairline));
+  box-shadow: var(--sl-shadow-md);
+  border-color: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-hairline));
 }
 
 /* =============================================================================
    LinkButton / CTAs — acento con degradado
    ========================================================================== */
 .sl-link-button.primary {
-  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  background: var(--sl-color-accent);
   border-color: transparent;
   color: #1a1208;
   font-weight: 600;
-  box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--sl-color-accent) 80%, transparent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px -6px color-mix(in srgb, var(--sl-color-accent) 60%, transparent);
 }
 .sl-link-button.primary:hover {
   color: #1a1208;
-  filter: brightness(1.05);
-  transform: translateY(-1px);
+  background: var(--sl-color-accent-high);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 16px -6px color-mix(in srgb, var(--sl-color-accent) 70%, transparent);
 }
 .sl-link-button.secondary {
-  border-color: var(--sl-color-hairline);
+  border-color: var(--sl-color-hairline-shade);
   color: var(--sl-color-white);
+  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 50%, transparent);
 }
 .sl-link-button.secondary:hover {
   border-color: var(--sl-color-accent);
   color: var(--sl-color-text-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
 }
 
 /* =============================================================================
@@ -321,11 +327,7 @@ aside[data-aside-type] {
   font-size: var(--sl-text-h3);
   font-weight: 700;
   letter-spacing: -0.01em;
-  background: linear-gradient(120deg, #fcd34d 0%, #f59e0b 55%, #ea580c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--sl-color-white);
 }
 .aida-quiz__meta {
   margin: 0;
@@ -605,7 +607,7 @@ aside[data-aside-type] {
   border: 1px solid var(--sl-color-hairline);
   border-radius: 14px;
   overflow: hidden;
-  background: #0d0a08;
+  background: var(--sl-color-black);
   box-shadow: var(--sl-shadow-md);
   display: flex;
   flex-direction: column;
@@ -663,8 +665,8 @@ aside[data-aside-type] {
   font-family: var(--sl-font-mono);
   font-size: 13px;
   line-height: 1.5;
-  color: #e9e3da;
-  background: #0d0a08;
+  color: var(--sl-color-text);
+  background: var(--sl-color-black);
 }
 .aida-term__line {
   white-space: pre-wrap;
@@ -673,11 +675,11 @@ aside[data-aside-type] {
   padding: 0;
 }
 .aida-term__line--title {
-  color: #fcd34d;
+  color: var(--sl-color-accent-high);
   font-weight: 700;
 }
 .aida-term__line--warn {
-  color: #fcd34d;
+  color: var(--sl-color-accent-high);
 }
 .aida-term__line--error {
   color: #ef4444;
@@ -690,13 +692,13 @@ aside[data-aside-type] {
   gap: 0.4rem;
   padding: 0.5rem 0.9rem;
   border-top: 1px solid var(--sl-color-hairline);
-  background: #0d0a08;
+  background: var(--sl-color-black);
   flex-shrink: 0;
 }
 .aida-term__prompt {
   font-family: var(--sl-font-mono);
   font-size: 13px;
-  color: #f59e0b;
+  color: var(--sl-color-accent);
   font-weight: 600;
   white-space: pre;
   flex-shrink: 0;
@@ -705,14 +707,14 @@ aside[data-aside-type] {
   flex: 1;
   background: transparent;
   border: none;
-  color: #e9e3da;
+  color: var(--sl-color-text);
   font-family: var(--sl-font-mono);
   font-size: 13px;
   line-height: 1.5;
   padding: 0;
   margin: 0;
   outline: none;
-  caret-color: #fcd34d;
+  caret-color: var(--sl-color-accent-high);
 }
 .aida-term__input::placeholder {
   color: var(--sl-color-gray-4);
@@ -772,7 +774,7 @@ aside[data-aside-type] {
   font-size: var(--sl-text-sm);
   line-height: 1.5;
   color: var(--sl-color-text);
-  background: #0d0a08;
+  background: var(--sl-color-black);
   border: 1px solid var(--sl-color-hairline);
   border-radius: 12px;
   resize: vertical;
@@ -814,7 +816,7 @@ aside[data-aside-type] {
   font-size: var(--sl-text-sm);
   line-height: 1.5;
   color: var(--sl-color-text);
-  background: #0d0a08;
+  background: var(--sl-color-black);
   border: 1px solid var(--sl-color-hairline);
   border-radius: 12px;
   white-space: pre-wrap;
@@ -834,7 +836,7 @@ aside[data-aside-type] {
   color: #ef4444;
 }
 .aida-pg__line--warn {
-  color: #fcd34d;
+  color: var(--sl-color-accent-high);
 }
 .aida-pg__line--info,
 .aida-pg__line--debug {
@@ -941,4 +943,294 @@ aside[data-aside-type] {
       )
     );
   }
+}
+
+/* =============================================================================
+   Command palette (Cmd+K)
+   Overlay de búsqueda rápida: fuzzy search sobre índice generado en build.
+   Se monta en document.body (fuera del layout). Sin @layer.
+   ========================================================================== */
+.cp {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+}
+.cp.cp-is-open {
+  display: flex;
+}
+.cp__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--sl-color-backdrop-overlay);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.cp__panel {
+  position: relative;
+  width: min(36rem, 90vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--sl-color-bg-sidebar);
+  border: 1px solid var(--sl-color-hairline-shade);
+  border-radius: 16px;
+  box-shadow: var(--sl-shadow-lg);
+  overflow: hidden;
+}
+.cp__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+.cp__icon {
+  flex-shrink: 0;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.7;
+}
+.cp__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--sl-color-text);
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-base);
+  outline: none;
+}
+.cp__input::placeholder {
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.6;
+}
+.cp__esc {
+  font-family: var(--sl-font);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  flex-shrink: 0;
+}
+.cp__results {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+  overflow-y: auto;
+  flex: 1;
+}
+.cp-result {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.cp-result--active {
+  background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+}
+.cp-result__group {
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sl-color-text-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.cp-result__title {
+  flex: 1;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cp-result__type {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.cp__results:empty::before {
+  content: 'Sin resultados.';
+  display: block;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  opacity: 0.6;
+  font-size: var(--sl-text-sm);
+}
+.cp__foot {
+  display: flex;
+  gap: 1.2rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--sl-color-hairline);
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+}
+.cp__foot kbd {
+  font-family: var(--sl-font-mono);
+  font-size: 0.7rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  background: var(--sl-color-bg-inline-code);
+  margin-right: 0.2rem;
+}
+
+/* =============================================================================
+   Breadcrumbs
+   ========================================================================== */
+.aida-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-4);
+  flex-wrap: wrap;
+}
+.aida-crumbs a {
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.aida-crumbs a:hover {
+  color: var(--sl-color-text-accent);
+}
+.aida-crumbs__sep {
+  opacity: 0.4;
+  user-select: none;
+}
+.aida-crumbs__current {
+  color: var(--sl-color-text);
+  font-weight: 500;
+}
+
+/* =============================================================================
+   Reading progress bar
+   ========================================================================== */
+.aida-readbar {
+  position: fixed;
+  top: var(--sl-nav-height);
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: calc(var(--sl-z-index-navbar) + 1);
+  background: transparent;
+  pointer-events: none;
+}
+.aida-readbar__fill {
+  height: 100%;
+  width: 0;
+  background: var(--sl-color-accent);
+  transition: width 0.1s linear;
+}
+.aida-readbar.is-hidden {
+  display: none;
+}
+
+/* =============================================================================
+   Badges
+   ========================================================================== */
+.aida-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.aida-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 60%, transparent);
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  color: var(--sl-color-gray-3, var(--sl-color-text));
+  transition: all 0.2s ease;
+}
+.aida-badge[data-earned='true'] {
+  border-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+  color: var(--sl-color-text-accent);
+}
+.aida-badge__icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.aida-badge[data-earned='true'] .aida-badge__icon {
+  opacity: 1;
+}
+
+/* Toast de desbloqueo de badge */
+.aida-toast {
+  position: fixed;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 14px;
+  background: var(--sl-color-bg-sidebar);
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+  box-shadow: var(--sl-shadow-lg);
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  color: var(--sl-color-text);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.aida-toast.is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+.aida-toast__icon {
+  color: var(--sl-color-accent);
+  font-size: 1.2rem;
+}
+
+/* =============================================================================
+   Export/Import de progreso
+   ========================================================================== */
+.aida-io {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.aida-io__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--sl-color-hairline-shade);
+  background: color-mix(in srgb, var(--sl-color-bg-sidebar) 50%, transparent);
+  color: var(--sl-color-text);
+  font-family: var(--sl-font);
+  font-size: var(--sl-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.aida-io__btn:hover {
+  border-color: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
 }

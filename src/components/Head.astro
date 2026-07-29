@@ -1,0 +1,13 @@
+---
+// Override del Head de Starlight: añade ClientRouter (view transitions)
+// para navegación tipo SPA sin flash. Usa astro-vtbot que maneja los edge
+// cases de search y mobile menu que se rompen con ClientRouter puro en
+// Starlight. Ver: https://github.com/withastro/starlight/discussions/2823
+import type { Props } from '@astrojs/starlight/props';
+import StarlightHead from '@astrojs/starlight/components/Head.astro';
+import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
+---
+
+<VtbotStarlight {...Astro.props}>
+  <StarlightHead {...Astro.props}><slot /></StarlightHead>
+</VtbotStarlight>

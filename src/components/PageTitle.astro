@@ -6,6 +6,7 @@
 import trackable from '../data/trackable.json';
 import ProgressMark from './ProgressMark.astro';
 import ProgressRing from './ProgressRing.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
 
 const title = Astro.locals.starlightRoute.entry.data.title;
 const base = import.meta.env.BASE_URL;
@@ -17,25 +18,30 @@ const isTrackable = trackableSlugs.includes(slug);
 ---
 
 <div class="aida-pagetitle">
-  <h1 id="_top">{title}</h1>
-  {
-    isTrackable && (
-      <div class="aida-pagetitle__meta">
-        <ProgressRing slug={slug} />
-        <ProgressMark slug={slug} />
-      </div>
-    )
-  }
+  <Breadcrumbs />
+  <div class="aida-pagetitle__row">
+    <h1 id="_top">{title}</h1>
+    {
+      isTrackable && (
+        <div class="aida-pagetitle__meta">
+          <ProgressRing slug={slug} />
+          <ProgressMark slug={slug} />
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <style>
   .aida-pagetitle {
+    margin-top: 1rem;
+  }
+  .aida-pagetitle__row {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-top: 1rem;
   }
   .aida-pagetitle h1 {
     margin: 0;

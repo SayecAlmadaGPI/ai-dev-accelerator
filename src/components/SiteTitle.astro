@@ -9,8 +9,8 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   <svg class="aida-mark" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
     <defs>
       <linearGradient id="aida-mark-grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#fbbf24"></stop>
-        <stop offset="1" stop-color="#f59e0b"></stop>
+        <stop offset="0" stop-color="#e6c188"></stop>
+        <stop offset="1" stop-color="#d4a056"></stop>
       </linearGradient>
     </defs>
     <rect x="1" y="1" width="26" height="26" rx="7" fill="url(#aida-mark-grad)"></rect>
@@ -59,7 +59,7 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
     width: auto;
     flex-shrink: 0;
     border-radius: 6px;
-    filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.35));
+    filter: drop-shadow(0 2px 6px rgba(212, 160, 86, 0.25));
     transition: transform 0.2s ease;
   }
   .site-title:hover .aida-mark {
@@ -72,22 +72,20 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   // mount-point: cada feature se code-splittea y solo carga en la página que
   // la necesita. Patrón consistente con Fase 3 (query [data-*], sin React).
   //
-  // Usamos MutationObserver para detectar mount-points que aparezcan después
-  // del parsing inicial (Astro view transitions, streaming, etc.).
+  // Con view transitions (astro-vtbot), el DOM se reemplaza en cada navegación.
+  // Escuchamos `astro:page-load` (se dispara tras el swap) para reinicializar
+  // las islas en la nueva página. El MutationObserver cubre el primer load y
+  // cualquier render diferido.
   const base = import.meta.env.BASE_URL;
 
-  const booted = new Set<string>();
   function bootFeature(selector: string, initFn: () => void): void {
-    if (booted.has(selector)) return;
     const el = document.querySelector(selector);
     if (el) {
-      booted.add(selector);
       initFn();
       return;
     }
     const mo = new MutationObserver(() => {
       if (document.querySelector(selector)) {
-        booted.add(selector);
         initFn();
         mo.disconnect();
       }
@@ -95,18 +93,45 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
     mo.observe(document.body, { childList: true, subtree: true });
   }
 
-  bootFeature('[data-quiz-mount]', () =>
-    import('../scripts/quiz.ts').then((m) => m.initQuizzes()),
-  );
-  bootFeature('[data-term-mount]', () =>
-    import('../scripts/term.ts').then((m) => m.initTerm()),
-  );
-  bootFeature('[data-playground-mount]', () =>
-    import('../scripts/playground.ts').then((m) => m.initPlayground()),
-  );
+  function bootIslands() {
+    bootFeature('[data-quiz-mount]', () =>
+      import('../scripts/quiz.ts').then((m) => m.initQuizzes()),
+    );
+    bootFeature('[data-term-mount]', () =>
+      import('../scripts/term.ts').then((m) => m.initTerm()),
+    );
+    bootFeature('[data-playground-mount]', () =>
+      import('../scripts/playground.ts').then((m) => m.initPlayground()),
+    );
+    bootFeature('code.language-mermaid', () =>
+      import('../scripts/mermaid.ts').then((m) => m.initMermaid()),
+    );
+  }
+
+  // Primer load + navegaciones subsiguientes (view transitions).
+  bootIslands();
+  document.addEventListener('astro:page-load', bootIslands);
 
   // Notas: drawer flotante en toda página (carga siempre, módulo chico).
+  // Se monta una sola vez en body; notes.ts escucha astro:page-load internamente
+  // para recargar la nota de la página actual.
   import('../scripts/notes.ts').then((m) => m.initNotes(base));
+
+  // Command palette (Cmd+K): carga siempre, índice ligero.
+  import('../scripts/command-palette.ts').then((m) => m.initCommandPalette(base));
+
+  // Badges: evaluación de logros desbloqueables.
+  import('../scripts/badges.ts').then((m) => m.evaluateAndNotify());
+
+  // Export/import de progreso.
+  import('../scripts/progress-io.ts').then((m) => m.initProgressIO(base));
+
+  // Scroll-spy del TOC.
+  import('../scripts/scroll-spy.ts').then((m) => m.initScrollSpy());
+
+  // Reading progress bar.
+  import('../scripts/reading-bar.ts').then((m) => m.initReadingBar(base));
+
   // PWA: registro del service worker en toda página.
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(base + 'sw.js', { scope: base });

@@ -87,13 +87,13 @@ const items = files.map((f) => extractMeta(path.join(MODS, f)));
     border: 1px solid var(--sl-color-hairline);
     background: color-mix(in srgb, var(--sl-color-bg-sidebar) 60%, transparent);
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     box-shadow: var(--sl-shadow-sm);
   }
   .mdash__card:hover {
-    transform: translateY(-3px);
     box-shadow: var(--sl-shadow-md);
-    border-color: color-mix(in srgb, var(--sl-color-accent) 40%, transparent);
+    border-color: color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
+    background-color: color-mix(in srgb, var(--sl-color-bg-sidebar) 78%, transparent);
   }
   .mdash__top {
     display: flex;

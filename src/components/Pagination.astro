@@ -1,0 +1,181 @@
+---
+// Paginación prev/next al pie de las páginas de contenido. Usa
+// Astro.locals.starlightRoute.pagination, que expone { prev, next } con
+// { href, label, title } o null. Solo renderiza si existe al menos uno.
+const route = Astro.locals.starlightRoute;
+const pagination = route?.pagination;
+const prev = pagination?.prev ?? null;
+const next = pagination?.next ?? null;
+
+if (!prev && !next) return '';
+
+const base = import.meta.env.BASE_URL;
+
+// Normaliza hrefs con el base del sitio (Starlight ya los trae relativos,
+// pero nos aseguramos de que respeten el base si vienen sin él).
+const resolveHref = (href) => {
+  if (!href) return '';
+  if (href.startsWith(base)) return href;
+  if (href.startsWith('/')) return base.replace(/\/$/, '') + href;
+  return href;
+};
+
+const ChevronLeft = () => (
+  <svg
+    class="aida-pag__chevron"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M15 18l-6-6 6-6"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg
+    class="aida-pag__chevron"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M9 18l6-6-6-6"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+---
+
+<nav class="aida-pag" aria-label="Navegación entre páginas">
+  {
+    prev ? (
+      <a class="aida-pag__card aida-pag__card--prev" href={resolveHref(prev.href)}>
+        <span class="aida-pag__label">
+          <ChevronLeft />
+          Anterior
+        </span>
+        <span class="aida-pag__title">{prev.title ?? prev.label}</span>
+      </a>
+    ) : (
+      <span class="aida-pag__card aida-pag__card--placeholder" aria-hidden="true" />
+    )
+  }
+
+  {
+    next ? (
+      <a class="aida-pag__card aida-pag__card--next" href={resolveHref(next.href)}>
+        <span class="aida-pag__label">
+          Siguiente
+          <ChevronRight />
+        </span>
+        <span class="aida-pag__title">{next.title ?? next.label}</span>
+      </a>
+    ) : (
+      <span class="aida-pag__card aida-pag__card--placeholder" aria-hidden="true" />
+    )
+  }
+</nav>
+
+<style>
+  .aida-pag {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .aida-pag__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 14px;
+    background: var(--sl-color-bg, var(--sl-color-gray-7, transparent));
+    box-shadow: var(--sl-shadow-sm, none);
+    text-decoration: none;
+    color: var(--sl-color-text);
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s ease,
+      background 0.18s ease;
+    min-height: 72px;
+  }
+
+  .aida-pag__card:hover,
+  .aida-pag__card:focus-visible {
+    border-color: var(--sl-color-accent);
+    box-shadow: var(--sl-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.25));
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  .aida-pag__card--placeholder {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Tarjeta "Anterior": contenido alineado a la izquierda. */
+  .aida-pag__card--prev {
+    text-align: left;
+  }
+
+  /* Tarjeta "Siguiente": contenido alineado a la derecha. */
+  .aida-pag__card--next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .aida-pag__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--sl-text-xs, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--sl-color-text-accent, var(--sl-color-accent));
+  }
+
+  .aida-pag__chevron {
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  .aida-pag__title {
+    font-size: var(--sl-text-body, 1rem);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sl-color-text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* En pantallas chicas, apila las tarjetas. */
+  @media (max-width: 600px) {
+    .aida-pag {
+      grid-template-columns: 1fr;
+    }
+    .aida-pag__card--next {
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>

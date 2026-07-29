@@ -1,0 +1,61 @@
+---
+// Breadcrumbs arriba del <h1>. Muestra Inicio / [Grupo] / [Título actual]
+// usando la info del sidebar de Starlight (Astro.locals.starlightRoute).
+// Solo se renderiza en páginas de contenido (modules, labs, cheatsheets,
+// templates, examples). La landing (index) y las páginas sueltas del sidebar
+// (Blueprint, Simulador, Playground) no muestran breadcrumbs.
+const base = import.meta.env.BASE_URL;
+const route = Astro.locals.starlightRoute;
+
+// path relativo al base, sin barras iniciales/finales.
+let pathname = Astro.url.pathname;
+if (pathname.startsWith(base)) pathname = pathname.slice(base.length);
+pathname = pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+
+// Raíces de contenido trackeable en el sidebar autogenerado.
+const contentRoots = ['modules', 'labs', 'cheatsheets', 'templates', 'examples'];
+const root = pathname.split('/')[0];
+const isContentPage = contentRoots.includes(root);
+if (!isContentPage || !route) return '';
+
+const sidebar = route.sidebar ?? [];
+const currentEntry = route.entry;
+
+// Estructura del sidebar de Starlight:
+// - items simples: { type: 'link', href, label, isCurrent }
+// - grupos: { type: 'group', label, entries: [{ type: 'link', href, label, isCurrent }] }
+// Recorremos los grupos para encontrar el que contiene la página actual
+// y su primer enlace (sirve como destino del crumb del grupo).
+let groupLabel = '';
+let groupHref = '';
+
+for (const group of sidebar) {
+  if (group.type !== 'group' || !Array.isArray(group.entries)) continue;
+  const links = group.entries.filter((e) => e.type === 'link');
+  const match = links.find((l) => l.isCurrent);
+  if (match) {
+    groupLabel = group.label;
+    groupHref = links[0]?.href ?? '';
+    break;
+  }
+}
+
+// Si no encontramos grupo, no renderizamos nada.
+if (!groupLabel) return '';
+
+const currentTitle = currentEntry.data.title;
+---
+
+<nav class="aida-crumbs" aria-label="Ruta de navegación">
+  <a href={base}>Inicio</a>
+  <span class="aida-crumbs__sep" aria-hidden="true">/</span>
+  {
+    groupHref ? (
+      <a href={groupHref}>{groupLabel}</a>
+    ) : (
+      <span>{groupLabel}</span>
+    )
+  }
+  <span class="aida-crumbs__sep" aria-hidden="true">/</span>
+  <span class="aida-crumbs__current" aria-current="page">{currentTitle}</span>
+</nav>

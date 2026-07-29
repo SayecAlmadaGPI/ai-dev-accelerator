@@ -6,6 +6,7 @@
 // actualizarse en vivo al marcar/desmarcar desde cualquier página.
 import trackable from '../data/trackable.json';
 import ProgressRing from './ProgressRing.astro';
+import Badges from './Badges.astro';
 
 const total = trackable.length;
 const base = import.meta.env.BASE_URL;
@@ -30,6 +31,16 @@ const labs = trackable.filter((t) => t.group === 'labs');
     </div>
     <div class="aida-progress__bar" aria-hidden="true"><span data-progress-bar></span></div>
     <p class="aida-progress__hint">Persiste en este navegador. Marca cada módulo o lab desde su página.</p>
+    <div class="aida-io">
+      <button class="aida-io__btn" data-io-export type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar
+      </button>
+      <button class="aida-io__btn" data-io-import type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importar
+      </button>
+    </div>
   </div>
 
   <div class="aida-progress__groups">
@@ -60,6 +71,8 @@ const labs = trackable.filter((t) => t.group === 'labs');
       </ul>
     </div>
   </div>
+
+  <Badges />
 </aside>
 
 <script>
@@ -156,7 +169,7 @@ const labs = trackable.filter((t) => t.group === 'labs');
     height: 100%;
     width: 0;
     border-radius: 999px;
-    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    background: var(--sl-color-accent);
     transition: width 0.4s ease;
   }
   .aida-progress__hint {

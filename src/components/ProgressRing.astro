@@ -33,7 +33,7 @@ const hasQuiz = Boolean(quiz);
   roots.forEach((el) => {
     const slug = el.getAttribute('data-pr-slug') || '';
     const total = Number(el.getAttribute('data-pr-total') || '0');
-    const done = localStorage.getItem(`aida:done:${slug}`) === 'true';
+    const done = localStorage.getItem(`aida:done:${slug}`) === '1';
     const score = parseInt(localStorage.getItem(`aida:quiz:${slug}`) || '0', 10);
 
     let pct = 0;
@@ -123,7 +123,7 @@ const hasQuiz = Boolean(quiz);
 
   :root {
     --pr-clr-done: #22c55e;
-    --pr-clr-progress: #f59e0b;
+    --pr-clr-progress: var(--sl-color-accent);
     --pr-clr-pending: var(--sl-color-gray-4);
   }
 </style>

@@ -1,0 +1,47 @@
+---
+// Componente de badges (insignias). Renderiza el catálogo completo en una
+// grid. Las badges ganadas se marcan con `data-earned="true"`. El script
+// se hidrata desde localStorage y escucha `aida:badges` para actualizarse.
+import { BADGES } from '../data/badges';
+import '../scripts/badges';
+---
+
+<section class="aida-badges" data-badges aria-label="Insignias">
+  {BADGES.map((badge) => (
+    <div
+      class="aida-badge"
+      data-badge-id={badge.id}
+      data-earned="false"
+      title={badge.description}
+    >
+      <span class="aida-badge__icon" aria-hidden="true">{badge.icon}</span>
+      <span class="aida-badge__name">{badge.name}</span>
+    </div>
+  ))}
+</section>
+
+<script>
+  import { evaluateAndNotify } from '../scripts/badges';
+
+  const root = document.querySelector('[data-badges]');
+  if (root) {
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-badge-id]')
+    );
+
+    const render = () => {
+      for (const el of items) {
+        const id = el.getAttribute('data-badge-id') ?? '';
+        const earned = localStorage.getItem('aida:badge:' + id) === '1';
+        el.setAttribute('data-earned', earned ? 'true' : 'false');
+      }
+    };
+
+    render();
+    window.addEventListener('aida:badges', render);
+    window.addEventListener('storage', render);
+  }
+
+  // Evalúa al cargar (descubre badges recién ganadas en otra página).
+  evaluateAndNotify();
+</script>

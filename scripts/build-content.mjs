@@ -18,6 +18,7 @@
 // Para carpetas sin README (templates/, examples/) genera un index.md.
 
 import { readFile, writeFile, mkdir, rm, readdir, copyFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -289,10 +290,80 @@ async function main() {
     'utf8',
   );
 
+  // search-index.json: índice para el command palette (Cmd+K). Se genera a
+  // partir de las páginas markdown de la raíz + acciones rápidas. Se copia
+  // a public/ para que esté disponible en runtime (fetch sin import).
+  const searchIndex = generateSearchIndex(collector);
+  await writeFile(
+    path.join(PUBLIC, 'search-index.json'),
+    JSON.stringify(searchIndex, null, 2),
+    'utf8',
+  );
+
   console.log(
-    `build-content: ${copied} páginas, ${assets} assets, ${indexes} índices generados, ${skipped} dirs saltados, ${sortedTrackables.length} trackeables.`,
+    `build-content: ${copied} páginas, ${assets} assets, ${indexes} índices generados, ${skipped} dirs saltados, ${sortedTrackables.length} trackeables, ${searchIndex.length} entradas de búsqueda.`,
   );
   console.log(`  -> ${DOCS}`);
+}
+
+// Genera el índice de búsqueda para el command palette (Cmd+K).
+// Incluye páginas (con grupo derivado del dir) y acciones rápidas.
+function generateSearchIndex(collector) {
+  const entries = [];
+
+  // Páginas de contenido
+  for (const p of collector.mdPages) {
+    const parts = p.split('/');
+    const dir = parts[0]; // modules, labs, cheatsheets, templates, examples
+    const fileName = parts[parts.length - 1].replace(/\.(md|mdx)$/, '');
+    const isReadme = fileName.toLowerCase() === 'readme';
+    const slug = slugFromRelPath(p);
+    const url = BASE + slug + '/';
+
+    // Título: derivar del archivo (leerlo para sacar el H1)
+    let title = isReadme ? dir : fileName;
+    try {
+      const content = readFileSync(path.join(ROOT, p), 'utf8');
+      const t = deriveTitle(content);
+      if (t) title = t;
+    } catch {}
+
+    // Grupo legible
+    const groupMap = {
+      modules: 'Módulos',
+      labs: 'Labs',
+      cheatsheets: 'Cheatsheets',
+      templates: 'Plantillas',
+      examples: 'Ejemplos',
+    };
+    const group = groupMap[dir] || 'Páginas';
+
+    entries.push({ title, url, group, type: 'page' });
+  }
+
+  // Páginas hand-authored (simulador, playground)
+  entries.push({ title: 'Simulador de terminal', url: BASE + 'simulador/', group: 'Herramientas', type: 'page' });
+  entries.push({ title: 'Playground JS', url: BASE + 'playground/', group: 'Herramientas', type: 'page' });
+  entries.push({ title: 'Blueprint', url: BASE + 'blueprint/', group: 'Documentos', type: 'page' });
+  entries.push({ title: 'Inicio', url: BASE, group: 'Documentos', type: 'page' });
+
+  // Acciones rápidas
+  entries.push({
+    title: 'Exportar progreso',
+    url: '#export-progress',
+    group: 'Acciones',
+    type: 'action',
+    keywords: 'exportar descargar progreso json backup',
+  });
+  entries.push({
+    title: 'Importar progreso',
+    url: '#import-progress',
+    group: 'Acciones',
+    type: 'action',
+    keywords: 'importar cargar progreso json restaurar',
+  });
+
+  return entries;
 }
 
 main().catch((err) => {
