@@ -683,6 +683,21 @@ es el caso límite donde el inner harness es literalmente tu trabajo (M1).
 > El ecosistema cambia cada 3-6 meses: esta entrada tiene la misma
 > caducidad implícita que el resto del blueprint.
 
+### 2026-07-29 (b) — Documento de referencia: mecánica de la LLM y el harness
+
+Aterriza la conversación conceptual sobre cómo "razona" una LLM (que
+solo predice el siguiente token) en un documento de referencia que
+entrelaza el mecanismo con cada práctica del curso. Crea una sección
+nueva **`references/`** como casa de lecturas de apoyo (no es módulo ni
+lab: no participa del tracking de progreso).
+
+| Archivo | Cambio |
+|---|---|
+| `references/llm-mecanica.md` | Nuevo. Mecanismo (next-token, atención, n-grama vs transformer, escala + RLHF), razonamiento como cómputo desplegado en el tiempo (CoT, flujos, MoE, reasoning models), la atención como mecanismo Y los dos límites del M0, y tabla "mecanismo → falla → módulo que la aborda". |
+| `references/README.md` | Nuevo. Índice de la sección Referencias. |
+| `scripts/build-content.mjs` | Añade `references` a `CONTENT_DIRS` y al `groupMap` del search-index. |
+| `astro.config.mjs` | Añade el grupo "Referencias" al sidebar (autogenerate de `references/`). |
+
 ---
 
 ## 📝 Notas para Futuras Versiones del Blueprint

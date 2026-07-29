@@ -30,7 +30,7 @@ const PUBLIC = path.join(ROOT, 'public');
 // DEBE coincidir con `base` en astro.config.mjs.
 const BASE = '/ai-dev-accelerator/';
 
-const CONTENT_DIRS = ['modules', 'labs', 'cheatsheets', 'templates', 'examples'];
+const CONTENT_DIRS = ['modules', 'labs', 'cheatsheets', 'templates', 'examples', 'references'];
 // Dotfolders / dirs de tooling que no se copian como contenido.
 const SKIP_DIRS = new Set(['.claude', '.planning', '.git', 'node_modules', 'dist', 'src']);
 const ASSET_EXTS = new Set(['.py', '.sh', '.json', '.yaml', '.yml', '.toml', '.txt', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp']);
@@ -335,6 +335,7 @@ function generateSearchIndex(collector) {
       cheatsheets: 'Cheatsheets',
       templates: 'Plantillas',
       examples: 'Ejemplos',
+      references: 'Referencias',
     };
     const group = groupMap[dir] || 'Páginas';
 

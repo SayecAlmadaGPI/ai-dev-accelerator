@@ -55,6 +55,7 @@ export default defineConfig({
         { label: 'Cheatsheets', items: [{ autogenerate: { directory: 'cheatsheets' } }] },
         { label: 'Plantillas', items: [{ autogenerate: { directory: 'templates' } }] },
         { label: 'Ejemplos', items: [{ autogenerate: { directory: 'examples' } }] },
+        { label: 'Referencias', items: [{ autogenerate: { directory: 'references' } }] },
         { slug: 'blueprint', label: 'Blueprint' },
         { slug: 'simulador', label: 'Simulador' },
         { slug: 'playground', label: 'Playground' },
