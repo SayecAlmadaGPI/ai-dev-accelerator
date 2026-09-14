@@ -93,7 +93,7 @@ verify() {
 check_planning() {
   if [ -d ".planning" ]; then
     log "Estado GSD presente en .planning/"
-    # No validamos el contenido acá; eso lo hace el agente al arrancar.
+    # No validamos el contenido aquí; eso lo hace el agente al arrancar.
   else
     warn "No hay .planning/. Si vas a usar el loop GSD (M2), inicialízalo con templates/.planning/."
   fi

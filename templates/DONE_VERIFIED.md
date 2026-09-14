@@ -37,7 +37,7 @@
 - **Tests:** `[comando]` — resultado: [N passed / N failed], cobertura [N%]
 - **Otros sensores:** [schema-diff, e2e, contract tests — los que apliquen]
 
-> Si un sensor no se corrió, no lo listes acá; va en la sección 2.
+> Si un sensor no se corrió, no lo listes aquí; va en la sección 2.
 
 ## 2. Qué NO se verificó
 

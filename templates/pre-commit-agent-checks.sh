@@ -2,7 +2,7 @@
 # pre-commit-agent-checks.sh — Hooks esenciales para trabajo con agentes
 # --------------------------------------------------------------------------
 # La capa 1 de enforcement (M6 §6.2): mecánico, determinista. Bloquea el
-# commit antes de que llegue al repo. Lo que vive acá no depende de que
+# commit antes de que llegue al repo. Lo que vive aquí no depende de que
 # el modelo recuerde o respete reglas; simplemente no se puede commitear.
 #
 # Instalación: enlaza este script como hook pre-commit (o llama a sus
@@ -45,7 +45,7 @@ check_lint() {
 }
 
 # --------------------------------------------------------------------------
-# 3. Tests rápidos (unitarios) — los lentos van en CI, no acá.
+# 3. Tests rápidos (unitarios) — los lentos van en CI, no aquí.
 # --------------------------------------------------------------------------
 check_unit_tests() {
   if [ -f package.json ] && grep -q '"test:unit"' package.json; then
