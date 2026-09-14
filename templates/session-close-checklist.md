@@ -59,7 +59,7 @@
 - **Bloqueantes heredados:** [lista corta o "ninguno"]
 
 <!--
-  Si llegaste acá y el paso 1 está en rojo, NO marques el checklist como
+  Si llegaste aquí y el paso 1 está en rojo, NO marques el checklist como
   hecho. Vuelve al paso 1. Un handoff sobre rojo le dice a la próxima
   sesión que arranque debuggeando, no construyendo.
 -->

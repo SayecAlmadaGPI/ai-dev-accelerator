@@ -84,7 +84,7 @@
   este incidente específico.
 
 - [Ej: "Si el agente reporta 'tests passing' sin mostrar el comando,
-  exige el output textual antes de aceptar.]
+  exige el output textual antes de aceptar."]
 
 <!--
   Recordatorio: el valor del postmortem no está en el documento, está en

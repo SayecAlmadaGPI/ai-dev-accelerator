@@ -65,12 +65,9 @@ mejor SWE-bench.
 
 > Recuerda: decides una *combinación* modelo+harness (M9 §9.4.3, M1).
 
-| Tool | Modelo por defecto | Cambio de modelo | MCP | Hooks | Skills | Cost model | Portabilidad del harness (M3 §3.9) |
-|------|--------------------|------------------|-----|-------|--------|------------|------------------------------------|
-| [Tool A] | [cuál] | [sí/no] | [sí/no] | [sí/no] | [sí/no] | [por sesión/token] | [alta/media/baja] |
-| [Tool B] | ... | ... | ... | ... | ... | ... | ... |
-| OpenCode (open-source, Anomaly) | 75+ proveedores vía Models.dev | ✅ (BYO key, Copilot, ChatGPT, locales) | ✅ nativo | ⚠️ vía plugins | ✅ agents/skills/commands | gratis + BYO | alta (lee `AGENTS.md`) |
-| Pi (open-source, Earendil, MIT) | 15+ proveedores (Anthropic, OpenAI, Ollama, llama.cpp) | ✅ (BYO key) | ❌ vía extensión | ❌ construible | ✅ skills/extensiones | gratis + BYO | alta (lee `AGENTS.md`); inner harness lo escribes tú |
+Para la comparativa por dimensiones del harness (MCP, hooks, skills,
+permisos, portabilidad), ver `templates/cross-tool-compatibility-matrix.md`
+§3 — única fuente; esta página mantiene solo modelo-vs-modelo y costo.
 
 ## Decisión de adopción (resumen)
 

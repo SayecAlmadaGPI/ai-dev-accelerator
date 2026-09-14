@@ -1,13 +1,18 @@
 # Cheatsheets de decisión y árboles
 
-Quick-reference para decisiones frecuentes con agentes de IA. Cada
-fichero es una hoja de decisión corta (pregunta → tabla o flujo →
-veredicto). El contenido extenso vive en los módulos; aquí está la
-versión consulta-rápida.
+Quick-reference para decisiones frecuentes con agentes de IA. El apéndice
+reúne en total 13 ficheros: los 9 de este directorio (6 cheatsheets de
+decisión + 3 árboles de decisión, indexados en las tablas de abajo) y 4
+cheatsheets que viven en `templates/` — `model-comparison-cheatsheet`,
+`mcp-primitives-cheatsheet`, `failure-classes-cheatsheet` y
+`owasp-agentic-cheatsheet` —, que son plantillas de llenado ligadas a su
+módulo y no se repiten aquí. Cada fichero es una hoja de decisión corta
+(pregunta → tabla o flujo → veredicto). El contenido extenso vive en los
+módulos; aquí está la versión consulta-rápida.
 
 > **Principio:** una cheatsheet no enseña; decide. Si necesitas el
 > *porqué*, vuelve al módulo citado. Si necesitas el *qué hago ahora*,
-> quédate acá.
+> quédate aquí.
 
 ## Cheatsheets de decisión (Apéndice B)
 

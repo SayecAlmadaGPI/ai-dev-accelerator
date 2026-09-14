@@ -7,11 +7,11 @@
   AGENTS.md. Una sola fuente, muchas herramientas.
 
   Principio rector: cada línea debe ganar su lugar. Si la quitas y el agente
-  no se equivoca en nada concreto, era ruido. Córta la. La meta es densidad de
+  no se equivoca en nada concreto, era ruido. Córtala. La meta es densidad de
   signal, no volumen. Por debajo de ~150-200 líneas efectivas.
 
   Cómo usar este template:
-  1. Reemplaza cada bloque [ENTRE CORCHETES]] con la realidad del proyecto.
+  1. Reemplaza cada bloque [ENTRE CORCHETES] con la realidad del proyecto.
   2. Borra las secciones que no apliquen. Un AGENTS.md que dice "N/A" en todo
      pierde peso.
   3. No delegues el llenado a ciegas al skill /init. Úsalo como borrador y edita
@@ -34,7 +34,7 @@
   - Typecheck / lint: `[comando]`
   - Build local: `[comando]`
 - **Estructura raíz:**
-  - `src/` — [qué vive acá]
+  - `src/` — [qué vive aquí]
   - `tests/` — [convención de naming de tests]
   - `docs/specs/` — specs que rigen cada feature (ver M2)
   - `.planning/` — estado del loop GSD cuando aplica (ver M2)
@@ -85,10 +85,10 @@
 - **Reporte de cierre:** cada tarea termina con DONE/VERIFIED explícito (ver M2
   tarea `_template.md`): qué se verificó, qué no, supuestos, qué revisa un humano.
 
-## 5. Lo que el agente puede inferir del código (NO repetir acá)
+## 5. Lo que el agente puede inferir del código (NO repetir aquí)
 
 - [Ej: "La convención de naming de tests ya se ve en `tests/`; no la documentes."]
-- [Ej: "Las dependencias ya están en `package.json`; no las listes acá."]
+- [Ej: "Las dependencias ya están en `package.json`; no las listes aquí."]
 
 > Si el `package.json` ya dice que usas Jest, no hace falta repetirlo. Cada
 > línea que el agente puede inferir es ruido que le quita un slot de atención.

@@ -53,7 +53,11 @@ La taxonomía de fallas más útil (del [Codex Knowledge Base](https://codex.dan
 
 Los porcentajes son aproximados y varían por estudio; el orden de las clases es estable.
 
-> **El dato que manda todo:** ~40% de las fallas atribuidas al modelo son, en realidad, fallas de la capa de contexto. El modelo razona bien sobre el contexto que tiene; el problema es que el contexto que tiene está corrupto o incompleto. Eso es un problema de harness, no de modelo.
+> **El dato que manda todo:** ~40% de las fallas atribuidas al modelo son, en
+> realidad, fallas de la capa de contexto (según la taxonomía de fallas que
+> recoge el Módulo 7 §7.1). El modelo razona bien sobre el contexto que tiene;
+> el problema es que el contexto que tiene está corrupto o incompleto. Eso es
+> un problema de harness, no de modelo.
 
 La conclusión: si tu única respuesta a "el agente se equivoca" es "pedírselo otra vez" o "cambiar de modelo", estás apuntando al síntoma. El harness es donde se gana o se pierde la confiabilidad.
 

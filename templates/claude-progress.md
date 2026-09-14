@@ -51,7 +51,7 @@
 ## Puntos de no retorno por venir
 
 > Decisiones irreversibles próximas: migraciones, deploys, borrados.
-> Marcarlas acá para que el HITL las atrape antes de que el agente las ejecute.
+> Marcarlas aquí para que el HITL las atrape antes de que el agente las ejecute.
 
 - [Ej: "Antes de aplicar la migración F4, requiere revisión humana: toca
   columna en producción."]

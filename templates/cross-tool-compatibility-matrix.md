@@ -41,6 +41,11 @@
 > resto (specs, planes, `.planning/`, ADRs, `init.sh`) es markdown o
 > script → "Igual" que las otras. Tu capa portable les aplica sin cambios.
 
+> **Codex en la capa portable:** lee `AGENTS.md` de primera clase (desde
+> `~/.codex/`, raíz del repo y working dir; M3). El resto (specs, planes,
+> `.planning/`, ADRs, `init.sh`) es markdown o script → "Igual" que las
+> otras. Tu capa portable le aplica sin cambios.
+
 ## 2. Capa inner (específica de cada tool)
 
 | Artefacto | Claude Code | Cursor | Gemini CLI | Aider | ¿Portabilidad? |
@@ -65,31 +70,45 @@
 > (skills, templates, custom tools; MCP, subagents y permisos se añaden).
 > El desglose por dimensión está en la §3 siguiente.
 
+> **Codex en la capa inner:** expone su propio modelo de permisos y
+> aislamiento (el árbol de selección manda revisarlo por comando). El resto
+> de la capa inner (reglas scoped, skills, hooks, subagents) no está
+> documentado en este repo: verifica la versión vigente antes de contar con
+> ello.
+
 ## 3. Dimensiones del harness por tool
 
 La §1 mapea *artefacto → dónde vive*; la §2 mapea *capa → portabilidad*.
 Esta sección mapea **dimensión del harness → soporte por tool**, para
 decidir qué tool te da la mecánica que necesitas. Cubre Claude Code
 (referencia "baterías incluidas"), Cursor (IDE), OpenCode (open-source
-multi-proveedor) y Pi (chasis mínimo extensible).
+multi-proveedor), Pi (chasis mínimo extensible) y Codex (agente de tareas
+orientado a issue).
 
 > Leyenda: ✅ nativo · ⚠️ parcial o vía plugin · ❌ no nativo (construible
 > como extensión) · — no aplica. Son ordinales, no absolutos: las
 > herramientas cambian; las dimensiones no. Revisa la versión vigente de
 > cada tool antes de decidir.
 
-| Dimensión | Claude Code | Cursor | OpenCode | Pi |
-|---|---|---|---|---|
-| **Slash commands custom** | ✅ `.claude/commands/` + built-in (`/clear`, `/compact`, plan mode) | ✅ rules con `description`/`globs`; custom instructions | ✅ `/docs/commands/` | ✅ vía extensiones (`/cmd`), skills (`/skill:name`), templates (`/tpl`) |
-| **Extensiones / skills** | ✅ `.claude/skills/` (SKILL.md) | ✅ Skills + `.cursor/rules/*.mdc` | ✅ agents, agent skills, plugins, custom tools, rules | ✅ extensiones TS (npm/git/path), skills, templates, temas |
-| **Hooks deterministas** | ✅ first-class: `PreToolUse`/`PostToolUse`/`Stop` en `settings.json` | ❌ no hay hooks (rules son advisory on-demand) | ⚠️ vía plugins ("custom tools, hooks…"), no config first-class | ❌ no nativo (maneja eventos como `project_trust`; construible) |
-| **Sistema de memoria** | ✅ 4 capas: `CLAUDE.md` · `MEMORY.md` auto · memory tool · subagent memory | ✅ codebase index + docs index + `@`-mentions + Memories (auto) | ⚠️ `AGENTS.md` (`/init`) + References (dirs/repos externos) + compaction/summary ocultos; sesiones jerárquicas | ✅ `AGENTS.md`/`CLAUDE.md` + `SYSTEM.md` + compactación; sesiones en árbol JSONL (fork) |
-| **Subagents** | ✅ `.claude/agents/*.md` | ❌ Agent monolítico (sin subagents) | ✅ agents configurables (sesiones hijas) | ❌ no nativo (construible como extensión) |
-| **MCP** | ✅ nativo | ✅ nativo | ✅ nativo | ❌ no nativo (construible como extensión) |
-| **Permisos / sandbox** | ✅ permission modes (read-only, plan, full) + sandbox | ⚠️ checkpoints (snapshots locales para revertir); sin sandbox explícito en la doc | ✅ `permission` (edit/bash = ask) + `policies` (experimental deny/allow) | ❌ no nativo (recomienda contenedores/tmux; trust system para cargar extensiones) |
-| **Selección de modelo / BYO** | ⚠️ mainly Anthropic; tiered routing limitado | ✅ multi-proveedor + BYO key | ✅ 75+ proveedores + locales + login Copilot/ChatGPT | ✅ 15+ proveedores + locales (Ollama, llama.cpp) + BYO key |
-| **Open-source** | ❌ cerrado | ❌ cerrado | ✅ | ✅ MIT |
-| **Lee `AGENTS.md`** | vía `CLAUDE.md` (symlink / `@imports`) | ✅ `AGENTS.md` + `CLAUDE.md` | ✅ nativo (`/init` lo genera) | ✅ `AGENTS.md` / `CLAUDE.md` |
+| Dimensión | Claude Code | Cursor | OpenCode | Pi | Codex |
+|---|---|---|---|---|---|
+| **Slash commands custom** | ✅ `.claude/commands/` + built-in (`/clear`, `/compact`, plan mode) | ✅ rules con `description`/`globs`; custom instructions | ✅ `/docs/commands/` | ✅ vía extensiones (`/cmd`), skills (`/skill:name`), templates (`/tpl`) | —/verificar |
+| **Extensiones / skills** | ✅ `.claude/skills/` (SKILL.md) | ✅ Skills + `.cursor/rules/*.mdc` | ✅ agents, agent skills, plugins, custom tools, rules | ✅ extensiones TS (npm/git/path), skills, templates, temas | —/verificar |
+| **Hooks deterministas** | ✅ first-class: `PreToolUse`/`PostToolUse`/`Stop` en `settings.json` | ❌ no hay hooks (rules son advisory on-demand) | ⚠️ vía plugins ("custom tools, hooks…"), no config first-class | ❌ no nativo (maneja eventos como `project_trust`; construible) | —/verificar |
+| **Sistema de memoria** | ✅ 4 capas: `CLAUDE.md` · `MEMORY.md` auto · memory tool · subagent memory | ✅ codebase index + docs index + `@`-mentions + Memories (auto) | ⚠️ `AGENTS.md` (`/init`) + References (dirs/repos externos) + compaction/summary ocultos; sesiones jerárquicas | ✅ `AGENTS.md`/`CLAUDE.md` + `SYSTEM.md` + compactación; sesiones en árbol JSONL (fork) | ✅ `AGENTS.md` de primera clase (`~/.codex/`, raíz del repo, working dir) |
+| **Subagents** | ✅ `.claude/agents/*.md` | ❌ Agent monolítico (sin subagents) | ✅ agents configurables (sesiones hijas) | ❌ no nativo (construible como extensión) | —/verificar (agente de tarea completa, orientado a issue) |
+| **MCP** | ✅ nativo | ✅ nativo | ✅ nativo | ❌ no nativo (construible como extensión) | ✅ (M0 lo lista entre las tools con soporte MCP) |
+| **Permisos / sandbox** | ✅ permission modes (read-only, plan, full) + sandbox | ⚠️ checkpoints (snapshots locales para revertir); sin sandbox explícito en la doc | ✅ `permission` (edit/bash = ask) + `policies` (experimental deny/allow) | ❌ no nativo (recomienda contenedores/tmux; trust system para cargar extensiones) | ⚠️ modelo propio de permisos y aislamiento; detalles según versión |
+| **Selección de modelo / BYO** | ⚠️ mainly Anthropic; tiered routing limitado | ✅ multi-proveedor + BYO key | ✅ 75+ proveedores + locales + login Copilot/ChatGPT | ✅ 15+ proveedores + locales (Ollama, llama.cpp) + BYO key | —/verificar |
+| **Open-source** | ❌ cerrado | ❌ cerrado | ✅ | ✅ MIT | —/verificar |
+| **Lee `AGENTS.md`** | vía `CLAUDE.md` (symlink / `@imports`) | ✅ `AGENTS.md` + `CLAUDE.md` | ✅ nativo (`/init` lo genera) | ✅ `AGENTS.md` / `CLAUDE.md` | ✅ de primera clase (`~/.codex/`, raíz del repo, working dir) |
+
+> **Codex en esta tabla:** los datos derivan del repo (M3: `AGENTS.md` de
+> primera clase desde `~/.codex/`, raíz del repo y working dir; M0: MCP
+> listado como soportado; árbol de selección: agente de tarea completa
+> orientado a issue, con modelo de permisos y aislamiento que hay que
+> revisar). Las celdas «—/verificar» no tienen dato fiable en el repo:
+> verifica la versión vigente antes de decidir.
 
 > **Cómo leer esta tabla para decidir:** cada ✅ que falta en Pi es, por
 > diseño, trabajo de harness que tú haces (M1). Si tu caso de uso necesita

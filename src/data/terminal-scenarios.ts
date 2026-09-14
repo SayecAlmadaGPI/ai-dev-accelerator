@@ -11,7 +11,7 @@ export interface TermScenario {
   /** Intro que se imprime al cargar el escenario. */
   intro: string;
   /** cmd (sin argumentos extra) -> output canned. `help`, `clear`, `ls` y
-   *  `echo` los maneja el shell globalmente; acá van los específicos. */
+   *  `echo` los maneja el shell globalmente; aquí van los específicos. */
   commands: Record<string, string>;
 }
 

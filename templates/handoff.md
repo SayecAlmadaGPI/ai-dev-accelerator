@@ -73,6 +73,6 @@
   feature de la lista]
 
 <!--
-  Recordatorio: si el estado narrado acá contradice a .planning/state.json,
+  Recordatorio: si el estado narrado aquí contradice a .planning/state.json,
   gana state.json. Marca este handoff como desactualizado y regenera.
 -->

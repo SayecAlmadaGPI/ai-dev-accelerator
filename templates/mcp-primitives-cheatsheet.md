@@ -34,7 +34,7 @@
 |-----------|------------------|------------|
 | Exponer `get_user_schema` como Tool. | El schema es un dato, no una acción. El modelo la invocará como "algo que hago" en lugar de "algo que consulto". | Exponlo como Resource: `db://schema/users`. |
 | Exponer `read_file` como Resource cuando debe poder tomar argumentos dinámicos. | Los Resources son identificables por URI; los args dinámicos complejos no encajan. | Si necesita args complejos, es Tool. |
-| Poner instrucciones de flujo dentro de la descripción de una Tool. | El modelo las obey a medias; las instrucciones largas diluyen la tool. | Saca el flujo a un Prompt; deja en la Tool solo su contrato. |
+| Poner instrucciones de flujo dentro de la descripción de una Tool. | El modelo las obedece a medias; las instrucciones largas diluyen la tool. | Saca el flujo a un Prompt; deja en la Tool solo su contrato. |
 | Usar Sampling para lógica que podrías hacer en el server. | Sampling cuesta tokens y red; el server debería computar lo determinista. | Reserva Sampling para lo que sí necesita razonamiento. |
 
 ## Cuándo combinar (patrón sano)

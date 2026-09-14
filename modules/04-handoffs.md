@@ -58,9 +58,11 @@ acumulado, y el costo acumulado de la sesión crece cuadrático con los turnos.
 ### 4.1.2 El costo cuadrático
 
 Cada turno nuevo, el modelo relee todo el contexto acumulado. No es "sumar
-un turno", es "reprocesar todo lo dicho hasta ahora". Por eso una sesión que
-va por el turno 40 no es 2× más cara que una en el turno 20: es
-proporcionalmente más cara y, peor, más propensa a error.
+un turno", es "reprocesar todo lo dicho hasta ahora". Por eso el costo de
+cada turno crece lineal con los turnos, y el costo acumulado de la sesión
+crece cuadrático: una sesión de 40 turnos cuesta en total ~4× el costo
+acumulado de una de 20 (cada turno ~2× más caro × el doble de turnos), si
+el trabajo por turno es igual. Y, peor, es más propensa a error.
 
 > **Implicación práctica:** una sesión no debe medirse en "cuánto logré",
 > sino en "cuánto logré por unidad de contexto gastado". Llegar al borde del
