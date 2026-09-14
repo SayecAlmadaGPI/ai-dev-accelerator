@@ -126,6 +126,16 @@ Pídele al agente que list tasks del proyecto 'evil'. Observa:
 - `RESULTADO.md` con: la tabla de primitivas, la decisión Tool/Resource
   por cada una, qué inyección intentaste y por qué el sandbox la contuvo.
 
+## Rúbrica de dominio
+
+Autoevalúate al terminar (regístralo en tu `RESULTADO.md`):
+
+| Nivel | Criterios observables |
+|-------|----------------------|
+| **Mínimo** | El server MCP expone las 5 primitivas con schemas correctos (nombres verbo+objeto, enums, unidades en params) y `close_task` es idempotente y gated. |
+| **Medio** | Todo el criterio: el agente conectado solo accede a la DB y a la API por el server (no puede leer `tasks.db` ni el token directamente), la prueba de inyección corrida con el sandboxing conteniendo la exfiltración, y `RESULTADO.md` con la tabla de primitivas y la decisión Tool/Resource justificada por cada una. |
+| **Completo** | Criterio + reflexión con evidencia: qué capa determinística (permisos, sandboxing, gate) hizo el trabajo en la inyección — y qué habría pasado sin ella —, el kill switch documentado, y qué primitiva clasificaste mal al principio y por qué esa distinción cambia cómo razona el modelo. |
+
 ## Qué debes haber aprendido
 
 - La distinción Tool vs. Resource no es estética; cambia cómo el modelo

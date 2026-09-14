@@ -102,6 +102,16 @@ golden y que el gate DONE/VERIFIED bloquea un PR sin reporte.
   spec, qué phantom/hollow report atrapaste con el sensor, y qué
   regla promueves de prosa a check.
 
+## Rúbrica de dominio
+
+Autoevalúate al terminar (regístralo en tu `RESULTADO.md`):
+
+| Nivel | Criterios observables |
+|-------|----------------------|
+| **Mínimo** | El feature funciona con disciplina mínima: los 4 AC tienen tests que pasan (incluye idempotencia y `TaskNotFound`) y `init.sh` reproduce el entorno en verde desde cero. |
+| **Medio** | Todo el criterio: spec con los `[NEEDS CLARIFICATION]` resueltos, `.planning/` (roadmap, plans, tasks) consistente con el estado real, un PR con DONE/VERIFIED completo que pasa el gate del pipeline, y `RESULTADO.md` con los hallazgos (clarificaciones, phantom/hollow atrapado, regla a promover). |
+| **Completo** | Criterio + evidencia de que la disciplina protegió: mutation testing sin mutantes vivos en las 4 funciones (o el sensor que atrapó un reporte phantom/hollow documentado con comando y número), la regla promovida ya instalada como check, y la reflexión de qué parte del flujo (spec → plan → tasks → verify) te defendió de qué clase de fallo. |
+
 ## Qué debes haber aprendido
 
 - Que la spec con no-objetivos explícitos es la primera defensa contra

@@ -125,6 +125,16 @@ Con la evidencia de las partes 1-4, decide:
   te sorprendió (p.ej. "el modelo barato resolvió el 80% de mis tareas a
   un 20% del costo").
 
+## Rúbrica de dominio
+
+Autoevalúate al terminar (regístralo en tu `RESULTADO.md`):
+
+| Nivel | Criterios observables |
+|-------|----------------------|
+| **Mínimo** | La prueba ciega corrida: 5-10 tareas reales de tu codebase, evaluadas sin saber qué modelo produjo cada output (nombres M_A/M_B/M_C hasta el revelado), con el resultado en `benchmark-your-task-result.json`. |
+| **Medio** | Todo el criterio: tabla de los 3 modelos completa (con la advertencia Live vs. Verified donde aplique), las 10 preguntas respondidas para el candidato, cost-per-quality calculado para ganador y actual, y `RESULTADO.md` con la decisión final, la evidencia que la sostiene y qué te sorprendió. |
+| **Completo** | Criterio + decisión defendible: sigue el protocolo (adoptar / no adoptar / esperar / tiered) con cada condición justificada por tus números — no por el benchmark público —, las mediciones fechadas para reevaluar cuando el release madure, y la reflexión de qué parte del delta fue el modelo y cuál tu harness (la capa portable idéntica entre corridas). |
+
 ## Qué debes haber aprendido
 
 - Que "gana en SWE-bench" no decide; "gana en TUS tareas a ciegas" sí.

@@ -97,6 +97,16 @@ Anota:
   "qué falló en A que no falló en B" y una nota de qué promueves de
   prosa a check en tu próximo harness.
 
+## Rúbrica de dominio
+
+Autoevalúate al terminar (regístralo en tu `RESULTADO.md`):
+
+| Nivel | Criterios observables |
+|-------|----------------------|
+| **Mínimo** | La Parte B funciona: `init.sh` corre en verde desde cero, los AC1-AC4 tienen tests que pasan y el reporte DONE/VERIFIED tiene las 4 partes. |
+| **Medio** | Todo el criterio: las dos partes corridas (baseline y harness) y `RESULTADO.md` completo — la comparación A vs. B, la tabla de "qué falló en A que no falló en B" y qué promueves de prosa a check. |
+| **Completo** | Criterio + la regla promovida **instalada** en tu harness (un check ejecutable, no una nota) y la reflexión con evidencia: qué detectó el sensor que el reporte del agente ocultó en A, y qué lección (invariante en archivo, AGENTS.md denso) explica el delta que observaste. |
+
 ## Qué debes haber aprendido
 
 - La diferencia entre "el agente dice que terminó" y "un sensor confirma

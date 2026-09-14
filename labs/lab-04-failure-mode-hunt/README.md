@@ -110,6 +110,16 @@ versión condensada):
 - `RESULTADO.md` con: qué clase fue la más fácil de cazar, cuál la más
   difícil, y qué dice eso de tu harness actual (¿dónde es más débil?).
 
+## Rúbrica de dominio
+
+Autoevalúate al terminar (regístralo en tu `RESULTADO.md`):
+
+| Nivel | Criterios observables |
+|-------|----------------------|
+| **Mínimo** | Los 5 bugs cazados y fixeados con el protocolo: cada uno con reproducción (test que falla con el bug), fix mínimo y regression test que queda verde. |
+| **Medio** | Todo el criterio: `BUGS.md` con la clasificación de cada bug (clase macro + modo de los 12) respaldada por la evidencia, 5 mini-postmortems cada uno con al menos una mitigación a instalar, 2 mitigaciones efectivamente instaladas, y `RESULTADO.md` con cuál clase fue más fácil/difícil de cazar y qué dice eso de tu harness. |
+| **Completo** | Criterio + el postmortem trabajado: cada mitigación instalada cierra el hueco que dejó escapar su bug (explicas por qué el harness no lo atrapó antes) y tu reflexión nombra tu punto ciego actual con la defensa que lo cubre — no solo curas los 5 bugs, previenes su clase. |
+
 ## Qué debes haber aprendido
 
 - Que clasificar la falla antes de fixear cambia el fix que eliges.
