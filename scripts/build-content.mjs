@@ -104,27 +104,53 @@ function hrefToUrl(href, srcRelDir) {
   if (!linkPath) return anchor ? `${BASE}#${anchor}` : BASE;
   const resolved = path.posix.join(srcRelDir, linkPath);
   let slug;
+  let isPage = true;
   if (resolved.endsWith('.md') || resolved.endsWith('.mdx')) {
     let p = resolved.replace(/\.(md|mdx)$/, '');
     if (p.endsWith('/README')) p = p.slice(0, -'/README'.length);
     if (p === 'README') p = '';
     slug = p;
+  } else if (path.posix.extname(resolved)) {
+    // Asset no-markdown (ej. .py, .json): se copia espejado a public/ con su
+    // nombre original (ver walk), así que SIN trailing slash (un `/` final
+    // sobre un archivo es 404 latente) y SIN minúsculas (conserva su case).
+    slug = resolved;
+    isPage = false;
   } else {
+    // Link a directorio (ej. `examples/mcp-server-template`): página índice,
+    // con trailing slash y en minúsculas.
     slug = resolved.replace(/\/$/, '');
   }
+
   // Minúsculas: GitHub Pages sirve case-sensitive y los archivos destino
   // se escriben en minúsculas (ver walk). Así link y ruta siempre coinciden.
-  slug = slug.toLowerCase();
-  let url = BASE + (slug ? slug + '/' : '');
+  if (isPage) slug = slug.toLowerCase();
+  let url = BASE + (slug ? slug + (isPage ? '/' : '') : '');
   if (anchor) url += `#${anchor}`;
   return url;
 }
 
+// Reescribe links internos línea a línea: NO entra en code fences (```
+// o ~~~ abiertos) para no corromper ejemplos de código, y deja intactas las
+// definiciones de reference-style links (`[texto]: url`).
 function rewriteLinks(body, srcRelDir) {
-  return body.replace(/\[([^\]]*)\]\(([^)]+)\)/g, (m, text, href) => {
-    if (!isInternal(href)) return m;
-    return `[${text}](${hrefToUrl(href, srcRelDir)})`;
-  });
+  let abierto = null; // marcador del fence abierto: '`' o '~'
+  return body
+    .split('\n')
+    .map((line) => {
+      const fence = line.match(/^\s{0,3}(`{3,}|~{3,})/);
+      if (fence) {
+        if (!abierto) abierto = fence[1][0];
+        else if (abierto === fence[1][0]) abierto = null;
+        return line;
+      }
+      if (abierto || /^\s{0,3}\[[^\]]+\]:\s/.test(line)) return line;
+      return line.replace(/\[([^\]]*)\]\(([^)]+)\)/g, (m, text, href) => {
+        if (!isInternal(href)) return m;
+        return `[${text}](${hrefToUrl(href, srcRelDir)})`;
+      });
+    })
+    .join('\n');
 }
 
 // --- walk + copy ---

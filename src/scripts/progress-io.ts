@@ -3,6 +3,9 @@
 // que puedes descargar y restaurar. Tras importar, avisa a la UI con los
 // eventos custom `aida:progress` y `aida:badges`.
 
+import { quizBySlug } from '../data/quizzes';
+import { BADGES } from '../data/badges';
+
 const PREFIX_DONE = 'aida:done:';
 const PREFIX_QUIZ = 'aida:quiz:';
 const PREFIX_BADGE = 'aida:badge:';
@@ -105,14 +108,24 @@ export async function importProgress(file: File): Promise<ImportSummary> {
   }
 
   for (const [slug, score] of Object.entries(quizzes)) {
-    if (typeof slug === 'string' && slug.length > 0 && typeof score === 'number') {
-      localStorage.setItem(PREFIX_QUIZ + slug, String(score));
-      quizCount++;
+    // Evidence, not claims: solo scores de quizzes reales del banco, acotados
+    // al total de preguntas de ese quiz. Slugs desconocidos se descartan.
+    const quiz = quizBySlug[slug];
+    if (typeof score !== 'number' || !Number.isFinite(score) || !quiz) {
+      console.warn(`[progress-io] score descartado (quiz desconocido o no numérico): ${slug}`);
+      continue;
     }
+    const total = quiz.questions.length;
+    localStorage.setItem(PREFIX_QUIZ + slug, String(Math.min(Math.max(score, 0), total)));
+    quizCount++;
   }
 
+  const idsValidos: Record<string, true> = Object.fromEntries(
+    BADGES.map((b) => [b.id, true as const]),
+  );
   for (const id of badges) {
-    if (typeof id === 'string' && id.length > 0) {
+    // Igual que los scores: un badge solo se importa si existe en el catálogo.
+    if (typeof id === 'string' && idsValidos[id]) {
       localStorage.setItem(PREFIX_BADGE + id, '1');
       badgeCount++;
     }
