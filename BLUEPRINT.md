@@ -79,9 +79,9 @@ APÉNDICES ── Kit de Supervivencia
 - **Patrones de trabajo:** human-in-the-loop, AFK (away from keyboard), automated check / review, human review, vibe coding, design concept, grilling, prototyping, DX (developer experience) vs. AX (agent experience).
 
 ### Artefactos
-- Glosario operativo compacto (~60 términos — lo justo y necesario).
-- Flashcards de jerga operativa.
-- Diagrama: "De la intención al token: flujo completo de una sesión agente".
+- Glosario operativo compacto (~60 términos — lo justo y necesario) — CUMPLIDO: tabla estática de consulta rápida en §0.9 del módulo.
+- Flashcards de jerga operativa — pendiente (ver Notas para Futuras Versiones).
+- Diagrama: "De la intención al token: flujo completo de una sesión agente" — CUMPLIDO (§0.8 del módulo).
 
 ### Referencias Clave
 - [Dictionary of AI Coding — mattpocock](https://github.com/mattpocock/dictionary-of-ai-coding) — vocabulario operativo traducido a plain English.
@@ -134,15 +134,15 @@ APÉNDICES ── Kit de Supervivencia
   - Rollback plan.
 - **Specs vs. Tickets:** el ticket es la intención; la spec es el contrato técnico.
 - **Feature lists como primitivas de harness:** `feature_list.json` como mapa de control, machine-readable, persistente entre sesiones.
-- **Plantillas y constituciones:** las 9 "Constitutional Articles" de GitHub Spec Kit (Library-First, Test-First, Anti-Abstraction, Integration-First Testing, etc.).
-- **Trabajo en paralelo:** SDD permite ejecutar agentes en paralelo sobre tareas no superpuestas.
-- **Self-specs:** cuando el LLM escribe su propia spec antes de generar código, con revisión humana en el medio.
+- **Plantillas y constituciones:** las 9 "Constitutional Articles" de GitHub Spec Kit (Library-First, Test-First, Anti-Abstraction, Integration-First Testing, etc.) — CUMPLIDO: documentadas en modules/02 §2.2, verificadas contra el `spec-driven.md` del repo de Spec Kit.
+- **Trabajo en paralelo:** SDD permite ejecutar agentes en paralelo sobre tareas no superpuestas — CUMPLIDO: desarrollado en §2.3 del módulo.
+- **Self-specs:** cuando el LLM escribe su propia spec antes de generar código, con revisión humana en el medio — CUMPLIDO: desarrollado en §2.3 del módulo.
 
 ### Artefactos
 - Template: `spec.md` — plantilla de especificación para cualquier feature.
 - Template: `feature_list.json` — estructura de feature list machine-readable.
 - Ejemplo completo: de un ticket de 2 líneas a una spec ejecutable en 15 minutos.
-- Workflow: `/speckit.specify → /speckit.plan → /speckit.tasks → implement`.
+- Workflow: el flujo canónico del curso usa GSD (Get Shit Done Redux — §2.3 del módulo); Spec Kit 1.0 (`/speckit.specify` → `/speckit.implement`) queda documentado en §2.2.
 
 ### Referencias Clave
 - [GitHub Spec Kit — Blog](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/) — toolkit open-source de GitHub para SDD con agentes (Sep 2025).
@@ -245,7 +245,7 @@ APÉNDICES ── Kit de Supervivencia
 
 ### Artefactos
 - Template: `mcp-server-template/` — esqueleto de servidor MCP en Python/TypeScript.
-- Ejemplo: MCP server para un work tracker interno.
+- Ejemplo: MCP server para un work tracker interno — CUMPLIDO: materializado en `templates/mcp-server-template/` (`server.py` real + `pyproject.toml`).
 - Cheatsheet: "MCP primitives — cuándo usar Tool vs. Resource vs. Prompt".
 
 ### Referencias Clave
@@ -269,7 +269,7 @@ APÉNDICES ── Kit de Supervivencia
 - **Tres capas de enforcement:**
   1. Git hooks (mecánico, determinístico) — bloquea commits malos automáticamente.
   2. `.claude/rules/` (advisory, scope-specific) — carga solo cuando es relevante.
-  3. `CLAUDE.md` (principios globales) — estándares de operación.
+  3. `AGENTS.md` (principios globales) — estándares de operación; es la capa global que usan los módulos del curso (CLAUDE.md vía symlink o `@imports`).
 - **Sensores computacionales (baratos, determinísticos):**
   - Build, lint, typecheck (`tsc --noEmit`, ESLint, `dotnet build`).
   - Tests unitarios, integración, e2e.
@@ -349,9 +349,9 @@ APÉNDICES ── Kit de Supervivencia
 6. **Debugging de incidente:** de un error en producción a un fix verificado.
 
 ### Artefactos
-- Repositorio laboratorio: `ai-dev-lab/` con proyectos intencionalmente rotos o incompletos.
-- Video-demo: cada caso como "una sola toma" de sesión real.
-- Playbook: "SDD para [caso] — paso a paso".
+- Repos con bugs: `labs/lab-04-failure-mode-hunt/starter/` — starter con 5 bugs reales inyectados (uno por clase de la taxonomía del M7). CUMPLIDO.
+- Video-demo: cada caso como "una sola toma" de sesión real — pendiente (Fase 5).
+- Playbook: "SDD para [caso] — paso a paso" — CUMPLIDO vía ejemplos trabajados: `examples/m2-caso-refactor/` (refactor de legacy) y `examples/m2-unified-workflow/` (del ticket al feature).
 
 ### Referencias Clave
 - [AI Engineering from Scratch — rohitg00](https://github.com/rohitg00/ai-engineering-from-scratch) — Fases 11-14 (LLM Engineering, MCP, Agent Engineering, Agent Workbench) con 17 capstones end-to-end.
@@ -389,7 +389,7 @@ APÉNDICES ── Kit de Supervivencia
   - Comparativa de herramientas: Claude Code vs. Cursor vs. Codex vs. Aider vs. Copilot.
   - Cuándo cambiar de modelo: heurísticas de decisión.
 - **Context windows, pricing y caching:**
-  - Tabla comparativa de costos por 1M tokens (input/output/cached).
+  - Tabla comparativa de costos por 1M tokens (input/output/cached) — decisión documentada: la comparación vive en `templates/model-comparison-cheatsheet.md` con ordinales direccionales y fecha de medición, no con valores absolutos que caducan por release.
   - Estrategias de compresión y RAG vs. long-context.
   - Tiered model routing (barato para resúmenes, caro para razonamiento).
 - **MoE en profundidad (para quien quiera entender la arquitectura):**
@@ -398,10 +398,10 @@ APÉNDICES ── Kit de Supervivencia
   - Beneficios y desafíos de despliegue.
 
 ### Artefactos
-- Dashboard: "Model Comparison Cheat Sheet 2026" (tabla viva).
-- Checklist: "10 preguntas antes de adoptar un nuevo modelo".
-- Script: `benchmark-your-task.py` — evaluar un modelo en TU codebase, no en HumanEval.
-- Guía: "De la publicación del paper a tu repo: cómo filtrar el hype".
+- Dashboard: "Model Comparison Cheat Sheet 2026" — decisión de diseño: template anti-envejecimiento (`templates/model-comparison-cheatsheet.md`) con ordinales direccionales y fecha de medición explícita, no una "tabla viva" mantenida a mano. CUMPLIDO.
+- Checklist: "10 preguntas antes de adoptar un nuevo modelo" — CUMPLIDO: `templates/10-preguntas-antes-adoptar.md`.
+- Script: `benchmark-your-task.py` — evaluar un modelo en TU codebase, no en HumanEval. CUMPLIDO: `templates/benchmark-your-task.py` (3 modelos, modo `--dry-run`).
+- Guía: "De la publicación del paper a tu repo: cómo filtrar el hype" — pendiente (Notas para Futuras Versiones).
 
 ### Referencias Clave
 - [SWE-bench — Princeton NLP](https://github.com/princeton-nlp/SWE-bench/) — benchmark estándar de repo-level.
@@ -538,7 +538,7 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 | **Fase 2: Harness Operativo** | M3 + M4 + M5 + Apéndices B/C (cheatsheets, decision trees) | Fase 1 |
 | **Fase 3: Calidad y Seguridad** | M6 + M7 + M10 + Apéndice D (labs 01-03) | Fase 2 |
 | **Fase 4: Especialización** | M8 (casos end-to-end) + M9 (evaluación de modelos) + labs 04-05 | Fase 3 |
-| **Fase 5: Pulido** | Sitio estático, videos, integración continua de referencias nuevas | Fase 4 |
+| **Fase 5: Pulido** | Sitio estático — **CUMPLIDO y en producción** (Astro Starlight, GitHub Pages); videos pendientes; changelog de referencias como práctica activa (desde 2026-09) | Fase 4 |
 
 ---
 
@@ -642,8 +642,33 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 Registro de cambios de **contenido** (no de código del sitio). Cada
 entrada lista qué se modificó y en qué archivo, para auditar la evolución
 del material. El sitio se regenera por copy-on-build desde la raíz del
-repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados acá
+repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados aquí
 se propaga al sitio sin tocar `src/content/docs/`.
+
+### 2026-09-14 — F2 aprendizaje constructivo + F3 sustancia de práctica
+
+**Tesis del cambio:** el curso pasa de "lectura + comprobación" a
+sistema de aprendizaje constructivo (objetivos Bloom + evidencia de
+logro por módulo, banco de 132 preguntas con muestreo, umbral 80% y
+repaso espaciado, badges de dominio, rúbricas de labs, widgets
+M0/M4/M7) y la práctica gana sustancia ejecutable (starter lab-04,
+MCP server real, benchmark 3 modelos, caso refactor trabajado, labs
+M0/M4, convención DONE/VERIFIED única, ejercicios de completación).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `modules/*.md` (11 módulos) | objetivos de aprendizaje | Objetivos observables (Bloom) + evidencia de logro por módulo. |
+| `src/data/quizzes.ts` | banco de preguntas | Ampliado a 132 (12 por módulo) con muestreo, umbral de dominio 80% y repaso espaciado. |
+| `labs/*/README.md` | rúbricas | Rúbricas de dominio de 3 niveles en los 5 labs. |
+| `src/components/PageSidebar.astro` + `src/data/*.ts` | widgets | Widgets de práctica M0/M4/M7 + mapa data-driven de widgets. |
+| `src/scripts/badges.ts` + `Badges.astro` | gamificación | Badges de dominio y progreso visible como dominio. |
+| `labs/lab-04-failure-mode-hunt/starter/` | lab-04 | Starter real con 5 bugs inyectados (uno por clase del M7). |
+| `templates/mcp-server-template/` | M5 | Esqueleto MCP materializado: `server.py` real + `pyproject.toml`. |
+| `templates/benchmark-your-task.py` | M9 | Benchmark con 3 modelos y modo `--dry-run`. |
+| `examples/m2-caso-refactor/`, `examples/m2-unified-workflow/` | M2/M8 | Caso refactor trabajado + artefactos reales del M8 (playbook SDD). |
+| `labs/lab-06-diagnostico-sesion/`, `labs/lab-07-handoff-restore/` | labs nuevos | Labs para M0 (diagnóstico de sesión) y M4 (handoff restore). |
+| `templates/DONE_VERIFIED.md`, `init.sh`, `verification-pipeline.yaml` | M6 | Convención única DONE/VERIFIED + correcciones de init.sh y pipeline. |
+| `modules/00-lenguaje-operativo.md`, `modules/02-spec-plan-execute.md` | contenido | M0 conforme a la convención, M2 ampliado, ejercicios de completación. |
 
 ### 2026-09-13 — Corrección de integridad: referencias y atribuciones (P0)
 
@@ -719,9 +744,11 @@ lab: no participa del tracking de progreso).
 - [ ] Añadir módulo de "Agent Economics" (cost tracking, budget governance, FinOps para LLMs) si el público lo demanda.
 - [ ] Explorar integración con `OpenAI Codex` async/cloud workflows como caso de uso en M8.
 - [ ] Considerar sección de "Local-First AI" (Ollama, llama.cpp, local models) para entornos regulados. **(parcialmente cubierto 2026-07-29: OpenCode y Pi soportan modelos locales vía Ollama/llama.cpp — ver la tabla de dimensiones del harness en `templates/cross-tool-compatibility-matrix.md` §3)**
+- [x] Materializar las 9 "Constitutional Articles" de Spec Kit en el curso — **cumplido 2026-09:** documentadas en modules/02 §2.2, verificadas contra el `spec-driven.md` del repo de Spec Kit.
+- [x] Cubrir self-specs y trabajo en paralelo como temas de primera clase — **cumplido 2026-09:** desarrollados en modules/02 §2.3.
+- [ ] Videos-demo de los casos end-to-end y flashcards del vocabulario del M0 (Fase 5).
 - [ ] Traducción a español: decidir si el material base se escribe en español con términos en inglés, o bilingüe completo.
-- [ ] Mantener un changelog de referencias: el ecosistema cambia cada 3-6 meses; este blueprint necesita caducidad explícita.
-
+- [ ] Sostener el changelog de referencias — **práctica activa desde 2026-09** (entradas 2026-09-13 y 2026-09-14): el ecosistema cambia cada 3-6 meses; este blueprint necesita caducidad explícita.
 ---
 
 *Documento generado el 2026-07-02. El ecosistema de agentes de IA evoluciona rápidamente; las referencias aquí citadas reflejan el estado del arte a esa fecha. Se recomienda revisión trimestral.*
