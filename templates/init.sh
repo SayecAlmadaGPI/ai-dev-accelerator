@@ -9,9 +9,12 @@
 # `set -euo pipefail` es la base; los checks explícitos son el refuerzo.
 #
 # Uso:
-#   bash init.sh            # setup completo
-#   bash init.sh --check   # solo verifica el entorno, no instala nada
-# -------------------------------------------------------------------
+#   bash init.sh            # setup completo: instala deps y corre sensores
+#   bash init.sh --check    # verificación pura de entorno: runtime presente
+#                           # y node_modules (avisa si falta, no falla).
+#                           # NO corre typecheck/tests: sin deps
+#                           # instaladas fallarían siempre en frío. En CI,
+#                           # el par canónico es: npm ci && bash init.sh --check
 
 set -euo pipefail
 
@@ -59,6 +62,20 @@ install_deps() {
 # -------------------------------------------------------------------
 # 3. Verificación de integridad del entorno (los sensores del M1)
 # -------------------------------------------------------------------
+# Dos niveles distintos, no confundir:
+# - verify_env: presencia de runtime y node_modules. Corre en frío y es
+#   lo único que hace --check. Si node_modules falta, AVISA (no falla):
+#   instalar no es trabajo del modo verificación.
+# - verify: sensores (typecheck + tests). Requiere deps instaladas; lo
+#   corre solo el setup completo, nunca --check.
+verify_env() {
+  if [ -d node_modules ]; then
+    log "node_modules presente."
+  else
+    warn "node_modules ausente. Corre 'bash init.sh' (o 'npm ci') antes de usar el entorno."
+  fi
+}
+
 verify() {
   log "Corriendo sensores (typecheck + tests)..."
 
@@ -91,11 +108,15 @@ main() {
   check_planning
 
   if [ "$mode" = "--check" ]; then
-    log "Modo --check: omitiendo instalación."
-  else
-    install_deps
+    # Verificación pura de entorno: sin instalar, sin sensores. Los
+    # sensores sin deps instaladas fallan siempre en frío (ese era el
+    # bug); con deps, los corre CI con su orden de costo (M6 §6.8).
+    verify_env
+    log "Modo --check: entorno verificado. Sensores: 'bash init.sh' completo o CI."
+    return
   fi
 
+  install_deps
   verify
   log "Listo. Entorno en estado conocido."
 }

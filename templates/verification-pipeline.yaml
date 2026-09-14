@@ -38,7 +38,12 @@ jobs:
         # El entorno de verificación debe ser reproducible desde cero.
         # Si init.sh no puede recrearlo, "a mí me funciona" no es
         # verificación (M6 §6.7 environment mismatch).
-        run: bash init.sh --check
+        # init.sh --check verifica el entorno sin instalar; el par
+        # canónico en frío es npm ci && bash init.sh --check. Los
+        # sensores son los pasos que siguen, con su orden de costo.
+        run: |
+          npm ci
+          bash init.sh --check
 
       - name: Typecheck (barato, falla rápido)
         run: npm run typecheck
@@ -107,19 +112,41 @@ jobs:
   spec-compliance:
     runs-on: ubuntu-latest
     needs: sensors-computational
-    # Solo corre si el PR tiene una spec referenciada.
-    if: contains(github.event.pull_request.body, 'docs/specs/')
+    # Corre en todo PR: el reporte de cierre es obligatorio, viva en
+    # .planning/tasks/<task>.md (ubicación canónica) o en el body del PR
+    # (PRs pequeños). Ver templates/DONE_VERIFIED.md.
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
-      - name: Review-agent diff vs spec
-        # Sensor inferencial (M6 §6.4): un LLM compara diff <-> spec,
-        # apoyado en el output de la etapa 1. Su valor es interpretar la
-        # señal computacional, no reemplazarla.
-        # Implementación real: llama a tu review-agent (acción custom o
-        # script) con el diff y la spec referenciada en el body del PR.
+        with:
+          fetch-depth: 0  # necesita el histórico para el diff.
+
+      - name: Sección DONE/VERIFIED presente en el cierre
+        # Sensor mecánico (M6 §6.4): el marcador DONE/VERIFIED debe
+        # aparecer en el body del PR O en algún task file del diff — la
+        # ubicación canónica del reporte. El schema completo (partes 1-4)
+        # lo exige done-verified-gate. La comparación semántica diff vs
+        # spec con un review-agent se agrega por proyecto: llama a tu
+        # acción custom con el diff y la spec referenciada en el body.
         run: |
-          echo "TODO: invocar review-agent con diff y spec."
-          # ./scripts/review-agent.sh --diff HEAD~1 --spec $(extract_spec_ref)
+          MARKER='## DONE/VERIFIED|DONE/VERIFIED:'
+          BODY="${{ github.event.pull_request.body }}"
+          if printf '%s' "$BODY" | grep -qE "$MARKER"; then
+            echo "OK: sección DONE/VERIFIED en el body del PR."
+            exit 0
+          fi
+          FOUND=$(git diff --name-only origin/main...HEAD -- '.planning/tasks/' \
+            | xargs -r grep -lE "$MARKER" 2>/dev/null || true)
+          if [ -n "$FOUND" ]; then
+            echo "OK: sección DONE/VERIFIED en: $FOUND"
+            exit 0
+          fi
+          echo "Falta la sección DONE/VERIFIED: no aparece en el body del PR ni"
+          echo "en los archivos de .planning/tasks/ tocados por este diff."
+          echo "Ubicación canónica: sección DONE/VERIFIED dentro de"
+          echo ".planning/tasks/<task>.md; para PRs pequeños, la misma sección"
+          echo "en el body del PR. Ver templates/DONE_VERIFIED.md."
+          exit 1
 
   # --- Etapa 4: gate DONE/VERIFIED -----------------------------------
   done-verified-gate:

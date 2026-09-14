@@ -75,8 +75,8 @@ RED → GREEN → REFACTOR. **El test antes que el código** (M2 §TDD, M6
 
 ## Parte 4 — Execute + Verify
 
-Implementa task por task. Cierra cada task con su reporte
-DONE/VERIFIED en `.planning/tasks/<id>.md` (M2 §tarea template):
+Implementa task por task. Cierra cada task con la sección
+DONE/VERIFIED dentro de `.planning/tasks/<id>.md` (M2 §tarea template):
 - Qué se verificó (comando + número).
 - Qué NO se verificó.
 - Supuestos.

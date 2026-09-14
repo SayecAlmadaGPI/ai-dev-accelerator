@@ -13,6 +13,10 @@
   la 4 (qué revisa el humano primero) son las que más se omiten y las que
   más valor aportan.
 
+  Ubicación canónica: sección DONE/VERIFIED dentro de
+  .planning/tasks/<task>.md; para PRs pequeños, la misma sección en el
+  body del PR. El archivo raíz es para reportes de sesión completa.
+
   Cómo usar: el agente lo completa al cerrar una tarea. Si una parte no
   aplica, dice explícitamente "n/a — razón", no la omite.
 -->

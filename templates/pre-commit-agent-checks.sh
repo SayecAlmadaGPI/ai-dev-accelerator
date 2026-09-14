@@ -85,7 +85,24 @@ check_critical_paths() {
 # --------------------------------------------------------------------------
 # 6. Reporte DONE/VERIFIED: aviso si no hay (el gate estricto va en CI)
 # --------------------------------------------------------------------------
+# Ubicación canónica (ver templates/DONE_VERIFIED.md): la sección
+# DONE/VERIFIED vive dentro de .planning/tasks/<task>.md; el archivo
+# DONE_VERIFIED.md en la raíz queda para reportes de sesión completa
+# (retrocompat). Buscamos el marcador en los staged; si no aparece,
+# avisamos — el gate que bloquea está en CI.
 check_done_verified() {
+  local marker_re='## DONE/VERIFIED|DONE/VERIFIED:'
+  local task_files found
+
+  # 1) Staged bajo .planning/tasks/ con el marcador (ubicación canónica).
+  task_files=$(git diff --cached --name-only | grep '^\.planning/tasks/' || true)
+  found=$(echo "$task_files" | xargs -r grep -lE "$marker_re" 2>/dev/null || true)
+  if [ -n "$found" ]; then
+    ok "sección DONE/VERIFIED presente en .planning/tasks/ (ubicación canónica)"
+    return
+  fi
+
+  # 2) Retrocompat: DONE_VERIFIED.md en la raíz, con el schema completo.
   if [ -f DONE_VERIFIED.md ]; then
     for SEC in "Qué se verificó" "Qué NO se verificó" "Supuestos" "revisa el humano"; do
       if ! grep -q "$SEC" DONE_VERIFIED.md; then
@@ -93,8 +110,11 @@ check_done_verified() {
         return
       fi
     done
-    ok "DONE/VERIFIED presente y completo"
+    ok "DONE/VERIFIED presente y completo (raíz)"
+    return
   fi
+
+  warn "Sin sección DONE/VERIFIED: ni en los staged de .planning/tasks/ ni DONE_VERIFIED.md en la raíz. El CI lo bloqueará."
 }
 
 # --------------------------------------------------------------------------
