@@ -7,7 +7,7 @@ import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfCon
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
 import ProgressRing from './ProgressRing.astro';
 import trackable from '../data/trackable.json';
-import { quizBySlug } from '../data/quizzes';
+import { widgetsBySlug } from '../data/widgets';
 
 const base = import.meta.env.BASE_URL;
 const { toc, entry, hasSidebar } = Astro.locals.starlightRoute;
@@ -45,23 +45,8 @@ if (modNum >= 7) difficulty = 'Avanzado';
 else if (modNum >= 4) difficulty = 'Intermedio';
 
 // Widgets de práctica contextual embebidos en el panel derecho.
-// Cada slug puede tener uno o más widgets (terminal fake o playground).
-interface Widget { type: 'sim' | 'play'; id: string; label: string }
-const widgets: Widget[] = [];
-if (slug === 'modules/02-spec-plan-execute')
-  widgets.push({ type: 'play', id: 'filterByDate', label: 'filterByDate en vivo' });
-if (slug === 'modules/03-workbench')
-  widgets.push({ type: 'sim', id: 'm3-workbench', label: 'Workbench interactivo' });
-if (slug === 'modules/06-verificacion') {
-  widgets.push({ type: 'play', id: 'mutation-testing', label: 'Mutation testing mini' });
-  widgets.push({ type: 'sim', id: 'm6-verify', label: 'Verificación interactiva' });
-}
-if (slug === 'labs/lab-01-baseline-vs-harness')
-  widgets.push({ type: 'sim', id: 'lab-01', label: 'Lab 01 interactivo' });
-if (slug === 'labs/lab-02-spec-driven-feature') {
-  widgets.push({ type: 'sim', id: 'lab-02', label: 'Lab 02 interactivo' });
-  widgets.push({ type: 'play', id: 'task-store', label: 'task-store en vivo' });
-}
+// El mapa slug → widgets vive en src/data/widgets.ts (data-driven).
+const widgets = widgetsBySlug[slug] ?? [];
 ---
 
 {
@@ -141,7 +126,7 @@ if (slug === 'labs/lab-02-spec-driven-feature') {
                 <details class="rp-practice__item" open={widgets.length === 1}>
                   <summary class="rp-practice__summary">{w.label}</summary>
                   <div class="rp-practice__body">
-                    {w.type === 'sim' ? (
+                    {w.kind === 'terminal' ? (
                       <div data-term-mount data-scenario={w.id} ></div>
                     ) : (
                       <div data-playground-mount data-example={w.id} ></div>
