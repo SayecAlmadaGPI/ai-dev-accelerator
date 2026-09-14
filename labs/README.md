@@ -9,6 +9,18 @@ partida. El curso **AI Accelerated Development** los organiza por fase.
 > con el agente. Si terminas sin haber visto fallar al agente al menos
 > una vez, el lab probablemente no te exigió suficiente.
 
+## Labs publicados (Fase 1 — Fundamentos)
+
+| Lab | Foco | Módulos que ejercita | Estado |
+|-----|------|----------------------|--------|
+| [lab-06 — Diagnóstico de sesión](./lab-06-diagnostico-sesion/) | Diagnosticar una sesión real con el vocabulario del M0: nombrar cada fenómeno con evidencia y prescribir la respuesta correcta. | M0, M4 §4.2 | ✅ publicado |
+
+## Labs publicados (Fase 2 — Harness Operativo)
+
+| Lab | Foco | Módulos que ejercita | Estado |
+|-----|------|----------------------|--------|
+| [lab-07 — Handoff y restore](./lab-07-handoff-restore/) | Interrumpir a propósito al ~60% de contexto, cerrar en 7 pasos y probar que una sesión nueva retoma solo desde archivos. | M4, M3, M6 | ✅ publicado |
+
 ## Labs publicados (Fase 3 — Calidad y Seguridad)
 
 | Lab | Foco | Módulos que ejercita | Estado |
@@ -26,7 +38,7 @@ partida. El curso **AI Accelerated Development** los organiza por fase.
 
 ## Pendientes
 
-- (ninguno pendiente — labs 01-05 publicados)
+- (ninguno pendiente — labs 01-07 publicados)
 
 ## Cómo hacer un lab
 
