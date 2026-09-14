@@ -1,8 +1,9 @@
 # Handoff — Diseño y arquitectura del sitio AI Dev Accelerator
 
-> Documento para cualquier herramienta agéntica (o persona) que quiera **rediseñar
 > el HTML/CSS del curso** o **modificar una parte sin romper el resto**. Lee esto
-> antes de tocar nada. Está verificado contra el código al 2026-07-28.
+> antes de tocar nada. Actualizado contra el código al **2026-09-14** (pasada
+> F2 aprendizaje constructivo + F3 sustancia + F4 plataforma; ver changelog
+> de BLUEPRINT.md de esa fecha). Verificación original: 2026-07-28.
 
 El sitio es un **Astro Starlight** estático desplegado en GitHub Pages:
 https://SayecAlmadaGPI.github.io/ai-dev-accelerator/
@@ -141,12 +142,26 @@ parsing (view transitions, streaming). Las islas soportan **múltiples instancia
 
 | Isla | Script | Data source | Mount-point |
 |---|---|---|---|
-| Quiz | `src/scripts/quiz.ts` | `src/data/quizzes.ts` | `<div data-quiz-mount data-slug>` (inyectado por `build-content.mjs` al final de cada módulo) |
+| Quiz | `src/scripts/quiz.ts` | `src/data/quizzes.ts` (132 ítems, con `ref` y `objective`) | `<div data-quiz-mount data-slug>` (inyectado por `build-content.mjs` al final de cada módulo) |
 | Terminal | `src/scripts/term.ts` | `src/data/terminal-scenarios.ts` | `<div data-term-mount data-scenario>` (en `simulador.mdx` y widgets) |
 | Playground | `src/scripts/playground.ts` | `src/data/playground-examples.ts` | `<div data-playground-mount data-example>` (en `playground.mdx` y widgets) |
 | Notas | `src/scripts/notes.ts` | IndexedDB (`idb-keyval`) | se monta en `document.body` (FAB + drawer) |
 | Progreso | `src/scripts/progress.ts` | localStorage | usado por `ProgressMark`/`ProgressOverview` |
 | PWA | `public/sw.js` + `public/manifest.webmanifest` + `public/icon.svg` | — | registro en el boot |
+
+**Motor quiz v2 (2026-09-14):** por intento se muestrean 5 preguntas del banco
+(Fisher-Yates), umbral de dominio al 80% con correctivos (refs `ref` de las
+falladas), historial `aida:quizhist:<slug>` y **repaso espaciado**
+(interleaving: hasta 2 módulos previos vencidos × 2 preguntas; intervalos
+7d/3d/1d según el último pct). `aida:quiz:<slug>` conserva semántica v1
+(score crudo); `bestPct` vive en el historial. Contador de repasos:
+`aida:review:count`.
+
+**Componentes con re-bind:** ProgressMark, ProgressRing, PageFrame, Badges y
+ProgressOverview re-vinculan su wiring en `astro:page-load` con guards
+`data-*-wired` (no uses `data-astro-rerun`: Astro ejecuta esos scripts como
+classic scripts crudos y rompe TS, verificado 2026-09-14). El boot de
+SiteTitle mantiene un registry de MutationObservers (≤1 por selector).
 
 **Contratos que NO hay que romper:**
 - Los slugs se derivan **siempre igual**: `Astro.url.pathname` → quitar `BASE_URL`
@@ -159,20 +174,24 @@ parsing (view transitions, streaming). Las islas soportan **múltiples instancia
 
 ## 5. Widgets de práctica embebidos (panel derecho)
 
-`PageSidebar.astro` mapea **slug → widgets** y los renderiza debajo del TOC en una
-card "Práctica en línea" (`<details>` colapsables). Cada widget es una instancia
-independiente del simulador o playground.
+El mapa **slug → widgets** vive en `src/data/widgets.ts` (data-driven,
+2026-09-14); `PageSidebar.astro` solo lo consume y renderiza debajo del TOC
+en una card "Práctica en línea" (`<details>` colapsables). Cada widget es una
+instancia independiente del simulador o playground.
 
 | Página | Widgets |
 |---|---|
+| `modules/00-lenguaje-operativo` | Simulador `m0-diagnostico` |
 | `modules/02-spec-plan-execute` | Playground `filterByDate` |
 | `modules/03-workbench` | Simulador `m3-workbench` |
+| `modules/04-handoffs` | Simulador `m4-handoff` |
 | `modules/06-verificacion` | Playground `mutation-testing` + Simulador `m6-verify` |
+| `modules/07-failure-modes` | Simulador `m7-arbol` (árbol de decisión M7 §7.9) |
 | `labs/lab-01-baseline-vs-harness` | Simulador `lab-01` |
 | `labs/lab-02-spec-driven-feature` | Simulador `lab-02` + Playground `task-store` |
 
-Para agregar/quitar un widget en una página, edita el bloque `widgets` en
-`PageSidebar.astro` (líneas ~50–64). Para cambiar el tamaño de los widgets
+Para agregar/quitar un widget en una página, edita `widgetsBySlug` en
+`src/data/widgets.ts` (cero hardcode en el componente). Para cambiar el tamaño de los widgets
 embebidos, edita las reglas `.rp-practice__body :global(.aida-term*)` /
 `.aida-pg*` al final del `<style>` de `PageSidebar.astro`.
 
@@ -193,12 +212,12 @@ en `PageSidebar.astro`) ensancha el panel derecho (`theme.css` ~932).
 | **El panel derecho** | `PageSidebar.astro` (estructura/widgets) + su `<style>` scoped + `theme.css` (896–944) | no reintroduzcas el colapso del panel derecho (se sacó a propósito, §8) |
 | **El hero del landing** | `Hero.astro` + `build-content.mjs` `copyRootIndex()` (inyecta el bloque `hero:` en `index.md`) | el `<h1 id="_top" data-page-title>` es contract para TOC/skip-link/`document.title` |
 | **El `<h1>` de las páginas** | `PageTitle.astro` | mantener `id="_top"` |
-| **La card "Tu progreso"** | `ProgressOverview.astro` | depende de `trackable.json` (generado) y `progress.ts` |
+| **La card "Tu progreso"** | `ProgressOverview.astro` | incluye línea "Dominio: X/11 módulos (quiz ≥80%)"; depende de `trackable.json` (generado), `progress.ts` y `badges.ts` |
 | **El dashboard de módulos** | `ModuleDashboard.astro` | lee `modules/*.md` en build-time (H1 + primera oración) |
-| **El anillo de progreso** | `ProgressRing.astro` (estructura + hidratación) + su `<style>` | **bug pendiente: §8** |
-| **El quiz** | `src/data/quizzes.ts` (contenido) + `quiz.ts` (UI) + `.aida-quiz*` en `theme.css` | el mount-point lo inyecta `build-content.mjs`; no lo agregues a mano en `.md` |
-| **El simulador** | `src/data/terminal-scenarios.ts` (escenarios) + `term.ts` (shell) + `.aida-term*` | — |
-| **El playground** | `src/data/playground-examples.ts` (ejemplos) + `playground.ts` (iframe sandbox) + `.aida-pg*` | el iframe es `sandbox="allow-scripts"` sin `allow-same-origin`; validá `event.source` |
+| **El anillo de progreso** | `ProgressRing.astro` (estructura + hidratación) + su `<style>` | muestra bestPct de `aida:quizhist` ("Quiz 83%") con fallback legacy; re-bind en astro:page-load |
+| **El quiz** | `src/data/quizzes.ts` (132 ítems + ref/objective) + `quiz.ts` (motor v2: muestreo/umbral/repaso) + `.aida-quiz*` en `theme.css` | el mount-point lo inyecta `build-content.mjs`; no lo agregues a mano en `.md`; no bajes el umbral 80% ni cambies `aida:quiz` a pct |
+| **El simulador** | `src/data/terminal-scenarios.ts` (8 escenarios) + `term.ts` (shell) + `.aida-term*` | los widgets embebidos se asignan en `src/data/widgets.ts` |
+| **El playground** | `src/data/playground-examples.ts` (ejemplos) + `playground.ts` (iframe sandbox) + `.aida-pg*` | el iframe es `sandbox="allow-scripts"` sin `allow-same-origin`; valida `event.source`; botón Detener destruye el iframe |
 | **El drawer de notas** | `notes.ts` + `.aida-notes*` | se monta en `body` y persiste entre navegaciones; recarga nota en `astro:page-load` |
 | **Sidebar / navegación** | `astro.config.mjs` `sidebar:` | los grupos autogenerados usan `{ label, items: [{ autogenerate: { directory } }] }` |
 | **Manifest / PWA / icons** | `public/manifest.webmanifest`, `public/sw.js`, `public/icon.svg` + `head` en `astro.config.mjs` | scope = base path |
@@ -230,12 +249,10 @@ $env:PATH = "C:\Users\SALMADA\node22;" + $env:PATH
    `ProgressOverview` usa `listDone` (solo el prefijo). Los tres lectores ahora
    son consistentes con el único escritor (`progress.ts`).
 
-2. **`@xterm/xterm` y `@xterm/addon-fit` siguen en `package.json` pero ya no se
-   usan.** El simulador se reescribió como terminal fake vanilla (`term.ts`).
-   Se pueden quitar las deps para limpiar.
+2. **RESUELTO (2026-09-14):** `@xterm/*` eliminadas (`npm uninstall`), lockfile
+   limpio.
 
-3. **`README.md` está desactualizado.** Dice "Pendiente (Fase 5): sitio estático"
-   pero el sitio está live y completo.
+3. **RESUELTO (2026-09-14):** `README.md` actualizado (sitio en producción).
 
 4. **No reintroduzcas el colapso del panel derecho.** Se implementó y se sacó
    (commit `0bcc8b7`) porque ocultaba todo el panel (metadata + TOC + widgets) y
@@ -249,8 +266,21 @@ $env:PATH = "C:\Users\SALMADA\node22;" + $env:PATH
 6. **Sin `@layer` en `theme.css`.** Si agregas estilos globales ahí, van
    unlayered a propósito.
 
-7. **Español neutro, forma tú.** Sin voseo (no `podés`/`tenés`/`marcás`/`decís`).
-   Pasar grep curado antes de commitear contenido nuevo.
+7. **Español neutro, forma tú.** Sin voseo (no `podés`/`tenés`/`marcás`/`decís`);
+   tampoco la marca regional `acá` (usar `aquí`). Pasar grep curado antes de commitear contenido nuevo.
+
+8. **Motor quiz v2 (2026-09-14).** Muestreo 5/intento, umbral 80% (`MASTERY_PCT`),
+   correctivos con `ref`, historial `aida:quizhist`, repaso espaciado,
+   `aida:review:count`. No bajes el umbral ni dupliques intentos sin remuestreo.
+
+9. **Convención DONE/VERIFIED (2026-09-14):** sección dentro de
+   `.planning/tasks/<task>.md`; PRs pequeños la llevan en el body; archivo raíz
+   solo para sesiones completas. Los tres gates (pre-commit, pipeline,
+   DONE_VERIFIED.md) la implementan.
+
+10. **A11y (2026-09-14):** `.aida-quiz__opt:focus-within`,
+    `prefers-reduced-motion` global y palette con roles ARIA + focus trap. No
+    regreses radios invisibles sin foco ni transiciones sin media query.
 
 ---
 
@@ -300,8 +330,9 @@ src/scripts/
   playground.ts               # isla playground (iframe sandbox)
   notes.ts                    # isla notas (IndexedDB)
 src/data/
-  quizzes.ts                  # 132 preguntas, 11 módulos (autorado, committed)
-  terminal-scenarios.ts       # escenarios del simulador (autorado)
+  quizzes.ts                  # 132 preguntas (12/módulo), con ref/objective
+  terminal-scenarios.ts       # 8 escenarios del simulador (autorado)
+  widgets.ts                  # mapa slug -> widgets de práctica (autorado)
   playground-examples.ts      # ejemplos del playground (autorado)
   badges.ts                   # catálogo de badges + evaluateBadges() (autorado)
   trackable.json              # GENERADO (gitignored)
@@ -368,7 +399,9 @@ global se eliminó (las islas se reinicializan en cada página).
 
 **Contrato:** las islas deben ser idempotentes — pueden llamarse múltiples
 veces sin duplicar estado. Los scripts que mantienen estado global (notes.ts)
-escuchan `astro:page-load` internamente para recargar el contexto.
+escuchan `astro:page-load` internamente para recargar el contexto. Los
+componentes con wiring (ProgressMark/Ring/PageFrame/Badges/ProgressOverview)
+también re-vinculan en `astro:page-load` con guards `data-*-wired` (2026-09-14).
 
 ### 11.3. Command Palette (Cmd+K)
 
@@ -380,7 +413,8 @@ escuchan `astro:page-load` internamente para recargar el contexto.
 - Búsqueda fuzzy (subsecuencia + scoring por cercanía)
 - Navegación con `↑` `↓`, Enter para abrir, Esc para cerrar
 - Incluye acciones rápidas: "Exportar progreso", "Importar progreso"
-- Usa `window.navigate()` de Astro (view transitions) si disponible
+- Navega con view transitions si `astro:transitions/client` está disponible
+  (fallback `location.href`); focus trap + roles listbox/option (a11y 2026-09-14)
 - Se monta en `document.body` (fuera del layout)
 
 **Para añadir entradas al índice:** edita `generateSearchIndex()` en
@@ -388,8 +422,10 @@ escuchan `astro:page-load` internamente para recargar el contexto.
 
 ### 11.4. Badges (sistema de logros)
 
-**Catálogo:** `src/data/badges.ts` — 8 badges: first-step, third-module,
-half-modules, all-modules, first-lab, all-labs, first-quiz, perfect-quiz.
+**Catálogo:** `src/data/badges.ts` — 12 badges: first-step, third-module,
+half-modules, all-modules, first-lab, all-labs, first-quiz, perfect-quiz,
+mastery-first, mastery-five, mastery-all, review-streak (los 4 nuevos anclados
+a dominio/repaso, 2026-09-14).
 **Runtime:** `src/scripts/badges.ts` — evaluación + toast de desbloqueo.
 **UI:** `src/components/Badges.astro` — grid en la card de progreso del landing.
 
@@ -398,7 +434,7 @@ half-modules, all-modules, first-lab, all-labs, first-quiz, perfect-quiz.
 y `aida:quiz`.
 
 **Para añadir un badge:** edita `BADGES` en `src/data/badges.ts`. La función
-`check(ctx)` recibe `{done, quizScores, quizTotals, total}`.
+`check(ctx)` recibe `{done, quizScores, quizTotals, masteryCount, reviewCount, total}`.
 
 ### 11.5. Export/Import de progreso
 
