@@ -8,6 +8,7 @@ import TableOfContents from 'virtual:starlight/components/TableOfContents';
 import ProgressRing from './ProgressRing.astro';
 import trackable from '../data/trackable.json';
 import { widgetsBySlug } from '../data/widgets';
+import { quizBySlug } from '../data/quizzes';
 
 const base = import.meta.env.BASE_URL;
 const { toc, entry, hasSidebar } = Astro.locals.starlightRoute;
