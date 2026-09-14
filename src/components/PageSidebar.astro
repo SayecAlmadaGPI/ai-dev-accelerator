@@ -94,7 +94,24 @@ const widgets = widgetsBySlug[slug] ?? [];
               )}
             </div>
           )}
-
+          {/* Práctica contextual embebida */}
+          {widgets.length > 0 && (
+            <div class="rp-card rp-practice">
+              <p class="rp-card__title">Práctica en línea</p>
+              {widgets.map((w) => (
+                <details class="rp-practice__item" open={widgets.length === 1}>
+                  <summary class="rp-practice__summary">{w.label}</summary>
+                  <div class="rp-practice__body">
+                    {w.kind === 'terminal' ? (
+                      <div data-term-mount data-scenario={w.id} ></div>
+                    ) : (
+                      <div data-playground-mount data-example={w.id} ></div>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
+          )}
 
           {/* Recursos relacionados (solo en módulos) */}
           {isTrackable && !slug.includes('lab-') && relatedLabs.length > 0 && (
@@ -119,24 +136,6 @@ const widgets = widgetsBySlug[slug] ?? [];
             <TableOfContents />
           </div>
 
-          {/* Práctica contextual embebida */}
-          {widgets.length > 0 && (
-            <div class="rp-card rp-practice">
-              <p class="rp-card__title">Práctica en línea</p>
-              {widgets.map((w) => (
-                <details class="rp-practice__item" open={widgets.length === 1}>
-                  <summary class="rp-practice__summary">{w.label}</summary>
-                  <div class="rp-practice__body">
-                    {w.kind === 'terminal' ? (
-                      <div data-term-mount data-scenario={w.id} ></div>
-                    ) : (
-                      <div data-playground-mount data-example={w.id} ></div>
-                    )}
-                  </div>
-                </details>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
