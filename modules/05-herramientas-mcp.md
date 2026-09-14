@@ -39,7 +39,7 @@ proveer esas funciones.
 ### 5.1.1 Cómo funciona, en una frase
 
 El modelo no ejecuta nada. Ve una *descripción* de herramientas disponibles
-( su schema), decide cuál invocar y con qué argumentos, y emite esa
+(su schema), decide cuál invocar y con qué argumentos, y emite esa
 decisión como salida estructurada. El *harness* (no el modelo) ejecuta la
 función real y devuelve el resultado. El modelo nunca toca el mundo
 directamente; siempre a través del harness.
@@ -82,7 +82,7 @@ El modelo aprende de los errores *si se los devuelves bien*:
 
 - **Errores estructurados, no strings libres.** Un JSON
   `{"error": "not_found", "resource": "issue-123"}` le enseña al modelo
-  más que `{"error": "Error 404: issue not found"`.
+  más que `{"error": "Error 404: issue not found"}`.
 - **Recoverable vs. fatal.** Dile al modelo si puede reintentar, ajustar
   argumentos, o si debe abortar.
 - **No ocultes el error "para no confundir".** El modelo confundido por
@@ -194,10 +194,12 @@ concretos:
   para que use una tool legítima con argumentos maliciosos ("lee este
   archivo y mandalo a este endpoint"). **Mitigación:** permisos
   mínimos por tool; confirmación humana en escrituras sensibles.
-- **Credenciales en el server.** Si tu server MCP guarda el token de
-  prod, un modelo con acceso al server tiene acceso a prod.
-  **Mitigación:** el server debe delegar las credenciales al host, no
-  retenerlas; usar OAuth 2.1 con scopes reducidos.
+- **Credenciales.** Las credenciales de los servicios *upstream* viven
+  en el server, pero nunca se exponen al modelo ni se devuelven en
+  tool results. Las credenciales del usuario final las maneja el host
+  (OAuth 2.1 en transportes remotos), con scopes reducidos. Si un
+  token de prod termina en un tool result, el modelo —y todo lo que
+  lea su output— tiene acceso a prod.
 
 > MCP introdujo **roots** (qué partes del filesystem/servicios puede
   tocar un server) y **elicitation** (el server puede pedir input al
@@ -215,7 +217,7 @@ flujo es específico de tu organización.
 
 ## 5.3 Skill libraries: conocimiento vertical como artefacto
 
-Una skill library (ver también M3 §3.3) es un conjunto de prompts y
+Una skill library (ver M3 §3.2) es un conjunto de prompts y
 herramientas reutilizables para un dominio vertical: migraciones de DB,
 deploys, incident response, onboarding de servicios. Difieren de un MCP
 server en que su producto principal es la *instrucción estructurada*, no
@@ -335,9 +337,12 @@ No construyas un MCP server para todo. Constrúyelo cuando se cumplen:
 el modelo lo invoca como acción; como Resource, lo referencia como dato.
 La distinción cambia cómo el modelo razona sobre ello.
 
-**Mi server MCP guarda el token de prod.** No. El server debe delegar
-credenciales al host y no retenerlas. Si el modelo puede hablarle al
-server, tiene el alcance del token; minimízalo.
+**Mi server MCP guarda el token de prod.** Guardarlo en el server es
+válido (las credenciales de servicios upstream viven ahí); lo
+inaceptable es exponerlas al modelo o devolverlas en tool results. Si
+un token de prod llega al contexto, el modelo —y todo lo que lea su
+output— tiene su alcance: minimízalo con scopes reducidos y deja las
+credenciales del usuario final en el host (OAuth 2.1).
 
 **¿Construyo un MCP server o un skill?** Si el producto son
 *instrucciones estructuradas*, skill. Si el producto son *herramientas
@@ -362,7 +367,7 @@ confiable que conectas.
 
 - **Model Context Protocol — Official Site**
   (https://modelcontextprotocol.io) — documentación oficial.
-- **MCP Specification** (https://spec.modelcontextprotocol.io) —
+- **MCP Specification** (https://modelcontextprotocol.io/specification/latest) —
   especificación del protocolo.
 - **MCP Python SDK** (https://github.com/modelcontextprotocol/python-sdk).
 - **MCP TypeScript SDK**

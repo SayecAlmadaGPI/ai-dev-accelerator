@@ -4,9 +4,10 @@
 > **Milestone:** M1
 > **Spec ref:** `../spec.md#RF-1` (AC-1, AC-2)
 > **Plan ref:** `../../plan.md#tarea-2`
-> **Estado:** pendiente
+> **Estado:** completada
 > **Agente asignado:** gsd-executor
 > **Estimación:** ~5 min
+> **Resultado:** tests del repo en verde, AC-2 verificado, sin interpolación SQL.
 
 ---
 
@@ -31,9 +32,9 @@ Añadir el método `findFiltered({ statuses?: string[], ... })` a `ProjectRepo` 
 5. **REFACTOR:** reutiliza la lógica de paginación de `findAll` en un helper privado.
 
 ## Verificación (criterio binario de "hecha")
-- [ ] `npm test -- ProjectRepo.filter` pasa.
-- [ ] No hay interpolación de strings en SQL (`grep -n "raw\|\${" src/repositories/ProjectRepo.ts` no debe aparecer en el nuevo método).
-- [ ] No se tocaron archivos fuera de la lista.
+- [x] `npm test -- ProjectRepo.filter` pasa.
+- [x] No hay interpolación de strings en SQL (`grep -n "raw\|\${" src/repositories/ProjectRepo.ts` no debe aparecer en el nuevo método).
+- [x] No se tocaron archivos fuera de la lista.
 
 ## Cómo reportar al terminar (DONE/VERIFIED)
 - **Verifiqué:** tests del repo, grep de interpolación limpio.

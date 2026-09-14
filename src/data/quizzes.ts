@@ -145,13 +145,13 @@ export const quizzes: Quiz[] = [
       {
         q: 'Los tres niveles de rigor de SDD son:',
         options: [
-          'Spec-First, Spec-Anchored, Spec-Iterative.',
-          'Spec-Lite, Spec-Medium, Spec-Full.',
+          'Spec-First, Spec-Anchored, Spec-as-Source.',
+          'Spec-Iterative, Spec-Lite, Spec-Post-hoc.',
+          'Spec-Anchored, Spec-Iterative, Spec-as-Source.',
           'Prompt, Plan, Code.',
-          'Vibe, TDD, SDD.',
         ],
         answer: 0,
-        explain: 'Spec-First (antes de codear), Spec-Anchored (spec que deriva con el código), Spec-Iterative (spec que emerges del prototipo). Elegir mal el nivel es el error más caro.',
+        explain: 'Spec-First: la spec se escribe antes de codear y puede derivar después (prototipos). Spec-Anchored: la spec vive junto al código y los tests fuerzan la alineación (el sweet spot de producción). Spec-as-Source: los humanos solo editan la spec; el código se genera. Elegir mal el nivel es el error más caro.',
       },
       {
         q: '¿Para qué sirve el marcador [NEEDS CLARIFICATION] en una spec?',
@@ -523,7 +523,7 @@ export const quizzes: Quiz[] = [
           'Cambiar a dense.',
         ],
         answer: 1,
-        explain: 'En sesiones largas el caching es el ahorro más grande: el mismo system prompt/historial reusado cuesta una fracción del input normal (10-25%).',
+        explain: 'En sesiones largas el caching es el ahorro más grande: el mismo system prompt/historial reusado cuesta, según el proveedor, típicamente entre ~10% y ~50% del precio de input fresco.',
       },
       {
         q: 'Tu integración al mundo real depende de MCP y no quieres atarte a un proveedor. ¿Qué combinación prioriza mejor esas dos restricciones?',

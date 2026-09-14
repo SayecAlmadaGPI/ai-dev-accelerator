@@ -4,7 +4,7 @@
 > **Branch / worktree:** `feature/project-status-date-filter`
 > **Autor del plan:** Tech Lead
 > **Fecha:** 2026-07-02
-> **Estado:** en-ejecución
+> **Estado:** completado
 
 ---
 
@@ -45,9 +45,9 @@
 5. **REFACTOR:** extraer parseo a `src/schemas/parseStatusFilter.ts` si queda legible.
 
 **Verificación:**
-- [ ] tests pasan.
-- [ ] no se tocaron archivos fuera de la lista.
-- [ ] `npm run lint` sin warnings nuevos.
+- [x] tests pasan.
+- [x] no se tocaron archivos fuera de la lista.
+- [x] `npm run lint` sin warnings nuevos.
 
 ---
 
@@ -65,8 +65,8 @@
 5. **REFACTOR:** helper de paginación compartido con `findAll`.
 
 **Verificación:**
-- [ ] `grep -n "raw\|\${" src/repositories/ProjectRepo.ts` no aparece en el método nuevo.
-- [ ] tests del repo pasan.
+- [x] `grep -n "raw\|\${" src/repositories/ProjectRepo.ts` no aparece en el método nuevo.
+- [x] tests del repo pasan.
 
 ---
 
@@ -84,8 +84,8 @@
 5. **REFACTOR:** validación solo en controller, no duplicar en service.
 
 **Verificación:**
-- [ ] AC-1, AC-2, AC-4 verificados.
-- [ ] AC-7 (los 12 tests existentes) siguen pasando.
+- [x] AC-1, AC-2, AC-4 verificados.
+- [x] AC-7 (los 12 tests existentes) siguen pasando.
 
 > Fase 1.1 completada con esta tarea.
 
@@ -96,8 +96,8 @@
 [El mismo molde que 1-3, aplicado a `from`/`to` inclusivos sobre `created_at`, y a la combinación AND. Cada tarea es 2-5 min con RED-GREEN-REFACTOR. Se omite el detalle para no repetir.]
 
 **Verificación combinada (cierre de 1.2):**
-- [ ] AC-3 (rango inclusivo), AC-5 (fecha inválida → 400), AC-6 (AND) verificados.
-- [ ] AC-7 sigue en verde.
+- [x] AC-3 (rango inclusivo), AC-5 (fecha inválida → 400), AC-6 (AND) verificados.
+- [x] AC-7 sigue en verde.
 
 ---
 
@@ -113,20 +113,20 @@
 4. Confirmar invariantes: respuesta con mismos campos, permisos intactos, auth requerida.
 
 **Definición de "Plan completado":**
-- [ ] tareas 1..6 ✅.
-- [ ] todos los AC verificados.
-- [ ] code review sin bloqueantes.
+- [x] tareas 1..6 ✅.
+- [x] todos los AC verificados.
+- [x] code review sin bloqueantes.
 
 ---
 
 ## Code review (post-implementación)
 
 **Checklist (contra el plan, no contra el gusto):**
-- [ ] cada tarea → un commit claro.
-- [ ] no hay código sin test.
-- [ ] YAGNI: no se añadió ordenamiento ni vistas (están en no-objetivos).
-- [ ] DRY: el helper de paginación se reutilizó, no se duplicó.
-- [ ] todos los AC cubiertos por tests.
+- [x] cada tarea → un commit claro.
+- [x] no hay código sin test.
+- [x] YAGNI: no se añadió ordenamiento ni vistas (están en no-objetivos).
+- [x] DRY: el helper de paginación se reutilizó, no se duplicó.
+- [x] todos los AC cubiertos por tests.
 
 **Hallazgos:**
 - _(ejemplo real durante la ejecución)_ Tarea 3: se detectó duplicación de validación entre controller y service → corregido en REFACTOR.
@@ -135,10 +135,10 @@
 
 ## Cierre del branch
 
-- [ ] todos los tests en verde.
-- [ ] opción elegida: **PR** (no merge directo).
-- [ ] actualizar `spec.md` estado → `verificada` con commit SHA.
-- [ ] actualizar `state.json`: `verification_gates.ship_ready = true`.
+- [x] todos los tests en verde.
+- [x] opción elegida: **PR** (no merge directo).
+- [x] actualizar `spec.md` estado → `verificada` con commit SHA.
+- [x] actualizar `state.json`: `verification_gates.ship_ready = true`.
 
 <!--
   Recordatorio Superpowers: "evidence over claims".

@@ -40,12 +40,12 @@ El modelo no puede "pensar más" dentro de una pasada; su profundidad y
 su ancho son finitos. Entonces:
 
 > Cómputo total que el modelo puede gastar en un problema =
-> (cómpito por pasada) × (número de pasadas).
+> (cómputo por pasada) × (número de pasadas).
 
 La única forma de gastar más cómputo es consumir más pasadas, es decir,
 generar más tokens intermedios antes del token de la respuesta.
 
-**Vocabulario del M0 que vive acá:** token, inference, next-token
+**Vocabulario del M0 que vive aquí:** token, inference, next-token
 prediction, non-determinism, context window, turn.
 
 ---
@@ -130,8 +130,8 @@ más pasadas (más cómputo) para descomponer el problema.
 3. **Self-correction / crítica** — genera, se revisa, corrige. Bucle
    generar → revisar.
 4. **Decomposición / planning** — parte el problema en sub-tareas, las
-   resuelve y combina. **Acá vive el SDD del M2: spec → plan → tasks →
-   ejecutar.**
+  resuelve y combina. **Aquí vive el SDD del M2: spec → plan → tasks →
+  ejecutar.**
 5. **Test-time search** — genera varias ramas (best-of-N,
    tree-of-thoughts), las puntúa con un verificador y elige la mejor.
 6. **Agéntico / con tools** — el modelo emite una llamada a una
@@ -168,8 +168,8 @@ Para cada token que el modelo va a producir, calcula un peso (entre 0 y
 
 Dos propiedades del softmax que son la clave:
 
-1. **Es de suma fija (zero-sum).** Si hay 100 tokens, los pesos suman 1.
-   Si hay 10 000, también. No crece con el contexto.
+1. **Es de suma fija.** Si hay 100 tokens, los pesos suman 1. Si hay
+   10 000, también. No crece con el contexto.
 2. **Es O(n²) en cómputo y O(n) en memoria** (KV cache): cada par de
    tokens interactúa.
 
@@ -185,7 +185,7 @@ Dos propiedades del softmax que son la clave:
 ### Límite 2 — Attention degradation / context rot (límite interior, blando)
 
 Aunque estés dentro de la ventana nominal, la calidad cae a medida que
-la llenas. La causa es la propiedad zero-sum:
+la llenas. La causa es la suma constante de 1:
 
 - Cada token nuevo es un *distractor* que compite por la masa de
   atención. La masa relevante se diluye: la relación señal/ruido cae con
@@ -221,12 +221,12 @@ curso":
 | Propiedad del mecanismo | Falla que produce | Práctica del curso que la aborda |
 |---|---|---|
 | El razonamiento se despliega en el tiempo sobre tokens autogenerados, sin garantía de verdad | Coherente pero falso (alucinación) | M2 (spec como contrato), M6 (sensores deterministas, DONE/VERIFIED), M5 (tools que hacen cómputo exacto) |
-| La atención se diluye al crecer el contexto (zero-sum) | Context rot, lost-in-the-middle, dumb zone | M4 (compaction como higiene de atención), M3 (progressive disclosure / context pointers), M1/M4 (subagents con contexto fresco) |
+| La atención se diluye al crecer el contexto (suma fija de 1) | Context rot, lost-in-the-middle, dumb zone | M4 (compaction como higiene de atención), M3 (progressive disclosure / context pointers), M1/M4 (subagents con contexto fresco) |
 | Hay un techo duro de ventana (O(n²), entrenamiento) | Estado que no cabe o se pierde entre sesiones | M4 (handoffs, system of record), M1 (el repo como system of record), M2 (`.planning/`) |
-| El cómputo se acorta con budget (max tokens, effort bajo) | "Declara victoria antes de tiempo", razonamiento truncado | M6 (DONE/VERIFIED), M7 (failure modes), M9 (cost-per-quality, tiered routing) |
+| El cómputo se acota con budget (max tokens, effort bajo) | "Declara victoria antes de tiempo", razonamiento truncado | M6 (DONE/VERIFIED), M7 (failure modes), M9 (cost-per-quality, tiered routing) |
 | El modelo es no determinista | Misma entrada, distinto resultado | M6 (sensores computacionales, no inferenciales), M10 (governance determinista), M9 (prueba ciega) |
 | Aprendió la *forma* de las llamadas, no el anclaje | Alucinación de API, mal uso de tools | M5 (MCP con schemas claros), M7 (taxonomía de fallas), M6 (verificación tool-grounded) |
-| Sycophancy: el siguiente token más probable dado una sugerencia muchas veces es "sí" | Valida tu idea equivocada | M0 (vocabulario), M1 (reviewer con contexto fresco), M6 (revisión adversarial) |
+| Sycophancy: el siguiente token más probable dada una sugerencia muchas veces es "sí" | Valida tu idea equivocada | M0 (vocabulario), M1 (reviewer con contexto fresco), M6 (revisión adversarial) |
 | El modelo no tiene estado entre sesiones (stateless) | "Aprendió" el codebase y al cerrar se pierde | M1 (system of record), M4 (handoff artifact), M3 (memoria en 4 capas) |
 | Razonamiento models / MoE / multi-proveedor cambian capacidad y costo, no el mecanismo | Hype de "modelo nuevo" sin evidencia en tu dominio | M9 (evaluación de releases, prueba ciega, cost-per-quality); cheatsheet de selección de tooling (OpenCode/Pi, BYO modelo) |
 
@@ -261,4 +261,6 @@ y le mantenga la densidad de señal.
 > [M5 — Herramientas y MCP](../modules/05-herramientas-mcp.md),
 > [M6 — Verificación](../modules/06-verificacion.md),
 > [M7 — Failure Modes](../modules/07-failure-modes.md),
-> [M9 — Evaluación de Modelos](../modules/09-evaluacion-modelos.md).
+> [M8 — Casos de Uso End-to-End](../modules/08-casos-uso.md),
+> [M9 — Evaluación de Modelos](../modules/09-evaluacion-modelos.md),
+> [M10 — Seguridad, Governance y Compliance](../modules/10-seguridad-governance.md).

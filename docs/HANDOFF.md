@@ -34,7 +34,7 @@ El contenido del curso **no vive** en `src/content/docs/`. La fuente canónica e
 5. Genera `src/data/trackable.json` (lista de módulos + labs trackeables).
 
 **`src/content/docs/` y `src/data/trackable.json` están gitignored y se regeneran
-en cada build. Editarlos a mano se pierde.** Editá siempre la raíz del repo.
+en cada build. Editarlos a mano se pierde.** Edita siempre la raíz del repo.
 
 **Excepciones (hand-authored, commiteadas, NO regeneradas):**
 - `src/content/docs/simulador.mdx` — página del simulador.
@@ -86,7 +86,7 @@ perderás especificidad.
 
 | Token | Uso |
 |---|---|
-| `--sl-color-accent` / `-high` / `-low` / `-text-accent` | Acento ámbar (#f59e0b dark / #b45309 light). **Cambiá acá para recolorear todo el sitio.** |
+| `--sl-color-accent` / `-high` / `-low` / `-text-accent` | Acento ámbar (#f59e0b dark / #b45309 light). **Cambia aquí para recolorear todo el sitio.** |
 | `--sl-color-bg`, `-bg-nav`, `-bg-sidebar`, `-bg-inline-code`, `-bg-accent` | Superficies. |
 | `--sl-color-hairline`, `-hairline-light`, `-hairline-shade` | Bordes. |
 | `--sl-color-white`, `-black`, `-text` | Extremos cálidos + texto base. |
@@ -97,7 +97,7 @@ Fuentes: Inter Variable + JetBrains Mono Variable (cargadas vía
 `@fontsource-variable/*` en `customCss`). Referenciadas como
 `--sl-font` / `--sl-font-mono`.
 
-### Familias de clases custom (todas en theme.css, buscadlas por el prefijo)
+### Familias de clases custom (todas en theme.css, búscalas por el prefijo)
 
 | Prefijo | Feature | Aprox. líneas |
 |---|---|---|
@@ -114,8 +114,8 @@ hover-lift (167–194), `.sl-link-button.primary`/`.secondary` (196–218),
 focus-visible ring ámbar (239–246).
 
 > Cada componente `.astro` tiene **además** su `<style>` scoped. Cuando cambies
-> el look de un componente concreto, editá su `<style>` scoped; cuando cambies
-> algo transversal (color, radio, sombra), editá `theme.css`.
+> el look de un componente concreto, edita su `<style>` scoped; cuando cambies
+> algo transversal (color, radio, sombra), edita `theme.css`.
 
 ---
 
@@ -171,9 +171,9 @@ independiente del simulador o playground.
 | `labs/lab-01-baseline-vs-harness` | Simulador `lab-01` |
 | `labs/lab-02-spec-driven-feature` | Simulador `lab-02` + Playground `task-store` |
 
-Para agregar/quitar un widget en una página, editá el bloque `widgets` en
+Para agregar/quitar un widget en una página, edita el bloque `widgets` en
 `PageSidebar.astro` (líneas ~50–64). Para cambiar el tamaño de los widgets
-embebidos, editá las reglas `.rp-practice__body :global(.aida-term*)` /
+embebidos, edita las reglas `.rp-practice__body :global(.aida-term*)` /
 `.aida-pg*` al final del `<style>` de `PageSidebar.astro`.
 
 En páginas con widgets, `<html data-has-widgets>` (lo setea un `<script is:inline>`
@@ -183,7 +183,7 @@ en `PageSidebar.astro`) ensancha el panel derecho (`theme.css` ~932).
 
 ## 6. Matriz "dónde cambiar X sin romper Y"
 
-| Querés cambiar… | Editá… | Cuidado con… |
+| Para cambiar… | Edita… | Cuidado con… |
 |---|---|---|
 | **Colores del sitio** | `theme.css` → `:root` (dark) y `:root[data-theme='light']` | mantener coherencia dark/light; los hardcoded `#fcd34d`/`#f59e0b`/`#ea580c` del gradient text están en `Hero.astro`, `theme.css` `.aida-quiz__title` y `.aida-progress__bar` |
 | **Tipografía** | `theme.css` `--sl-font`/`--sl-font-mono` + `customCss` en `astro.config.mjs` | — |
@@ -240,13 +240,13 @@ $env:PATH = "C:\Users\SALMADA\node22;" + $env:PATH
 4. **No reintroduzcas el colapso del panel derecho.** Se implementó y se sacó
    (commit `0bcc8b7`) porque ocultaba todo el panel (metadata + TOC + widgets) y
    la pestaña de reexpansión quedaba tapada por el header. El panel derecho es
-   **siempre visible**. Si querés más espacio de texto, colapsá el sidebar
+   **siempre visible**. Si quieres más espacio de texto, colapsa el sidebar
    izquierdo (toggle del `PageFrame`).
 
 5. **`src/content/docs/` es generado.** Si un link se rompe o falta una página,
-   revisá la raíz del repo y `build-content.mjs`, no `src/content/docs/`.
+   revisa la raíz del repo y `build-content.mjs`, no `src/content/docs/`.
 
-6. **Sin `@layer` en `theme.css`.** Si agregás estilos globales ahí, van
+6. **Sin `@layer` en `theme.css`.** Si agregas estilos globales ahí, van
    unlayered a propósito.
 
 7. **Español neutro, forma tú.** Sin voseo (no `podés`/`tenés`/`marcás`/`decís`).
@@ -254,7 +254,7 @@ $env:PATH = "C:\Users\SALMADA\node22;" + $env:PATH
 
 ---
 
-## 9. No tocar (salvo que sepas qué hacés)
+## 9. No tocar (salvo que sepas qué haces)
 
 - `src/scripts/progress.ts` — contracts `aida:done:` + evento `aida:progress`.
 - `src/data/trackable.json` — generado, gitignored.
@@ -300,7 +300,7 @@ src/scripts/
   playground.ts               # isla playground (iframe sandbox)
   notes.ts                    # isla notas (IndexedDB)
 src/data/
-  quizzes.ts                  # 44 preguntas, 11 módulos (autorado, committed)
+  quizzes.ts                  # 46 preguntas, 11 módulos (autorado, committed)
   terminal-scenarios.ts       # escenarios del simulador (autorado)
   playground-examples.ts      # ejemplos del playground (autorado)
   badges.ts                   # catálogo de badges + evaluateBadges() (autorado)

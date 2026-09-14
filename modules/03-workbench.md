@@ -11,7 +11,7 @@ Imagina tu repo como un taller donde un colaborador muy capaz pero distraído va
 
 La pregunta de diseño no es "¿qué quieres que el agente sepa?", sino "¿qué necesita estar *en el entorno* para que el agente acierte sin que se lo pidas?". El workbench es el conjunto de archivos que viven en el repo y que el agente carga — siempre, bajo demanda o por scope — al arrancar.
 
-> **Principio rector del workbench:** cada cosa que pones acá le quita un slot de atención al modelo (ver M0: presupuesto de ~150-200 instrucciones efectivas). Por eso el trabajo no es *llenar* el workbench, es *curar* el workbench. Cada línea debe ganar su lugar.
+> **Principio rector del workbench:** cada cosa que pones aquí le quita un slot de atención al modelo (ver M0: presupuesto de ~150-200 instrucciones efectivas). Por eso el trabajo no es *llenar* el workbench, es *curar* el workbench. Cada línea debe ganar su lugar.
 
 ---
 
@@ -88,7 +88,7 @@ Consecuencia: un AGENTS.md de 500 líneas no es "5× mejor" que uno de 100; es *
 
 Una skill es un playbook reutilizable y versionable que encapsula un flujo vertical completo: "cómo hacer una migración de DB en este repo", "cómo deployar a staging", "cómo hacer triage de un incidente". Se invoca por nombre (`/migrar-db`) y el agente sigue el playbook en lugar de improvisar.
 
-> AGENTS.md es conocimiento *declarativo* ("qué es verdad sobre este repo"). Skills son conocimiento *operativo* ("cómo se hace X acá, paso a paso").
+> AGENTS.md es conocimiento *declarativo* ("qué es verdad sobre este repo"). Skills son conocimiento *operativo* ("cómo se hace X aquí, paso a paso").
 
 ### Cuándo una skill, cuándo una regla
 
@@ -221,7 +221,7 @@ No hay una estructura "correcta", pero hay principios que ayudan al agente:
 4. **Un lugar para cada cosa:** si la doc vive en `docs/`, no también en `wiki/` y `notion/`. El agente busca en un solo lugar.
 5. **`docs/decisions/` (ADRs):** las decisiones de arquitectura documentadas y numeradas. El agente las encuentra y respeta; tú las diff-eas en el tiempo.
 
-### Lo que confunde al agente (evitalo)
+### Lo que confunde al agente (evítalo)
 
 - Múltiples archivos con nombres casi idénticos en distintos lugares (`User.ts`, `user.ts`, `Users.ts`).
 - Lógica duplicada con pequeñas variaciones ("¿cuál es la buena?").
@@ -269,7 +269,7 @@ Lo que tú decides que el agente siempre respete. Estable, curado, corto. Ya lo 
 El agente descubre patrones durante la sesión y los escribe solo en `MEMORY.md`. Tú la revisas periódicamente. Ojo: solo las primeras ~200 líneas se cargan automáticamente al inicio; lo que se va abajo es ruido.
 
 ### Capa 3: memoria on-demand (API agents)
-Para flujos por API (no interactivos), el patrón es: una sesión inicial crea `claude-progress.txt`, un checklist de features y un `init.sh`. Cada sesión siguiente lee el dir de memoria + el progress log + `git log` para reconstruir el estado. Esto es la base del two-agent architecture (M4).
+Para flujos por API (no interactivos), el patrón es: una sesión inicial crea `claude-progress.md`, un checklist de features y un `init.sh`. Cada sesión siguiente lee el dir de memoria + el progress log + `git log` para reconstruir el estado. Esto es la base del two-agent architecture (M4).
 
 ### Capa 4: memoria del subagent
 Cada subagent puede tener su propio almacén persistente (`memory: project` en el frontmatter). El code-reviewer acumula lo que aprendió sobre el repo en `~/.claude/agent-memory/code-reviewer/MEMORY.md`. Esto permite que un subagent especializado mejore con el tiempo sin contaminar al principal.

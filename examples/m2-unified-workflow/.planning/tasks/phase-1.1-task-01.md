@@ -4,9 +4,10 @@
 > **Milestone:** M1
 > **Spec ref:** `../spec.md#RF-1` (y AC-1, AC-4)
 > **Plan ref:** `../../plan.md#tarea-1`
-> **Estado:** pendiente
+> **Estado:** completada
 > **Agente asignado:** gsd-executor
 > **Estimación:** ~5 min
+> **Resultado:** tests en verde (3/3), AC-1 y AC-4 verificados.
 
 ---
 
@@ -35,10 +36,10 @@ Validar el query param `status` del endpoint `GET /api/projects`: aceptar uno o 
 5. **REFACTOR:** si hay lógica repetible, extrae a `src/schemas/parseStatusFilter.ts`.
 
 ## Verificación (criterio binario de "hecha")
-- [ ] `npm test -- status-filter` pasa.
-- [ ] No se tocaron archivos fuera de la lista.
-- [ ] No se modificaron tests existentes para hacerlos pasar.
-- [ ] `npm run lint && npm run typecheck` sin errores nuevos.
+- [x] `npm test -- status-filter` pasa.
+- [x] No se tocaron archivos fuera de la lista.
+- [x] No se modificaron tests existentes para hacerlos pasar.
+- [x] `npm run lint && npm run typecheck` sin errores nuevos.
 
 ## Cómo reportar al terminar (DONE/VERIFIED)
 - **Verifiqué:** `npm test -- status-filter` (3/3 verdes), `npm run typecheck` limpio.

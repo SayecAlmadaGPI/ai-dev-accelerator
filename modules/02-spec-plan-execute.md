@@ -71,7 +71,7 @@ El error más común es creer que más rigor es siempre mejor. No lo es: over-sp
 
 Los LLM son excelentes completando patrones y malos leyendo mentes. Una spec bien escrita **descompone un problema complejo en componentes modulares que caben en la context window del agente** y, sobre todo, quita la necesidad de adivinar.
 
-Encontraste en el módulo de investigación que las specs refinadas por humanos pueden reducir los errores del código generado por LLM **hasta un 50%**. Eso no es magia: es simplemente que la spec eliminó 50% de las decisiones que el agente habría tomado en silencio.
+El paper "Spec-Driven Development: From Code to Contract" (AIWare 2026) reporta que las specs refinadas por humanos pueden reducir los errores del código generado por LLM **hasta un 50%**. Eso no es magia: es simplemente que la spec eliminó 50% de las decisiones que el agente habría tomado en silencio.
 
 Tres propiedades de una buena spec, pensada como super-prompt:
 1. **Descompone:** cada RF es independiente y mapea a ACs verificables.
@@ -115,7 +115,7 @@ En la sección 10, cada item marcado `[NEEDS CLARIFICATION]` es **bloqueante por
 
 ### El problema que ataca: context rot
 
-La causa de falla número uno en agentes de código (≈40% según la taxonomía que vimos en el Módulo 7) es la **corrupción de contexto**: a medida que la conversación crece, el agente pierde instrucciones, confunde archivos y olvida constraints. Una sesión larga no es una sesión más inteligente; es una sesión que se degrada.
+La causa de falla número uno en agentes de código (≈40% según la taxonomía que vimos en el Módulo 1, §1.1) es la **corrupción de contexto**: a medida que la conversación crece, el agente pierde instrucciones, confunde archivos y olvida constraints. Una sesión larga no es una sesión más inteligente; es una sesión que se degrada.
 
 GSD resuelve esto con una idea simple y potente: **el filesystem es la base de datos del proyecto.** Todo el estado vive en archivos dentro de `.planning/`, no en la memoria de la conversación. Un agente que arranca una sesión nueva lee esos archivos y reconstruye el contexto sin releer el historial.
 
@@ -274,7 +274,7 @@ Aquí está la "tabla periódica" de artefactos del pipeline, con qué sección 
 El directorio `examples/m2-unified-workflow/` contiene el caso de punta a punta. Te recomiendo leerlo en este orden:
 
 1. `TICKET.md` — cómo llega la materia prima (vaga, con supuestos ocultos).
-2. `spec.md` — cómo SDD la convierte en contrato (13 secciones, 7 AC binarios, 2 decisiones resueltas).
+2. `spec.md` — cómo SDD la convierte en contrato (12 secciones, 7 AC binarios, 2 decisiones resueltas).
 3. `.planning/roadmap.md` + `state.json` — cómo GSD descompone en 3 fases y 8 tasks, y trackea el estado.
 4. `.planning/tasks/phase-1.1-task-01..03.md` — cómo cada task es autocontenida para un agente fresco.
 5. `plan.md` — cómo Superpowers convierte las tasks en un plan RED-GREEN-REFACTOR.
@@ -292,7 +292,7 @@ No intentes montar los tres frameworks el primer día. Hay tres niveles de adopc
 - Escribe `spec.md` antes de pedirle código al agente.
 - Pídele que ejecute contra los AC, no contra su imaginación.
 - Resuelve los `[NEEDS CLARIFICATION]` antes de codear.
-- **Costo:** 15-20 minutos por feature. **Ganancia:** eliminas ~50% de los errores más comunes.
+- **Costo:** 15-20 minutos por feature. **Ganancia:** eliminas gran parte de los errores más comunes (hasta un 50% según el estudio citado en §2.2).
 
 ### Nivel 2 — Medio (sumar GSD)
 - Añade `.planning/roadmap.md` y `state.json` para features que duren más de una sesión.
@@ -339,7 +339,7 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 - **SDD — metodología:** [GitHub Spec Kit (blog)](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/), [repo](https://github.com/github/spec-kit), [paper AIWare 2026](https://arxiv.org/pdf/2602.00180), [SDD Flow comunitario](https://github.com/Ataden/SDD_Flow).
 - **GSD:** [overview de GSD Redux](https://deepwiki.com/open-gsd/get-shit-done-redux/1-overview).
 - **Superpowers:** [repo obra/superpowers](https://github.com/obra/superpowers).
-- **Sobre context rot y por qué el filesystem como base de datos:** [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-long-running-agents), [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/).
+- **Sobre context rot y por qué el filesystem como base de datos:** [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/).
 - **Sobre specs refinadas que reducen errores ~50%:** paper AIWare 2026 (link arriba).
 
 ---

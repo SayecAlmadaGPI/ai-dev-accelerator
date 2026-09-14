@@ -92,9 +92,10 @@ inglés por ser el vocabulario operativo del campo; su glosa está en M0.
 ## Estado
 
 Núcleo del curso completo: módulos M0–M10, labs 01–05, plantillas,
-cheatsheets y ejemplos. Pendiente (Fase 5): sitio estático y
-videos-demo. El blueprint prevé mantener un changelog de caducidad de
-referencias, porque el ecosistema cambia cada 3–6 meses.
+cheatsheets, ejemplos y referencias. Sitio estático en producción, con
+deploy automático a GitHub Pages. Pendiente (Fase 5): videos-demo y el
+changelog de caducidad de referencias como práctica continua (el
+blueprint prevé caducidad de referencias cada 3–6 meses).
 
 Licencia y contribuciones: ver `BLUEPRINT.md` §notas para futuras
 versiones.

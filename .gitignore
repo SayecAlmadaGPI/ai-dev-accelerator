@@ -24,6 +24,8 @@ desktop.ini
 # --- Claude Code: datos locales de sesión (no transcripciones) ---
 # Las sesiones viven en ~/.claude, no aquí; esto es por si llegan a caer.
 .claude/sessions/
+# --- Config local del harness omp (por proyecto; no al repo público) ---
+.omp/
 
 # --- Astro / Starlight build artifacts ---
 dist/

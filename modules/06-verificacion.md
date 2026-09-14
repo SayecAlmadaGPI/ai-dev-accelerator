@@ -47,7 +47,7 @@ leyó la salida. El modelo genera la *narración* de la verificación sin la
 ### 6.1.2 Hollow report
 
 El agente sí corrió algo, pero el reporte es hueco: "tests passing ✓"
-sin decir *cuántos*, *cuáles*, o con *qué cobertura. El reporte tiene
+sin decir *cuántos*, *cuáles*, o con *qué* cobertura. El reporte tiene
 forma de verificación pero no contenido verificable. Un humano que lo
 lee no puede distinguir "todo verde" de "todo rojo que presenté como
 verde".

@@ -29,8 +29,8 @@ cualquiera de esos tres puntos. Si vivió en archivos, se reconstruye.
 ## 4.1 Anatomía de una sesión
 
 Una sesión con un agente no es una línea recta de "pido → recibo". Es una
-curva con tres fases, y el costo no es lineal sino cuadrático respecto del
-contexto acumulado.
+curva con tres fases: el costo de cada turno es lineal en el contexto
+acumulado, y el costo acumulado de la sesión crece cuadrático con los turnos.
 
 ### 4.1.1 Las tres fases de una sesión
 
@@ -38,7 +38,7 @@ contexto acumulado.
 |------|----------------|--------|
 | **Arranque** (0–~20% del contexto) | El agente reconstruye estado, lee specs, arma plan. | Que reconstruya mal y arranque en dirección equivocada. |
 | **Productiva** (~20–~60%) | El agente ejecuta, edita, corre tests. La trayectoria es útil. | Que el contexto se llene de detalles que ya no aportan. |
-| **Degradada** (~60%+) | Cada turno procesa todo lo acumulado. La atención se diluye. | Context rot: el agente empieza a perder reglas y a repetirse. |
+| **Degradada** (~60%+) | Cada turno procesa todo lo acumulado. La atención se diluye. | Context rot: hacia el ~70% se instala y el agente empieza a perder reglas y a repetirse. |
 
 ### 4.1.2 El costo cuadrático
 
@@ -75,7 +75,7 @@ una cirugía: corta algo, y no siempre lo que cortarías tú.
 
 | Umbral | Qué pasa | Qué debes hacer |
 |--------|----------|-----------------|
-| **~60%** | Aún estás en zona productiva. La compaction sería opcional. | Compactar proactivamente acá si vas a seguir trabajando. Pierdes poco, ganas margen. |
+| **~60%** | Aún estás en zona productiva. La compaction sería opcional. | Compactar proactivamente aquí si vas a seguir trabajando. Pierdes poco, ganas margen. |
 | **~70%** | Inicia el context rot. El agente empieza a degradarse silenciosamente. | Ya deberías haber compactado o cerrado sesión. |
 | **~83.5%** | El sistema compacta automáticamente (autocompact). | Demasiado tarde: ya trabajaste en zona degradada. |
 
@@ -512,7 +512,7 @@ racionalmente querrías retomar" es la correcta.
   4, 5, 6, 10, 12 sobre sesiones, inicialización, overreaching y estado
   limpio.
 - **Anthropic — Effective Harnesses for Long-Running Agents**
-  (https://www.anthropic.com/engineering/effective-harnesses-long-running-agents) —
+  (https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) —
   two-agent split, feature list JSON.
 - **Claude Code Docs — Best Practices**
   (https://code.claude.com/docs/en/best-practices) — `/clear`,

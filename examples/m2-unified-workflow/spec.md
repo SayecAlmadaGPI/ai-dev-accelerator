@@ -3,7 +3,7 @@
 > **ID:** project-status-date-filter
 > **Tipo:** feature
 > **Nivel de rigor:** Spec-Anchored
-> **Estado:** aprobada
+> **Estado:** verificada
 > **Propietario:** [PM + Tech Lead]
 > **Fecha:** 2026-07-02
 
@@ -99,16 +99,16 @@ Gestores de proyectos (rol `project_manager`). Aceptación firmada por el PM.
 
 ## 5. Criterios de aceptación
 
-- [ ] **AC-1:** `GET /api/projects?status=active` devuelve solo proyectos con `status='active'`.
+- [x] **AC-1:** `GET /api/projects?status=active` devuelve solo proyectos con `status='active'`.
   - **Verificación:** `curl .../projects?status=active | jq '.projects[].status' | sort -u` → solo `active`.
-- [ ] **AC-2:** `?status=active,archived` devuelve proyectos con status en ese conjunto.
+- [x] **AC-2:** `?status=active,archived` devuelve proyectos con status en ese conjunto.
   - **Verificación:** los `status` devueltos son subconjunto de `{active, archived}`.
-- [ ] **AC-3:** `?from=2026-01-01&to=2026-06-30` devuelve `created_at` dentro del rango inclusivo.
+- [x] **AC-3:** `?from=2026-01-01&to=2026-06-30` devuelve `created_at` dentro del rango inclusivo.
   - **Verificación:** `jq '.projects[].created_at'` todos entre `from` y `to` inclusive.
-- [ ] **AC-4:** `status=invalid` → `400`.
-- [ ] **AC-5:** fecha con formato inválido → `400`.
-- [ ] **AC-6:** combinación `status=active&from=2026-01-01` → AND.
-- [ ] **AC-7 (no-regresión):** los 12 tests existentes de `projects` siguen pasando.
+- [x] **AC-4:** `status=invalid` → `400`.
+- [x] **AC-5:** fecha con formato inválido → `400`.
+- [x] **AC-6:** combinación `status=active&from=2026-01-01` → AND.
+- [x] **AC-7 (no-regresión):** los 12 tests existentes de `projects` siguen pasando.
   - **Verificación:** `npm test -- projects`.
 
 ---
@@ -173,12 +173,12 @@ Gestores de proyectos (rol `project_manager`). Aceptación firmada por el PM.
 ## 11. Definición de "Verificado"
 
 Esta spec se considera **verificada** cuando:
-- [ ] Todos los AC-1..7 marcan ✅ con sus verificaciones ejecutadas.
-- [ ] No hay `[NEEDS CLARIFICATION]` pendientes (resueltos en sección 10).
-- [ ] Los 12 tests existentes de `projects` siguen pasando.
-- [ ] Los nuevos tests cubren los AC y los edge cases de la sección 8.
-- [ ] No se tocaron archivos fuera de los listados en la sección 7.
-- [ ] El rollback plan está documentado.
+- [x] Todos los AC-1..7 marcan ✅ con sus verificaciones ejecutadas.
+- [x] No hay `[NEEDS CLARIFICATION]` pendientes (resueltos en sección 10).
+- [x] Los 12 tests existentes de `projects` siguen pasando.
+- [x] Los nuevos tests cubren los AC y los edge cases de la sección 8.
+- [x] No se tocaron archivos fuera de los listados en la sección 7.
+- [x] El rollback plan está documentado.
 
 ---
 
@@ -187,5 +187,5 @@ Esta spec se considera **verificada** cuando:
 - **Ticket de origen:** PROJ-142
 - **Roadmap milestone:** `.planning/roadmap.md` → M1
 - **Plan de implementación:** `plan.md`
-- **PR(s):** _(a completar)_
-- **Commit de verificación:** _(a completar)_
+- **PR(s):** #12 (mergeado)
+- **Commit de verificación:** 8f3a2c1

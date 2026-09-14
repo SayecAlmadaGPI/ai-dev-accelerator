@@ -11,6 +11,7 @@ import {
   evaluateBadges,
   type BadgeContext,
 } from '../data/badges';
+import { quizzes } from '../data/quizzes';
 
 const QUIZ_PREFIX = 'aida:quiz:';
 
@@ -58,15 +59,17 @@ function readQuizScores(): Record<string, number> {
 }
 
 /**
- * Lee los totales de quizzes. Si el runtime los publica en
- * `window.__AIDA_QUIZ_TOTALS__` (inyectado por las páginas de quiz),
- * se usan; si no, se asume total desconocido y se omite la validación
- * de score perfecto para esos slugs.
+ * Lee los totales de quizzes, derivados de los datos autorados
+ * (importados de ../data/quizzes). Si el runtime publica
+ * `window.__AIDA_QUIZ_TOTALS__`, tiene prioridad; si no, se usa
+ * el mapa derivado (slug → questions.length).
  */
 function readQuizTotals(): Record<string, number> {
-  if (typeof window === 'undefined') return {};
+  const derived: Record<string, number> = {};
+  for (const quiz of quizzes) derived[quiz.slug] = quiz.questions.length;
+  if (typeof window === 'undefined') return derived;
   const w = window as unknown as { __AIDA_QUIZ_TOTALS__?: Record<string, number> };
-  return w.__AIDA_QUIZ_TOTALS__ ?? {};
+  return w.__AIDA_QUIZ_TOTALS__ ?? derived;
 }
 
 /** Muestra un toast efímero anunciando una badge recién ganada. */

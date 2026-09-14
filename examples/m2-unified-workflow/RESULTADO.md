@@ -11,11 +11,11 @@
 TICKET.md            (materia prima vaga)
    │  SDD: escribir el contrato
    ▼
-spec.md              (13 secciones, 7 AC verificables, 2 decisiones resueltas)
+spec.md              (12 secciones, 7 AC verificables, 2 decisiones resueltas)
    │  GSD: descomponer en roadmap + tasks
    ▼
 .planning/roadmap.md (3 phases, 8 tasks, estado trackeable)
-.planning/state.json (máquina de estados: "fase 1.1 en ejecución")
+.planning/state.json (máquina de estados: proyecto completado, ship_ready)
 .planning/tasks/     (cada task autocontenida para un agente de contexto fresco)
    │  Superpowers: plan de implementación con TDD
    ▼
@@ -58,14 +58,14 @@ Archivos tocados:
 ## Lecciones del caso (para la lección del módulo)
 
 1. **El ticket vago se vuelve determinista:** las 2 preguntas (D-1, D-2) que en el ticket original estaban implícitas se resolvieron en la spec ANTES de tocar código. Sin SDD, el agente las habría resuelto en silencio.
-2. **El `.planning/` sobrevive a la sesión:** un agente que arranca mañana lee `state.json` y sabe que está en la fase 1.1, sin reconstruir la conversación. Eso es exactamente el anti-context-rot de GSD.
+2. **El `.planning/` sobrevive a la sesión:** un agente que arranca mañana lee `state.json` y sabe en qué punto está el proyecto, sin reconstruir la conversación. Eso es exactamente el anti-context-rot de GSD.
 3. **El plan es para un "junior con mal gusto":** las tasks dicen qué archivos tocar y qué tests escribir primero. Cualquier agente fresco puede ejecutarlas sin juicio arquitectónico, porque el juicio ya vivió en la spec.
 4. **Evidence over claims:** el cierre no dice "ya está hecho"; muestra los 7 AC y los invariantes con su verificación concreta.
 
 ## Estado final de los artefactos
 - `spec.md` → estado `verificada`, commit SHA registrado en sección 12.
 - `state.json` → `verification_gates.ship_ready = true`, todas las phases `verificada`.
-- PR abierto con los 7 AC en verde.
+- PR #12 mergeado con los 7 AC en verde.
 
 ---
 

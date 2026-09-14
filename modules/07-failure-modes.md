@@ -195,7 +195,7 @@ M3 §3.5), no reintentos.
 ## 7.7 Secret exposure
 
 El agente lee valores de `.env` u otros archivos de credenciales y los
-reproducen en output, logs, o los pasa a tools externas (un MCP server,
+reproduce en output, logs, o los pasa a tools externas (un MCP server,
 un endpoint). Es la versión operacional del sandbox escape (§7.1.5).
 
 > **Mitigación:**
@@ -362,7 +362,7 @@ solución casi nunca es más prompt.
   (https://arxiv.org/html/2606.19380v3) — underspecification, capability
   errors, harness errors; propone mitigaciones concretas.
 - **12 Failure Classes from 30B Tokens — DEV Community**
-  (https://dev.to/cryptokeesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7) —
+  (https://dev.to/keesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7) —
   experiencia de producción a escala.
 - **Coding Discipline — SkillStack**
   (https://github.com/viktorbezdek/skillstack/blob/main/coding-discipline/README.md) —

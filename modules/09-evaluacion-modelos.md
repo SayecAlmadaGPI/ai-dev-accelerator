@@ -1,4 +1,4 @@
-# Módulo 9 — Evaluación de Modelos y Navegación del Ecosistema ★ NUEVO
+# Módulo 9 — Evaluación de Modelos y Navegación del Ecosistema
 
 > **Tesis:** los modelos cambian cada trimestre; la habilidad de leer un
 > release sin hype no. Saber distinguir "gana en SWE-bench" de "sirve
@@ -110,10 +110,12 @@ específica como representativa de todas.
 - **SWE-bench Pro:** tareas enterprise de largo horizonte, más cercanas
   a trabajo real de ingeniería.
 
-> **El dato incómodo:** SWE-bench-Live muestra ~24% de resolución vs.
-> ~70% en Verified. La diferencia no es "el modelo empeoró"; es que
-> Live no permite que el modelo haya visto la respuesta. Ese gap es la
-> medida real del overfitting a benchmarks estáticos.
+> **El dato incómodo:** a la fecha de redacción (julio 2026), el modelo
+> líder del momento resolvía ~24% en SWE-bench-Live vs. ~70% en
+> Verified. Las cifras exactas cambian con cada release; lo estable es
+> la brecha Verified-vs-Live. La diferencia no es "el modelo empeoró";
+> es que Live no permite que el modelo haya visto la respuesta. Ese gap
+> es la medida real del overfitting a benchmarks estáticos.
 
 ---
 
@@ -210,7 +212,7 @@ harness flojo puede rendir menos que uno inferior en un harness afilado
 |-----------|--------------|
 | Harness inner | Hooks, skills, subagents, permisos (M3). |
 | Modelo por defecto | ¿Puedes cambiarlo? ¿Tiered routing? |
-| MCP support | §9 con M5. |
+| MCP support | Protocolo, primitivas y transportes (M5 §5.2). |
 | Cost model | Por sesión, por token, suscripción. |
 | Lock-in | ¿Tu harness portable sobrevive al cambio? (M3 §3.9). |
 | Open-source | ¿El agente es open-source? Hedging de lock-in del proveedor. |
@@ -247,8 +249,9 @@ El lado económico del ecosistema.
   ser 3-5× el input; el cached (prompt caching) es una fracción del
   input. Para sesiones largas, el caching es el ahorro más grande.
 - **Ventana llena ≠ costo lineal.** Llegar a 1M tokens sostenidos cuesta
-  más que 4 sesiones de 250K, porque el costo por turno es cuadrático en
-  contexto (M4 §4.1.2).
+  más que 4 sesiones de 250K: cada turno re-procesa todo el contexto
+  (costo por turno lineal en el contexto, M4 §4.1.2), y eso hace que
+  el costo acumulado de la sesión crezca cuadrático.
 
 ### 9.5.2 RAG vs. long-context
 
@@ -332,11 +335,11 @@ decisión, no. SWE-bench-Verified puede estar contaminado; mira Live.
 Sobre todo, prueba en tu dominio.
 
 **¿Ventana de 1M?** Es nominal. La útil (la que sostiene calidad) suele
-ser bastante menor. Mid-lost-in-the-middle y context rot. No la tomes
+ser bastante menor. Lost in the middle y context rot. No la tomes
 como capacidad real.
 
 **¿Cambiar de modelo cada release?** No. El delta rara vez justifica la
-ficción del cambio. Cambia cuando una prueba ciega en tu dominio lo
+fricción del cambio. Cambia cuando una prueba ciega en tu dominio lo
 justifica, no cuando el release lo anuncia.
 
 **¿Reasoning model siempre mejor?** No. Cuestan más y tardan más. Para
@@ -392,9 +395,9 @@ afilado (M1).
 - **MoE Survey — Computer Society**
   (https://www.computer.org/csdl/journal/tk/2025/07/10937907/25n2xHILEpG) —
   survey en journal IEEE.
-- **Claude Code vs Cursor vs Codex vs Aider — 2026 Head-to-Head**
-  (https://www.youngju.dev/blog/culture/2026-05-14-ai-coding-agent-comparison-2026-claude-code-cursor-codex-copilot-openclaw-deep-dive-guide-2026.en) —
-  guía de compra práctica.
+- **Agent Harnesses — Builder.io**
+  (https://www.builder.io/blog/agent-harness) — comparativa práctica de
+  harnesses de agentes.
 - **Scrimba — Claude Code vs Codex vs Cursor**
   (https://scrimba.com/articles/claude-code-vs-codex-vs-cursor/) —
   comparativa rápida.

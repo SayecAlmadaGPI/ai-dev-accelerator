@@ -33,7 +33,7 @@ Estos términos describen la **caja negra** con la que hablas. No necesitas sabe
 ### Training vs. Inference
 **Definición:** *training* es cuando el modelo aprende (lo hace el proveedor, una sola vez por versión); *inference* es cuando el modelo predice (lo que pasa cada vez que le mandas un mensaje).
 **Por qué te importa:** el conocimiento del modelo está *congelado* en el training. En inference no aprende nada nuevo — solo predice. Cuando le pides "recuerda que X", no está aprendiendo; está usando el contexto de la conversación. Si borras el contexto, "olvida".
-**En la práctica:** por eso un agente que "aprendió" tu códigobase en una sesión no sabe nada en la siguiente, salvo que persistas ese conocimiento en archivos (de eso viven M1 y M4).
+**En la práctica:** por eso un agente que "aprendió" tu codebase en una sesión no sabe nada en la siguiente, salvo que persistas ese conocimiento en archivos (de eso viven M1 y M4).
 
 ### Next-token prediction
 **Definición:** lo único que realmente hace el modelo en inference: dado un texto, predecir el siguiente token más probable. Una y otra vez.
@@ -56,7 +56,7 @@ Estos términos describen la **caja negra** con la que hablas. No necesitas sabe
 **En la práctica:** mantener tu system prompt / AGENTS.md estable entre llamadas activa el cache. Cambiar una línea al principio invalida todo el cache del prefijo.
 
 ### Cache tokens
-**Definición:** los tokens leídos desde el prefix cache en lugar de procesarse desde cero. Se facturan a una fracción del precio (típicamente 10-25% del input normal).
+**Definición:** los tokens leídos desde el prefix cache en lugar de procesarse desde cero. Se facturan a una fracción del precio del input fresco (según el proveedor, entre ~10% y ~50%).
 **Por qué te importa:** es la métrica que te dice si tu diseño está aprovechando el cache. Pocas cache tokens = estás pagando de más.
 **En la práctica:** en una sesión de agente larga, la mayoría del costo debería ir a cache tokens, no a input fresco. Si no, tu estructura de prompts no es cache-friendly.
 
@@ -72,14 +72,14 @@ Esta es la capa de interacción. Donde el "estado" vive (o deja de vivir).
 **En la práctica:** por eso cerrar una sesión y reabrir "lo mismo" no es lo mismo — perdiste el contexto acumulado. Salvo que lo hayas persistido en archivos (M1, M4).
 
 ### Context window
-**Definición:** el máximo de tokens que el modelo puede "tener en mente" a la vez en una sesión. En 2026, 1M es estándar; algunos llegan a 2M o 10M.
+**Definición:** el máximo de tokens que el modelo puede "tener en mente" a la vez en una sesión. En 2026, 1M es común en los modelos frontera; varios anuncian 2M o más, y los reclamos mayores conviene verificarlos con tu caso de uso.
 **Por qué te importa:** no es un número de "cuánto cabe", sino de "cuánto atiende". A partir de cierto punto, la calidad de atención degrada aunque el texto entre.
 **En la práctica:** una ventana de 1M no significa que leer 800K tokens te dé un buen resultado. Significa que *cabén*. Lo que el modelo atienda es otra historia (ver *attention degradation*).
 
 ### Turn (turno)
 **Definición:** un ciclo de input + output entre tú y el modelo. Una sesión con 50 turnos tiene 50 inputs tuyos y 50 outputs del modelo.
-**Por qué te importa:** cada turno re-envía todo el historial. El costo crece de forma *cuadrática* con la cantidad de turnos, no lineal. Turn 100 cuesta mucho más que turn 10, porque re-procesa los 99 anteriores.
-**En la práctica:** una sesión de 200 turnos puede costar 10-20× más que una de 20 turnos con el mismo trabajo útil. Compactar (ver más abajo) rompe esa cuadrática.
+**Por qué te importa:** cada turno re-envía y re-procesa todo el historial acumulado. El costo *por turno* es lineal en el tamaño del contexto; el costo *acumulado* de la sesión crece de forma *cuadrática* con la cantidad de turnos. Turn 100 cuesta más que turn 10, porque re-procesa los 99 anteriores.
+**En la práctica:** una sesión de 200 turnos cuesta del orden de 100× más que una de 20 turnos con el mismo trabajo útil. Compactar (ver más abajo) rompe esa cuadrática.
 
 ### Agent (agente)
 **Definición:** un modelo + un harness (las herramientas, instrucciones, permisos y entorno). El "agente" no es el modelo; es el *sistema* que lo rodea.
@@ -156,7 +156,7 @@ Los nombres de lo que sale mal. Saber el nombre es el primer paso para reconocer
 ### Parametric knowledge vs. Contextual knowledge
 **Definición:** *parametric* es lo que el modelo aprendió en training (congelado, con fecha de corte). *Contextual* es lo que le diste en el contexto de esta sesión.
 **Por qué te importa:** si una API cambió después del cutoff del modelo, el modelo la va a usar mal — su conocimiento parametric está desactualizado.
-**En la práctica:** nunca asumas que el agente "sabe" tu códigobase. Su conocimiento parametric no la incluye. Siempre debe leerla (contextual) antes de actuar sobre ella.
+**En la práctica:** nunca asumas que el agente "sabe" tu codebase. Su conocimiento parametric no lo incluye. Siempre debe leerlo (contextual) antes de actuar sobre él.
 
 ### Knowledge cutoff
 **Definición:** la fecha hasta la que llega el conocimiento parametric del modelo. Cualquier cambio posterior es invisible para él salvo que se lo des como contexto.
@@ -294,7 +294,7 @@ Cómo se organiza el trabajo humano-agente. Estos términos describen *modalidad
 ### Prototyping
 **Definición:** construir una versión rápida y desechable para validar una idea antes de invertir en la versión real.
 **Por qué te importa:** es el caso de uso legítimo del vibe coding. Lo desechable puede ser libre; lo que se queda debe tener spec.
-**En la práctica:** "construyé un prototype de esta UI en 20 minutos, lo voy a tirar igual" es prototyping sano. Lo que sobrevive al prototipo se reescribe con spec.
+**En la práctica:** "construye un prototipo de esta UI en 20 minutos, lo voy a tirar igual" es prototyping sano. Lo que sobrevive al prototipo se reescribe con spec.
 
 ### DX vs. AX
 **Definición:** *DX* (developer experience) es qué tan agradable es trabajar *con* tu código para un humano. *AX* (agent experience) es qué tan agradable es trabajar *con* tu repo para un agente.
@@ -339,7 +339,7 @@ Este diagrama muestra cómo todos los términos de este módulo encajan en una s
 │                                                                       │
 │   turnos: 1 ──► N                                                     │
 │     cada turno: tool call ──► tool result ──► razonamiento             │
-│     costo crece cuadrático; cache tokens mantienen el bill bajo        │
+│     costo acumulado crece cuadrático; cache tokens abaratan el bill    │
 │                                                                       │
 │   sycophancy + hallucination (factuality/faithfulness) los vigilan    │
 └──────────────────────────────────────────────────────────────────────┘
@@ -377,7 +377,7 @@ Tabla compacta para consulta durante una sesión. Cuando oyes / ves X, piensa Y.
 | Effort | Cuánto "piensa" antes de responder | Siempre usar effort alto (caro) |
 | Prefix cache | Prefijo ya procesado, reutilizable | Cambiar el inicio del prompt (invalida cache) |
 | Context window | Máximo de tokens "en mente" | Creer que = atención efectiva |
-| Turn | Un ciclo input+output | Ignorar el costo cuadrático de turnos |
+| Turn | Un ciclo input+output | Ignorar que el costo acumulado crece cuadrático con los turnos |
 | Agent | Modelo + harness | Culpar al modelo cuando falla el harness |
 | Tool | Función invocable sobre el entorno | Dar tools sin pensar en seguridad |
 | MCP | Protocolo estándar de tools portable | Reinventar integraciones por herramienta |

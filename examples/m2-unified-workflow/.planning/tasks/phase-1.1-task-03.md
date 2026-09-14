@@ -4,9 +4,10 @@
 > **Milestone:** M1
 > **Spec ref:** `../spec.md#RF-1` (AC-1, AC-2, AC-4 integrados)
 > **Plan ref:** `../../plan.md#tarea-3`
-> **Estado:** pendiente
+> **Estado:** completada
 > **Agente asignado:** gsd-executor
 > **Estimación:** ~5 min
+> **Resultado:** flujo end-to-end en verde, AC-1, AC-2, AC-4 y AC-7 verificados.
 
 ---
 
@@ -31,9 +32,9 @@ Unir las piezas: el controller (task-01) llama al service, que invoca `findFilte
 5. **REFACTOR:** verifica que no se duplicó la validación (la validación vive en el controller, no en el service).
 
 ## Verificación (criterio binario de "hecha")
-- [ ] `npm test -- status-filter` pasa (incluye el e2e nuevo).
-- [ ] `npm test -- projects` (los 12 tests existentes) siguen pasando (AC-7).
-- [ ] La validación no se duplicó en service y repo.
+- [x] `npm test -- status-filter` pasa (incluye el e2e nuevo).
+- [x] `npm test -- projects` (los 12 tests existentes) siguen pasando (AC-7).
+- [x] La validación no se duplicó en service y repo.
 
 ## Cómo reportar al terminar (DONE/VERIFIED)
 - **Verifiqué:** AC-1, AC-2, AC-4 vía tests; AC-7 (no-regresión) verde.

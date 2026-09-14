@@ -2,7 +2,7 @@
 
 > **Tesis:** la seguridad de un agente de código no puede depender de
 > pedirle al modelo que sea cuidadoso. Tiene que depender de mecanismos
-> deterministas — anillos de privilegio, sandboxes, audit logs
+> deterministas — capas de privilegio, sandboxes, audit logs
 > inmutables, kill switches — que funcionan igual hagas lo que hagas con
 > el prompt. Lo determinista protege; lo probabilístico sugiere. En
 > seguridad, sugerir no alcanza.
@@ -27,20 +27,24 @@ que no pase, o para que se vea cuando pase).
 ## 10.1 OWASP Top 10 para Agentic AI (2025)
 
 El OWASP publicó un Top 10 específico para sistemas agentic. No es el
-Top 10 clásico de aplicaciones web; son las categorías de riesgo que
-aparecen cuando un LLM actúa y toma decisiones. Los más relevantes para
-un agente de código:
+Top 10 clásico de aplicaciones web ni el Top 10 para LLM Applications
+(2025), del que varias categorías heredan contenido — la columna
+"Herencia" marca de cuál. Fuente: https://genai.owasp.org/. Las
+categorías aparecen cuando un LLM actúa y toma decisiones; traducidas
+a un agente de código:
 
-| Riesgo OWASP | Qué es en un agente de código | Mitigación |
-|-------------|------------------------------|------------|
-| **Prompt injection** | Instrucciones inyectadas (directas o vía repo/tool) que el agente obedece. | §10.2. |
-| **Insecure output handling** | El output del agente se ejecuta o renderiza sin sanitizar. | Validación determinista antes de ejecutar; no ejecutar output crudo. |
-| **Training data / data poisoning** | Para apps que entrenan; menos relevante en agentes de código, pero aplica si el agente "aprende" del repo. | Curar qué entra al sistema de record. |
-| **Excessive agency** | El agente tiene más permisos de los que su tarea necesita. | Mínimo privilegio (§10.3); scopes por tool. |
-| **Supply chain (tools/MCP)** | Un MCP server o tool de terceros es malicioso o comprometido (M5 §5.2.6). | Revisar servers antes de conectar; tool poisoning. |
-| **Sensitive data exposure** | El agente lee y filtra secretos (M7 §7.7). | Secretos fuera del árbol indexado; redacción. |
-| **Improper error handling** | Errores filtrados al modelo o al output (stack traces con secrets). | Errores estructurados, sanitizados. |
-| **Memory / context poisoning** | El contexto del agente se contamina con datos hostiles. | Relectura forzada de fuentes canónicas. |
+| Riesgo OWASP | Qué es en un agente de código | Mitigación | Herencia (LLM Apps 2025) |
+|-------------|------------------------------|------------|--------------------------|
+| **T1 Prompt Injection** | Instrucciones inyectadas (directas o vía repo/tool) que el agente obedece. | §10.2. | LLM01 Prompt Injection. |
+| **T2 Tool Misuse** | El agente usa tools con argumentos hostiles o fuera de scope, o su output se ejecuta o renderiza sin sanitizar. | Validación determinista antes de ejecutar; no ejecutar output crudo. | LLM05 Improper Output Handling. |
+| **T3 Privilege Compromise** | El agente retiene o escala más privilegios de los que su tarea necesita, y con ellos lee y filtra secretos (M7 §7.7). | Mínimo privilegio (§10.3); scopes por tool; secretos fuera del árbol indexado; redacción; errores estructurados, sanitizados. | LLM02 Sensitive Information Disclosure; LLM06 Excessive Agency. |
+| **T4 Resource Overload** | Loops o llamadas sin límite que queman tokens, API calls o compute. | Circuit breakers (M7 §7.1.3); kill switch (§10.5.3). | LLM10 Unbounded Consumption. |
+| **T5 Cascading Hallucination** | Una alucinación o un contexto envenenado se propaga por la cadena spec → plan → código. | Relectura forzada de fuentes canónicas; curar qué entra al sistema de record. | LLM04 Data & Model Poisoning; LLM09 Misinformation. |
+| **T6 Intent Breaking** | El agente se desvía del intent original de la tarea sin que nadie lo note. | Gates por paso (§10.4); trazabilidad de decisión (§10.6.3). | — |
+| **T7 Misaligned/Deceptive Behaviors** | El agente reporta haber hecho lo que no hizo (phantom verification). | Sensores cuyo resultado no pasa por el modelo (M6 §6.1.1). | — |
+| **T8 Repudiation & Traceability** | No se puede reconstruir qué decidió ni qué ejecutó el agente. | Logging inmutable (§10.6); Merkle audit logs (§10.6.2). | — |
+| **T9 Identity & Impersonation** | Un MCP server o tool de terceros se hace pasar por otro de confianza (M5 §5.2.6). | Revisar servers antes de conectar; tool poisoning. | LLM03 Supply Chain. |
+| **T10 Overwhelming HITL** | Tantos pedidos de aprobación que el humano aprueba sin leer. | Aprobación solo de lo irreversible (§10.5.1). | — |
 
 > Ver `templates/owasp-agentic-cheatsheet.md` para mitigaciones por
 > categoría.
@@ -155,18 +159,20 @@ agente "todo el repo por si acaso" maximiza ambas amenazas.
 
 La traducción operativa de "determinístico > probabilístico".
 
-### 10.5.1 Anillos de privilegio
+### 10.5.1 Capas de privilegio
 
-| Anillo | Qué puede | Qué no |
-|--------|-----------|--------|
-| **Agente (anillo 0, contexto)** | Leer/razonar. | No ejecuta nada directamente. |
-| **Harness (anillo 1)** | Ejecutar tools aprobadas. | No accede a paths fuera de scope. |
-| **Sandbox (anillo 2)** | Ejecución aislada (contenedor, worktree). | Sin red saliente sin whitelisting; sin secrets. |
-| **Host / humano (anillo 3)** | Aprobación de lo irreversible. | El agente nunca llega acá solo. |
+| Capa | Qué puede | Qué no |
+|------|-----------|--------|
+| **Host / humano (capa 0, kernel del harness)** | Aprobación de lo irreversible. | El agente nunca llega aquí solo. |
+| **Sandbox (capa 1)** | Ejecución aislada (contenedor, worktree). | Sin red saliente sin whitelisting; sin secrets. |
+| **Harness (capa 2)** | Ejecutar tools aprobadas. | No accede a paths fuera de scope. |
+| **Agente (capa 3, la exterior)** | Leer/razonar. | No ejecuta nada directamente. |
 
-> El agente vive en el anillo más interno. Cada acción sensible sube un
-> anillo hasta el humano para lo irreversible. El error de diseño
-> clásico es dar al agente permisos de anillo 3.
+> La numeración sigue la convención de los anillos de CPU: la capa 0 es
+> la más privilegiada (el humano/kernel del harness) y el agente vive en
+> la capa exterior, la menos privilegiada. Cada acción sensible sube
+> hacia capas más privilegiadas hasta el humano para lo irreversible. El
+> error de diseño clásico es dar al agente permisos de capa 0.
 
 ### 10.5.2 Quarantined LLM
 
@@ -331,8 +337,8 @@ más conviene aplicar primero.
 
 ## 10.12 Referencias
 
-- **OWASP Top 10 para LLM/Agentic AI (2025)** — categorías de riesgo y
-  mitigaciones.
+- **OWASP GenAI Security — Top 10 para Agentic AI (2025)**
+  (https://genai.owasp.org/) — categorías de riesgo y mitigaciones.
 - **Microsoft Agent Governance Toolkit**
   (https://github.com/microsoft/agent-governance-toolkit) — toolkit
   open-source, 10/10 OWASP, 992 tests.

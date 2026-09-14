@@ -36,6 +36,8 @@ La taxonomía de fallas más útil (del [Codex Knowledge Base](https://codex.dan
 | **Sandbox y seguridad** | ~10% | No hay aislamiento; permisos demasiado amplios; tools destructivas sin gate. |
 | **Realización de acción** | ~10% | No hay enforcement del formato de salida; el agente reporta "tests pasan" sin haberlos corrido. |
 
+Los porcentajes son aproximados y varían por estudio; el orden de las clases es estable.
+
 > **El dato que manda todo:** ~40% de las fallas atribuidas al modelo son, en realidad, fallas de la capa de contexto. El modelo razona bien sobre el contexto que tiene; el problema es que el contexto que tiene está corrupto o incompleto. Eso es un problema de harness, no de modelo.
 
 La conclusión: si tu única respuesta a "el agente se equivoca" es "pedírselo otra vez" o "cambiar de modelo", estás apuntando al síntoma. El harness es donde se gana o se pierde la confiabilidad.
@@ -318,12 +320,12 @@ Outer. Lo portable (AGENTS.md, CI, hooks, MCP) sobrevive a que cambies de herram
 
 ## Referencias de este módulo
 
-- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo (12 módulos + proyectos); fuente principal del marco teórico.
+- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo (14 lecturas + 8 proyectos); fuente principal del marco teórico.
 - [Harness Engineering for Coding Agents — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/) — inner/outer harness, guías vs. sensores, orden de inversión.
-- [Anthropic's Harness Engineering — Rick Hightower](https://ai.plainenglish.io/anthropics-harness-engineering-two-agents-one-feature-list-zero-context-overflow-7c26eb02c807) — two-agent split, feature list JSON.
-- [Effective Harnesses for Long-Running Agents — Anthropic](https://www.anthropic.com/engineering/effective-harnesses-long-running-agents) — harnesses para sesiones largas.
+- [Agent harnesses from DIY to product — paddo.dev](https://paddo.dev/blog/agent-harnesses-from-diy-to-product) — desglose real del two-agent split y la feature list JSON.
+- [Effective Harnesses for Long-Running Agents — Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) — harnesses para sesiones largas.
 - [Effective Context Engineering — Anthropic](https://www.anthropic.com/engineering/effective-context-engineering) — contexto como recurso finito.
-- [Coding Agent Failure Taxonomy — Codex Knowledge Base](https://codex.danielvaughan.com/2026/06/03/coding-agent-failure-taxonomy-nist-style-classification-detection-codex-cli/) — las 5 clases de falla (~40% contexto).
+- [Coding Agent Failure Taxonomy — Codex Knowledge Base](https://codex.danielvaughan.com/2026/06/03/coding-agent-failure-taxonomy-nist-style-classification-detection-codex-cli/) — las 5 clases de falla; reporta ~2% de pérdida de contexto por paso (<36% tras 50 pasos).
 - [dlt-hub/dlthub-ai-workbench](https://github.com/dlt-hub/dlthub-ai-workbench), [rajshah4/harness-engineering](https://github.com/rajshah4/harness-engineering), [jameswood-tech/harness-engineering-cursor](https://github.com/jameswood-tech/harness-engineering-cursor) — implementaciones de referencia.
 
 ---

@@ -79,7 +79,7 @@ APÉNDICES ── Kit de Supervivencia
 - **Patrones de trabajo:** human-in-the-loop, AFK (away from keyboard), automated check / review, human review, vibe coding, design concept, grilling, prototyping, DX (developer experience) vs. AX (agent experience).
 
 ### Artefactos
-- Glosario interactivo (1,059 términos no — lo justo y necesario).
+- Glosario operativo compacto (~60 términos — lo justo y necesario).
 - Flashcards de jerga operativa.
 - Diagrama: "De la intención al token: flujo completo de una sesión agente".
 
@@ -107,11 +107,11 @@ APÉNDICES ── Kit de Supervivencia
 - Diagrama: arquitectura de un harness mínimo viable.
 
 ### Referencias Clave
-- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo sobre diseño de harnesses (12 módulos + proyectos).
+- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo sobre diseño de harnesses (14 lecturas + 8 proyectos).
 - [Harness Engineering for Coding Agents — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/) — guía completa con inner/outer harness.
-- [Anthropic's Harness Engineering — Rick Hightower](https://ai.plainenglish.io/anthropics-harness-engineering-two-agents-one-feature-list-zero-context-overflow-7c26eb02c807) — dos agentes, una feature list, zero context overflow.
-- [OpenAI — Harness Engineering (Feb 2026)](https://openai.com/research/harness-engineering) — post de Ryan Lopopolo sobre diseño de harnesses.
-- [Effective Harnesses for Long-Running Agents — Anthropic Engineering Blog](https://www.anthropic.com/engineering/effective-harnesses-long-running-agents) (Nov 2025).
+- [Agent harnesses from DIY to product — paddo.dev](https://paddo.dev/blog/agent-harnesses-from-diy-to-product) — desglose real del two-agent pattern y la feature list.
+- [OpenAI — Harness Engineering (Feb 2026)](https://openai.com/index/harness-engineering/) — post de Ryan Lopopolo sobre diseño de harnesses.
+- [Effective Harnesses for Long-Running Agents — Anthropic Engineering Blog](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) (Nov 2025).
 
 ---
 
@@ -149,8 +149,8 @@ APÉNDICES ── Kit de Supervivencia
 - [GitHub Spec Kit — Repo](https://github.com/github/spec-kit) — metodología detallada y templates.
 - [Spec-Driven Development: From Code to Contract — arXiv / AIWare 2026](https://arxiv.org/pdf/2602.00180) — paper académico con 3 niveles de rigor y case studies.
 - [SDD Flow Framework — Ataden/SDD_Flow](https://github.com/Ataden/SDD_Flow) — framework comunitario "Specs are the new code".
-- [Amazon Kiro](https://aws.amazon.com/kiro/) — IDE para SDD basado en specs.
-- [Tessl](https://tessl.io) — visión spec-as-source.
+- [Amazon Kiro](https://kiro.dev/) — IDE para SDD basado en specs.
+- [Tessl](https://tessl.io) — hoy "Agent Enablement Platform" (gobernanza de skills); su visión original spec-as-source motivó el nivel 3 de rigor.
 
 ---
 
@@ -219,8 +219,8 @@ APÉNDICES ── Kit de Supervivencia
 - Diagrama: flujo Initializer → Coding Agent → Commit → Handoff.
 
 ### Referencias Clave
-- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — módulos 4, 5, 6, 10, 12 sobre sesiones, inicialización, overreaching, y estado limpio.
-- [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-long-running-agents) — two-agent split, feature list JSON.
+- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — sus lecturas sobre sesiones, inicialización, overreaching y estado limpio.
+- [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) — two-agent split, feature list JSON.
 - [Claude Code Docs — Best Practices](https://code.claude.com/docs/en/best-practices) — `/clear`, `/compact`, plan mode, explore → plan → implement → commit.
 - [orchestrator.dev — Agent Memory 2026](https://orchestrator.dev/blog/2026-04-06--claude-code-agent-memory-2026/) — context compaction thresholds, context rot.
 
@@ -250,7 +250,7 @@ APÉNDICES ── Kit de Supervivencia
 
 ### Referencias Clave
 - [Model Context Protocol — Official Site](https://modelcontextprotocol.io) — documentación oficial.
-- [MCP Specification](https://spec.modelcontextprotocol.io) — especificación del protocolo.
+- [MCP Specification](https://modelcontextprotocol.io/specification/latest) — especificación del protocolo.
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) — 23k+ stars.
 - [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) — SDK oficial.
 - [MCP Reference Servers](https://github.com/modelcontextprotocol/servers) — 87k+ stars; filesystem, git, memory, sequential thinking, etc.
@@ -331,7 +331,7 @@ APÉNDICES ── Kit de Supervivencia
 - [Coding Agent Failure Taxonomy — Codex Knowledge Base](https://codex.danielvaughan.com/2026/06/03/coding-agent-failure-taxonomy-nist-style-classification-detection-codex-cli/) — taxonomía de 5 clases con porcentajes.
 - [What Breaks When LLMs Code? — arXiv](https://arxiv.org/html/2605.30777v1) — estudio empírico de 547 fallas reales de seguridad operacional.
 - [ClayBuddy Framework — arXiv](https://arxiv.org/html/2606.19380v3) — underspecification, capability errors, harness errors; propone mitigaciones concretas.
-- [12 Failure Classes from 30B Tokens — DEV Community](https://dev.to/cryptokeesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7) — experiencia de producción a escala.
+- [12 Failure Classes from 30B Tokens — DEV Community](https://dev.to/keesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7) — experiencia de producción a escala.
 - [Coding Discipline — SkillStack](https://github.com/viktorbezdek/skillstack/blob/main/coding-discipline/README.md) — 5 failure modes empíricamente documentados.
 
 ---
@@ -356,7 +356,7 @@ APÉNDICES ── Kit de Supervivencia
 ### Referencias Clave
 - [AI Engineering from Scratch — rohitg00](https://github.com/rohitg00/ai-engineering-from-scratch) — Fases 11-14 (LLM Engineering, MCP, Agent Engineering, Agent Workbench) con 17 capstones end-to-end.
 - [Augment Code](https://www.augmentcode.com/) — casos de uso de agentes en repos reales.
-- [SWE-agent](https://github.com/SWE-agent/SWE-agent) — agente de código open-source con harness inspeccionable.
+- [SWE-agent](https://github.com/SWE-agent/SWE-agent) — agente de código open-source con harness inspeccionable (sus maintainers recomiendan hoy mini-swe-agent: https://github.com/SWE-agent/mini-swe-agent).
 
 ---
 
@@ -419,7 +419,7 @@ APÉNDICES ── Kit de Supervivencia
 - [NVIDIA Technical Blog — MoE in LLM Architectures](https://developer.nvidia.com/blog/applying-mixture-of-experts-in-llm-architectures/) — aplicación técnica.
 - [A Survey on MoE in LLMs — arXiv](https://arxiv.org/html/2507.11181v1) — survey completo (2025).
 - [MoE Survey — Computer Society](https://www.computer.org/csdl/journal/tk/2025/07/10937907/25n2xHILEpG) — survey en journal IEEE.
-- [Claude Code vs Cursor vs Codex vs Aider — 2026 Head-to-Head](https://www.youngju.dev/blog/culture/2026-05-14-ai-coding-agent-comparison-2026-claude-code-cursor-codex-copilot-openclaw-deep-dive-guide-2026.en) — guía de compra práctica.
+- [Agent Harness — builder.io](https://www.builder.io/blog/agent-harness) — comparativa práctica de harnesses de agentes.
 - [Scrimba — Claude Code vs Codex vs Cursor](https://scrimba.com/articles/claude-code-vs-codex-vs-cursor/) — comparativa rápida.
 - [Agent Harness Comparison — DEV Community](https://dev.to/arihantdeva/agent-harness-comparison-claude-code-aider-cursor-agent-codex-cli-33n5) — comparativa de harness.
 - [LLM Context Window Comparison — Morph](https://www.morphllm.com/llm-context-window-comparison) — 20 modelos, costo por ventana llena.
@@ -553,8 +553,8 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 ### Harness Engineering
 - [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/)
 - [Harness Engineering for Coding Agents — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/)
-- [Anthropic's Harness Engineering — Rick Hightower](https://ai.plainenglish.io/anthropics-harness-engineering-two-agents-one-feature-list-zero-context-overflow-7c26eb02c807)
-- [Effective Harnesses for Long-Running Agents — Anthropic](https://www.anthropic.com/engineering/effective-harnesses-long-running-agents)
+- [Agent harnesses from DIY to product — paddo.dev](https://paddo.dev/blog/agent-harnesses-from-diy-to-product)
+- [Effective Harnesses for Long-Running Agents — Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Effective Context Engineering — Anthropic](https://www.anthropic.com/engineering/effective-context-engineering)
 - [dlt-hub/dlthub-ai-workbench](https://github.com/dlt-hub/dlthub-ai-workbench)
 - [rajshah4/harness-engineering](https://github.com/rajshah4/harness-engineering)
@@ -570,7 +570,7 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 
 ### Model Context Protocol (MCP)
 - [MCP Official Site](https://modelcontextprotocol.io)
-- [MCP Specification](https://spec.modelcontextprotocol.io)
+- [MCP Specification](https://modelcontextprotocol.io/specification/latest)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
 - [MCP Servers](https://github.com/modelcontextprotocol/servers)
@@ -581,7 +581,7 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [Coding Agent Failure Taxonomy](https://codex.danielvaughan.com/2026/06/03/coding-agent-failure-taxonomy-nist-style-classification-detection-codex-cli/)
 - [What Breaks When LLMs Code? — arXiv](https://arxiv.org/html/2605.30777v1)
 - [ClayBuddy Framework — arXiv](https://arxiv.org/html/2606.19380v3)
-- [12 Failure Classes — DEV Community](https://dev.to/cryptokeesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7)
+- [12 Failure Classes — DEV Community](https://dev.to/keesan/what-12-failure-classes-and-30-billion-tokens-spent-taught-us-about-trusting-ai-coding-agents-pi7)
 - [Coding Discipline — SkillStack](https://github.com/viktorbezdek/skillstack/blob/main/coding-discipline/README.md)
 - [Microsoft Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit)
 - [FIDES — Microsoft](https://learn.microsoft.com/en-us/agent-framework/agents/security)
@@ -613,12 +613,12 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [MoE Survey — IEEE Computer Society](https://www.computer.org/csdl/journal/tk/2025/07/10937907/25n2xHILEpG)
 
 ### Comparativas de Herramientas
-- [2026 AI Coding Agent Head-to-Head — Chaos and Order](https://www.youngju.dev/blog/culture/2026-05-14-ai-coding-agent-comparison-2026-claude-code-cursor-codex-copilot-openclaw-deep-dive-guide-2026.en)
+- [Agent Harness — builder.io](https://www.builder.io/blog/agent-harness)
 - [Scrimba — Claude Code vs Codex vs Cursor](https://scrimba.com/articles/claude-code-vs-codex-vs-cursor/)
 - [Agent Harness Comparison — DEV Community](https://dev.to/arihantdeva/agent-harness-comparison-claude-code-aider-cursor-agent-codex-cli-33n5)
 - [Claude Code vs Cursor vs Aider — DEV Community](https://dev.to/sameer_saleem/claude-code-vs-cursor-vs-aider-the-2026-battle-for-your-terminal-and-ide-3cb4)
 - **Herramientas open-source multi-proveedor (BYO modelo):**
-  - [OpenCode — opencode.ai](https://opencode.ai) · [docs](https://opencode.ai/docs) — agente open-source multi-interfaz (terminal + IDE + desktop), 75+ proveedores vía Models.dev, MCP nativo, lee `AGENTS.md`.
+  - [OpenCode — opencode.ai](https://opencode.ai) · [repo anomalyco/opencode](https://github.com/anomalyco/opencode) · [docs](https://opencode.ai/docs) — agente open-source multi-interfaz (terminal + IDE + desktop), 75+ proveedores vía Models.dev, MCP nativo, lee `AGENTS.md`.
   - [Pi — pi.dev](https://pi.dev) · [repo earendil-works/pi](https://github.com/earendil-works/pi) — chasis mínimo extensible (MIT); MCP/subagents/permisos se añaden como extensiones TS. Caso límite del M1.
   - Desglose por dimensión del harness (comandos, extensiones, hooks, memoria, subagents, MCP, permisos, modelo, open-source): `templates/cross-tool-compatibility-matrix.md` §3.
 
@@ -644,6 +644,19 @@ entrada lista qué se modificó y en qué archivo, para auditar la evolución
 del material. El sitio se regenera por copy-on-build desde la raíz del
 repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados acá
 se propaga al sitio sin tocar `src/content/docs/`.
+
+### 2026-09-13 — Corrección de integridad: referencias y atribuciones (P0)
+
+**Tesis del cambio:** una auditoría web del 2026-09-13 verificó las
+referencias load-bearing del curso; se corrigen URLs rotas, atribuciones
+desviadas y entradas muertas para que cada afirmación cite una fuente viva.
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `BLUEPRINT.md` | §M1/§M4 refs | Anthropic +for (×3), OpenAI /index/, Rick Hightower→paddo.dev, youngju.dev→builder.io |
+| `BLUEPRINT.md` | §M0/M9 | WalkingLabs 14 lecturas, cryptokeesan→Keesan, Kiro→kiro.dev, spec MCP→/specification/latest, SWE-agent nota mini |
+| `BLUEPRINT.md` | §M2 | Tessl pivot note |
+| `BLUEPRINT.md` | §Comparativas | OpenCode→anomalyco, Pi→earendil-works |
 
 ### 2026-07-29 — Ampliación del panorama de herramientas (OpenCode + Pi)
 
