@@ -300,7 +300,7 @@ src/scripts/
   playground.ts               # isla playground (iframe sandbox)
   notes.ts                    # isla notas (IndexedDB)
 src/data/
-  quizzes.ts                  # 46 preguntas, 11 módulos (autorado, committed)
+  quizzes.ts                  # 132 preguntas, 11 módulos (autorado, committed)
   terminal-scenarios.ts       # escenarios del simulador (autorado)
   playground-examples.ts      # ejemplos del playground (autorado)
   badges.ts                   # catálogo de badges + evaluateBadges() (autorado)
