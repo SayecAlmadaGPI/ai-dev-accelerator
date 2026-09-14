@@ -39,7 +39,8 @@ function mountPlayground(host: HTMLElement): void {
       placeholder="// Escribe JS y pulsa Ejecutar. Usa console.log para ver la salida."></textarea>
     <div class="aida-pg__controls">
       <button class="aida-pg__btn sl-link-button primary" type="button">Ejecutar</button>
-      <button class="aida-pg__btn sl-link-button secondary" type="button">Limpiar</button>
+      <button class="aida-pg__btn sl-link-button secondary aida-pg__btn--stop" type="button" style="display:none">Detener</button>
+      <button class="aida-pg__btn sl-link-button secondary aida-pg__btn--clear" type="button">Limpiar</button>
       <span class="aida-pg__state"></span>
     </div>
     <pre class="aida-pg__out" aria-live="polite"></pre>`;
@@ -47,12 +48,14 @@ function mountPlayground(host: HTMLElement): void {
   const editor = host.querySelector<HTMLTextAreaElement>('.aida-pg__editor')!;
   const sel = host.querySelector<HTMLSelectElement>('.aida-pg__sel')!;
   const runBtn = host.querySelector<HTMLButtonElement>('.aida-pg__btn.primary')!;
-  const clearBtn = host.querySelector<HTMLButtonElement>('.aida-pg__btn.secondary')!;
+  const stopBtn = host.querySelector<HTMLButtonElement>('.aida-pg__btn--stop')!;
+  const clearBtn = host.querySelector<HTMLButtonElement>('.aida-pg__btn--clear')!;
   const out = host.querySelector<HTMLElement>('.aida-pg__out')!;
   const state = host.querySelector<HTMLElement>('.aida-pg__state')!;
 
   let iframe: HTMLIFrameElement | null = null;
   let runTimer: ReturnType<typeof setTimeout> | null = null;
+  let running = false;
 
   // Creamos un handler de message que solo acepta de NUESTRO iframe.
   function onMessage(e: MessageEvent): void {
@@ -61,10 +64,9 @@ function mountPlayground(host: HTMLElement): void {
     if (!d || d.__pg !== 1) return;
 
     if (d.done) {
-      if (runTimer) {
-        clearTimeout(runTimer);
-        runTimer = null;
-      }
+      clearRunTimer();
+      running = false;
+      stopBtn.style.display = 'none';
       runBtn.disabled = false;
       state.textContent = 'Listo';
       state.dataset.state = 'ok';
@@ -86,8 +88,11 @@ function mountPlayground(host: HTMLElement): void {
   }
 
   function run(code: string): void {
+    if (running) return; // un run a la vez; usa Detener para cortar antes
     clearOutput();
+    running = true;
     runBtn.disabled = true;
+    stopBtn.style.display = '';
     state.textContent = 'Ejecutando…';
     state.dataset.state = 'edit';
 
@@ -103,12 +108,38 @@ function mountPlayground(host: HTMLElement): void {
     iframe.srcdoc = buildSrcDoc(code);
     document.body.appendChild(iframe);
 
-    if (runTimer) clearTimeout(runTimer);
+    clearRunTimer();
     runTimer = setTimeout(() => {
-      if (runBtn.disabled) {
-        state.textContent = 'Ejecutando (paso de 5s; posible bucle infinito)';
-      }
+      // El iframe con el bucle infinito sigue vivo (quemando CPU) hasta que
+      // lo destruyamos: remove() mata el browsing context y con él el loop.
+      stopRun('Ejecución detenida (límite de 5s) — el iframe anterior sigue vivo hasta detenerlo');
     }, 5000);
+  }
+
+  function clearRunTimer(): void {
+    if (runTimer) {
+      clearTimeout(runTimer);
+      runTimer = null;
+    }
+  }
+
+  // Detiene la ejecución actual: destruye el iframe (quitar el iframe del DOM
+  // destruye su browsing context, y eso MATA el script en ejecución, incluido
+  // un bucle infinito), limpia el timer y deja la isla lista para un nuevo
+  // run. Los mensajes tardíos del frame destruido se descartan solos: el
+  // guard de onMessage ignora todo mientras iframe sea null.
+  function stopRun(note: string): void {
+    clearRunTimer();
+    running = false;
+    if (iframe) {
+      iframe.remove();
+      iframe = null;
+    }
+    stopBtn.style.display = 'none';
+    runBtn.disabled = false;
+    appendLog('warn', [note]);
+    state.textContent = 'Detenida';
+    state.dataset.state = 'err';
   }
 
   sel.addEventListener('change', () => {
@@ -118,6 +149,9 @@ function mountPlayground(host: HTMLElement): void {
   });
 
   runBtn.addEventListener('click', () => run(editor.value));
+  stopBtn.addEventListener('click', () => {
+    stopRun('Ejecución detenida — el iframe anterior sigue vivo hasta detenerlo');
+  });
   clearBtn.addEventListener('click', () => {
     editor.value = '';
     clearOutput();
