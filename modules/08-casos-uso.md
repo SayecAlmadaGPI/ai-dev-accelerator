@@ -48,8 +48,12 @@ corresponda. Este módulo muestra esa activación en orden, caso por caso.
 | 8.6 Migración de stack | Rotura masiva, irreversibilidad | Migración en fases + gates | Worktree aislado, rollback |
 | 8.7 Debugging de incidente | Fix sin entender la causa | Hipótesis → reproducción → fix | Postmortem |
 
-> Ver `examples/` (cuando aplique) y los labs correspondientes para los
-> casos prácticos guiados.
+> Casos trabajados que ya existen en este repo:
+> [`examples/m2-caso-refactor/`](../examples/m2-caso-refactor/) (§8.2,
+> refactor legacy con tests de caracterización),
+> [`examples/m2-unified-workflow/`](../examples/m2-unified-workflow/)
+> (§8.3, feature de punta a punta) y
+> [`lab-04-failure-mode-hunt`](../labs/lab-04-failure-mode-hunt/) (§8.7).
 
 ---
 
@@ -95,6 +99,21 @@ test. Refactorizar sin red de seguridad = inventar bugs nuevos mientras
 - **Refuerza:** M6 (mutation testing, diff guard para que el refactor
   no toque behavior), M7 §7.3 (worktree aislado para que la deriva del
   refactor no contamine main).
+
+### 8.2.4 Ejemplo trabajado
+
+> **Del monolito a módulos con tests de caracterización:**
+> [`examples/m2-caso-refactor/`](../examples/m2-caso-refactor/). Léelo en
+> este orden: primero `legacy/order_totals.js`, el monolito feo pero
+> funcional con sus 8 comportamientos raros marcados en comentarios;
+> luego `legacy/order_totals.test.js` y la `characterization_suite.js`
+> que los fija ANTES de tocar nada. Sigue con `spec.md` (invariantes =
+> golden outputs; no-objetivos = no "arreglar" los raros) y `plan.md`
+> (3 tareas, verificación binaria en cada una); cierra con
+> `refactored/` y `RESULTADO.md`: la MISMA suite en verde contra legacy
+> y refactored. La lección: los golden values se fijan ejecutando, no
+> calculando — en este caso, dos redondeos de IVA salieron al revés de
+> lo que la aritmética mental predice.
 
 ---
 
@@ -308,6 +327,9 @@ la causa sigue, el incidente regresa más tarde peor.
   como test, regression test).
 - **Refuerza:** M4 (commit verde con el fix + test), M2 (el test de
   regresión es un AC nuevo).
+
+> **Caso trabajado de debugging:** [`lab-04-failure-mode-hunt`](../labs/lab-04-failure-mode-hunt/)
+> — un incidente de punta a punta con reproducción, hipótesis y regression test.
 
 ---
 
