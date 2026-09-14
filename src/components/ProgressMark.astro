@@ -16,7 +16,14 @@ const { slug } = Astro.props;
 <script>
   import { getDone, toggleDone } from '../scripts/progress';
 
+  // El script módulo corre una sola vez por sesión; `astro:page-load` se
+  // dispara en el primer load y tras cada navegación (view transitions),
+  // así el wiring se re-ejecuta sobre el DOM nuevo de cada página.
+  // Guard con atributo: si init() corriera dos veces sobre el mismo DOM,
+  // no se duplicaría el listener de click (toggleDone se dispararía 2x).
   function wire(btn: Element) {
+    if (btn.hasAttribute('data-pmark-wired')) return;
+    btn.setAttribute('data-pmark-wired', '');
     const slug = btn.getAttribute('data-slug') || '';
     const label = btn.querySelector('.pmark-label');
     const render = () => {
@@ -32,5 +39,9 @@ const { slug } = Astro.props;
     });
   }
 
-  document.querySelectorAll('[data-pmark]').forEach(wire);
+  function init() {
+    document.querySelectorAll('[data-pmark]').forEach(wire);
+  }
+
+  document.addEventListener('astro:page-load', init);
 </script>

@@ -40,26 +40,39 @@ const base = import.meta.env.BASE_URL;
 </div>
 
 <script>
+	// El script módulo corre una sola vez por sesión; `astro:page-load` se
+	// dispara en el primer load y tras cada navegación (view transitions),
+	// así el toggle se re-vincula al DOM nuevo de cada página. Bonus: re-aplica
+	// el estado colapsado persistido, que el swap resetea al reemplazar el DOM.
 	(function () {
 		const STORAGE_KEY = 'aida:sidebar:collapsed';
-		const frame = document.querySelector('[data-page-frame]');
-		const toggle = document.querySelector('[data-sidebar-toggle]');
-		const pane = document.querySelector('[data-sidebar-pane]');
-		if (!frame || !toggle || !pane) return;
 
-		function setCollapsed(collapsed: boolean) {
-			frame.classList.toggle('sidebar-is-collapsed', collapsed);
-			toggle.setAttribute('aria-expanded', String(!collapsed));
-			pane.setAttribute('aria-hidden', String(collapsed));
-			try { localStorage.setItem(STORAGE_KEY, String(collapsed)); } catch {}
+		function init() {
+			const frame = document.querySelector('[data-page-frame]');
+			const toggle = document.querySelector('[data-sidebar-toggle]');
+			const pane = document.querySelector('[data-sidebar-pane]');
+			if (!frame || !toggle || !pane) return;
+			// Guard con atributo: no duplicar el listener de click si init()
+			// corriera dos veces sobre el mismo DOM.
+			if (frame.hasAttribute('data-sidebar-wired')) return;
+			frame.setAttribute('data-sidebar-wired', '');
+
+			function setCollapsed(collapsed: boolean) {
+				frame.classList.toggle('sidebar-is-collapsed', collapsed);
+				toggle.setAttribute('aria-expanded', String(!collapsed));
+				pane.setAttribute('aria-hidden', String(collapsed));
+				try { localStorage.setItem(STORAGE_KEY, String(collapsed)); } catch {}
+			}
+
+			const stored = localStorage.getItem(STORAGE_KEY);
+			if (stored === 'true') setCollapsed(true);
+
+			toggle.addEventListener('click', () => {
+				setCollapsed(!frame.classList.contains('sidebar-is-collapsed'));
+			});
 		}
 
-		const stored = localStorage.getItem(STORAGE_KEY);
-		if (stored === 'true') setCollapsed(true);
-
-		toggle.addEventListener('click', () => {
-			setCollapsed(!frame.classList.contains('sidebar-is-collapsed'));
-		});
+		document.addEventListener('astro:page-load', init);
 	})();
 </script>
 

@@ -1,7 +1,7 @@
 ---
 // Override del SiteTitle de Starlight: marca SVG inline (tile ámbar con
 // doble chevron ">>" = aceleración) + wordmark. No usa config.logo (que
-// es image-based); la marca vive acá como SVG inline.
+// es image-based); la marca vive aquí como SVG inline.
 const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
 ---
 
@@ -78,18 +78,30 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
   // cualquier render diferido.
   const base = import.meta.env.BASE_URL;
 
+  // Registry de observers por selector: como bootIslands() corre en cada
+  // astro:page-load, sin registry cada navegación sin widgets dejaría
+  // observers huérfanos acumulándose. Con el Map queda a lo sumo 1 observer
+  // vivo por selector y se desconecta al montar la feature.
+  const observers = new Map<string, MutationObserver>();
+
   function bootFeature(selector: string, initFn: () => void): void {
     const el = document.querySelector(selector);
+    // Al montar (o al re-bootear con el selector ya presente), suelta el
+    // observer previo de ese selector si existía.
+    observers.get(selector)?.disconnect();
+    observers.delete(selector);
     if (el) {
       initFn();
       return;
     }
     const mo = new MutationObserver(() => {
       if (document.querySelector(selector)) {
-        initFn();
         mo.disconnect();
+        observers.delete(selector);
+        initFn();
       }
     });
+    observers.set(selector, mo);
     mo.observe(document.body, { childList: true, subtree: true });
   }
 

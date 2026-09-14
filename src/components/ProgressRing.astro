@@ -30,54 +30,62 @@ const hasQuiz = Boolean(quiz);
 
 <script>
   const CIRC = 2 * Math.PI * 18; // ~113.1
-  const roots = document.querySelectorAll<HTMLElement>('[data-pr-slug]');
-  roots.forEach((el) => {
-    const slug = el.getAttribute('data-pr-slug') || '';
-    const total = Number(el.getAttribute('data-pr-total') || '0');
-    const done = localStorage.getItem(`aida:done:${slug}`) === '1';
-    const score = parseInt(localStorage.getItem(`aida:quiz:${slug}`) || '0', 10);
-    // Dominio v2: mejor pct del historial. Fallback legacy: score/banco.
-    let bestPct: number | null = null;
-    const histRaw = localStorage.getItem(`aida:quizhist:${slug}`);
-    if (histRaw) {
-      try {
-        const hist = JSON.parse(histRaw) as { bestPct?: unknown };
-        if (typeof hist.bestPct === 'number') bestPct = hist.bestPct;
-      } catch {
-        // JSON corrupto: cae al cálculo legacy.
+
+  // El script módulo corre una sola vez por sesión; la hidratación es
+  // idempotente (solo escrituras de style/textContent), así que re-ejecutarla
+  // en cada astro:page-load (primer load + view transitions) es seguro.
+  function init() {
+    const roots = document.querySelectorAll<HTMLElement>('[data-pr-slug]');
+    roots.forEach((el) => {
+      const slug = el.getAttribute('data-pr-slug') || '';
+      const total = Number(el.getAttribute('data-pr-total') || '0');
+      const done = localStorage.getItem(`aida:done:${slug}`) === '1';
+      const score = parseInt(localStorage.getItem(`aida:quiz:${slug}`) || '0', 10);
+      // Dominio v2: mejor pct del historial. Fallback legacy: score/banco.
+      let bestPct: number | null = null;
+      const histRaw = localStorage.getItem(`aida:quizhist:${slug}`);
+      if (histRaw) {
+        try {
+          const hist = JSON.parse(histRaw) as { bestPct?: unknown };
+          if (typeof hist.bestPct === 'number') bestPct = hist.bestPct;
+        } catch {
+          // JSON corrupto: cae al cálculo legacy.
+        }
       }
-    }
 
-    let pct = 0;
-    let label = 'Pendiente';
-    let arcColor = 'var(--pr-clr-pending)';
+      let pct = 0;
+      let label = 'Pendiente';
+      let arcColor = 'var(--pr-clr-pending)';
 
-    if (done) {
-      pct = 100;
-      label = 'Completado';
-      arcColor = 'var(--pr-clr-done)';
-    } else if (bestPct !== null) {
-      pct = bestPct;
-      label = `Quiz ${bestPct}%`;
-      arcColor = 'var(--pr-clr-progress)';
-    } else if (total > 0 && score > 0) {
-      pct = Math.round((score / total) * 100);
-      label = `Quiz ${score}/${total}`;
-      arcColor = 'var(--pr-clr-progress)';
-    }
-    const arc = el.querySelector<SVGCircleElement>('[data-pr-arc]');
+      if (done) {
+        pct = 100;
+        label = 'Completado';
+        arcColor = 'var(--pr-clr-done)';
+      } else if (bestPct !== null) {
+        pct = bestPct;
+        label = `Quiz ${bestPct}%`;
+        arcColor = 'var(--pr-clr-progress)';
+      } else if (total > 0 && score > 0) {
+        pct = Math.round((score / total) * 100);
+        label = `Quiz ${score}/${total}`;
+        arcColor = 'var(--pr-clr-progress)';
+      }
+      const arc = el.querySelector<SVGCircleElement>('[data-pr-arc]');
 
-    if (arc) {
-      arc.style.strokeDashoffset = String(CIRC * (1 - pct / 100));
-      arc.style.stroke = arcColor;
-    }
+      if (arc) {
+        arc.style.strokeDashoffset = String(CIRC * (1 - pct / 100));
+        arc.style.stroke = arcColor;
+      }
 
-    const pctEl = el.querySelector<HTMLElement>('[data-pr-pct]');
-    if (pctEl) pctEl.textContent = `${pct}%`;
+      const pctEl = el.querySelector<HTMLElement>('[data-pr-pct]');
+      if (pctEl) pctEl.textContent = `${pct}%`;
 
-    const labelEl = el.querySelector<HTMLElement>('[data-pr-label]');
-    if (labelEl) labelEl.textContent = label;
-  });
+      const labelEl = el.querySelector<HTMLElement>('[data-pr-label]');
+      if (labelEl) labelEl.textContent = label;
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
 </script>
 
 <style>

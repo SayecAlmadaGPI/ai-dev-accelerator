@@ -83,30 +83,34 @@ const labs = trackable.filter((t) => t.group === 'labs');
   import { listDone } from '../scripts/progress';
   import { readMasteryCount } from '../scripts/badges';
 
-  const root = document.querySelector('[data-progress]');
-  if (root) {
+  const CIRC = 126;
+
+  // El script módulo corre una sola vez por sesión, así que los listeners de
+  // window se registran una sola vez (no se acumulan en view transitions).
+  // render() re-consulta el DOM en cada llamada: hidrata el DOM nuevo de
+  // cada página vía astro:page-load (primer load + navegaciones).
+  function render() {
+    const root = document.querySelector('[data-progress]');
+    if (!root) return;
     const total = Number(root.getAttribute('data-total') || '0');
-    const CIRC = 126;
     const countEl = root.querySelector('[data-progress-count]');
     const arcEl = root.querySelector('[data-progress-arc]') as SVGCircleElement | null;
     const barEl = root.querySelector('[data-progress-bar]') as HTMLElement | null;
     const masteryEl = root.querySelector('[data-progress-mastery]');
 
-    const render = () => {
-      const done = listDone();
-      const n = done.length;
-      if (countEl) countEl.textContent = String(n);
-      if (arcEl) arcEl.style.strokeDashoffset = String(CIRC * (1 - (total ? n / total : 0)));
-      if (barEl) barEl.style.width = `${total ? (n / total) * 100 : 0}%`;
-      // Dominio: módulos con bestPct ≥ 80 (re-leído de localStorage).
-      if (masteryEl) masteryEl.textContent = String(readMasteryCount());
-    };
-
-    render();
-    window.addEventListener('aida:progress', render);
-    window.addEventListener('aida:quiz', render);
-    window.addEventListener('storage', render);
+    const done = listDone();
+    const n = done.length;
+    if (countEl) countEl.textContent = String(n);
+    if (arcEl) arcEl.style.strokeDashoffset = String(CIRC * (1 - (total ? n / total : 0)));
+    if (barEl) barEl.style.width = `${total ? (n / total) * 100 : 0}%`;
+    // Dominio: módulos con bestPct ≥ 80 (re-leído de localStorage).
+    if (masteryEl) masteryEl.textContent = String(readMasteryCount());
   }
+
+  window.addEventListener('aida:progress', render);
+  window.addEventListener('aida:quiz', render);
+  window.addEventListener('storage', render);
+  document.addEventListener('astro:page-load', render);
 </script>
 
 <style>

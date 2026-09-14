@@ -23,24 +23,23 @@ import '../scripts/badges';
 <script>
   import { evaluateAndNotify } from '../scripts/badges';
 
-  const root = document.querySelector('[data-badges]');
-  if (root) {
-    const items = Array.from(
-      root.querySelectorAll<HTMLElement>('[data-badge-id]')
-    );
-
-    const render = () => {
-      for (const el of items) {
-        const id = el.getAttribute('data-badge-id') ?? '';
-        const earned = localStorage.getItem('aida:badge:' + id) === '1';
-        el.setAttribute('data-earned', earned ? 'true' : 'false');
-      }
-    };
-
-    render();
-    window.addEventListener('aida:badges', render);
-    window.addEventListener('storage', render);
+  // El script módulo corre una sola vez por sesión, así que los listeners de
+  // window se registran una sola vez (no se acumulan en view transitions).
+  // render() re-consulta el DOM en cada llamada: hidrata el DOM nuevo de
+  // cada página vía astro:page-load (primer load + navegaciones).
+  function render() {
+    const root = document.querySelector('[data-badges]');
+    if (!root) return;
+    for (const el of root.querySelectorAll<HTMLElement>('[data-badge-id]')) {
+      const id = el.getAttribute('data-badge-id') ?? '';
+      const earned = localStorage.getItem('aida:badge:' + id) === '1';
+      el.setAttribute('data-earned', earned ? 'true' : 'false');
+    }
   }
+
+  window.addEventListener('aida:badges', render);
+  window.addEventListener('storage', render);
+  document.addEventListener('astro:page-load', render);
 
   // Evalúa al cargar (descubre badges recién ganadas en otra página).
   evaluateAndNotify();
