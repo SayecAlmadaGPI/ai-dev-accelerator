@@ -6,6 +6,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Escribe** una spec con ACs binarios, no-objetivos y ambigüedades marcadas `[NEEDS CLARIFICATION]`. | Quiz M2; lab-02; plantilla `templates/spec.md`. |
+| 2. | **Elige** el nivel de rigor (Spec-First / Spec-Anchored / Spec-as-Source) justificando por contexto. | Quiz M2; §2.2. |
+| 3. | **Descompone** una spec en phases y tasks atómicas ejecutables por subagentes de contexto fresco. | Quiz M2; §2.3/2.5. |
+| 4. | **Distingue** los artefactos del pipeline (spec/roadmap/state.json/tasks/plan/feature_list) y qué "verdad" porta cada uno. | Quiz M2; §2.6; ejemplo `examples/m2-unified-workflow/`. |
+
+**Práctica recomendada:** lab-02 — feature completo desde la spec (ver [`lab-02-spec-driven-feature`](../labs/lab-02-spec-driven-feature/)).
+
+---
+
 ## 2.1 Por qué una metodología (y no solo "vibe coding")
 
 ### El problema de la intención no especificada

@@ -9,6 +9,20 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Aplica** el pipeline SDD completo a un refactor legacy con tests de caracterización antes de tocar. | Quiz M8; §8.1-8.2. |
+| 2. | **Elige** la estrategia de verificación correcta por tipo de caso (migración, docs vivas, generación de tests). | Quiz M8; §8.3-8.6. |
+| 3. | **Ejecuta** el protocolo de debugging: reproducir → hipótesis → fix mínimo → regression test. | Quiz M8; §8.7; lab-04. |
+
+**Práctica recomendada:** elige UN caso de §8.1-8.7 y ejecútalo sobre TU codebase con las plantillas (para §8.7, [`lab-04-failure-mode-hunt`](../labs/lab-04-failure-mode-hunt/)).
+
+---
+
 ## 8.0 Por qué este módulo existe
 
 Hasta aquí cada módulo profundizó una dimensión. Pero en una sesión real

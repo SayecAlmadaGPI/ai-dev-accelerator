@@ -5,6 +5,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Distingue** hallucination de factuality vs. faithfulness en un fallo concreto de sesión y elige la mitigación correcta (grounding vs. alcance/spec). | Quiz M0; §0.4. |
+| 2. | **Explica** por qué el costo acumulado de una sesión crece cuadrático con los turnos (y el por-turno es lineal) y **decide** cuándo compactar con los umbrales 60/70/83.5. | Quiz M0; §0.2/0.5. |
+| 3. | **Diagnostica** síntomas de dumb zone en una sesión y **prescribe** la respuesta (clear, compact o handoff). | Quiz M0; §0.4/0.5. |
+| 4. | **Clasifica** el conocimiento involucrado en parametric vs. contextual para predecir cuándo el agente usará información desactualizada. | Quiz M0; §0.4. |
+
+**Práctica recomendada:** ninguno todavía (M0 es prerrequisito); revisa tu última sesión real y diagnostica un fallo con este vocabulario.
+
+---
+
 ## 0.0 Por qué importa el vocabulario
 
 Hay un momento muy específico en el que un desarrollador pasa de "usar IA como chatbot" a "trabajar con agentes como ingeniero". Es el momento en el que deja de decir *"se puso raro, le voy a reabrir"* y empieza a decir *"el contexto se llenó y entró en la dumb zone, hay que hacer un handoff con artifact"*. No es un cambio de sofisticación; es un cambio de **capacidad de diagnóstico**.

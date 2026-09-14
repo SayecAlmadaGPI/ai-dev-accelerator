@@ -37,6 +37,7 @@ autoestudio como para enseñanza:
 6. **Niveles de adopción** (mínimo, medio, completo) para no asustar al lector.
 7. **FAQ** con trampas reales.
 8. **Referencias** con los links exactos.
+9. **Evidencia de logro** al inicio: 3–5 objetivos observables (verbo medible) y cómo se comprueban (quiz, lab, plantilla o acción).
 
 ## Cómo citar entre módulos
 

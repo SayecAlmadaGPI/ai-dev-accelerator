@@ -9,6 +9,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Lee** un leaderboard sin engañarte: contaminación, vigencia, cost-per-quality (las 10 preguntas antes de adoptar). | Quiz M9; `templates/10-preguntas-antes-adoptar.md`. |
+| 2. | **Diseña** una prueba ciega en tu codebase (benchmark-your-task.py) para evaluar un cambio de modelo. | lab-05; `templates/benchmark-your-task.py`. |
+| 3. | **Decide** RAG vs. long-context vs. routing según costo, latencia y vigencia del conocimiento. | Quiz M9; `cheatsheets/rag-o-long-context.md`. |
+| 4. | **Evalúa** un release nuevo fechando mediciones y separando benchmark de TU caso de uso. | Quiz M9; §9.4/9.6. |
+
+**Práctica recomendada:** lab-05 — prueba ciega de 3 modelos en tu codebase (ver [`lab-05-model-evaluation`](../labs/lab-05-model-evaluation/)).
+
+---
+
 ## 9.0 Por qué este módulo existe
 
 El resto del curso asume que ya tienes un modelo y un agente. Este

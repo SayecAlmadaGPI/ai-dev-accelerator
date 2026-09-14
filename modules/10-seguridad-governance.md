@@ -9,6 +9,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Mapea** un ataque de prompt injection (directo / indirecto / vía repo / vía tool result) contra las capas de privilegio del harness. | Quiz M10; §10.2/10.4. |
+| 2. | **Selecciona** el patrón defensivo correcto (de los 6) para un caso, justificando determinístico > probabilístico. | Quiz M10; §10.4. |
+| 3. | **Audita** un agente en producción con el checklist de 20 controles (logging inmutable, trazabilidad, kill switches). | Quiz M10; `templates/security-governance-checklist.md`. |
+| 4. | **Prioriza** riesgos reales vs. hipotéticos para decidir dónde invertir primero. | Quiz M10; §10.7. |
+
+**Práctica recomendada:** corre el checklist de governance sobre un agente que ya uses en producción (seguridad de servers: [`lab-03-mcp-integration`](../labs/lab-03-mcp-integration/)).
+
+---
+
 ## 10.0 Por qué este módulo existe
 
 El M7 trató el sandbox escape como una clase de falla a responder. Este

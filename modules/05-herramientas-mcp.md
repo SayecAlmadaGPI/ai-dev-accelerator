@@ -8,6 +8,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Diferencia** Tool / Resource / Prompt / Sampling y elige la primitiva correcta por caso de uso. | Quiz M5; `templates/mcp-primitives-cheatsheet.md`. |
+| 2. | **Elige** transporte (stdio vs. Streamable HTTP) y modelo de credenciales (server-side vs. host OAuth) para un server dado. | Quiz M5; §5.2.4. |
+| 3. | **Especifica** un MCP server propio: tools con schemas, errores estructurados, idempotencia. | lab-03; `templates/mcp-server-template/`. |
+| 4. | **Evalúa** riesgos al conectar un server de terceros (tool poisoning, inyección vía tool result). | Quiz M5; §5.6 y M10. |
+
+**Práctica recomendada:** lab-03 — conectar agente a DB/API vía MCP con seguridad (ver [`lab-03-mcp-integration`](../labs/lab-03-mcp-integration/)).
+
+---
+
 ## 5.0 Por qué este módulo existe
 
 El M3 te dio el workbench de archivos. El M4 te dio el flujo que sobrevive

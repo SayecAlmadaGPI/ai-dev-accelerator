@@ -5,6 +5,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Separa** inner vs. outer harness para una herramienta concreta (qué controla el vendor, qué controlas tú). | Quiz M1; §1.2. |
+| 2. | **Diseña** una restricción mecánica (determinística) para un fallo dado, en lugar de una regla advisory. | Quiz M1; §1.4-1.5. |
+| 3. | **Ordena** la jerarquía de enforcement (mecánico > scoped rules > AGENTS.md) para un caso real. | Quiz M1; §1.6. |
+| 4. | **Audita** tu entorno con el checklist de harness (21 ítems) y produce una lista de huecos priorizados. | Plantilla `templates/harness-design-checklist.md`. |
+
+**Práctica recomendada:** lab-01 — sentir la diferencia con/sin harness (ver [`lab-01-baseline-vs-harness`](../labs/lab-01-baseline-vs-harness/)).
+
+---
+
 ## 1.0 La tesis: el agente no es el modelo
 
 Hay una sola idea que, si la internalizas, cambia todo lo demás. La formuló Birgitta Böckeler (Thoughtworks) y se ha vuelto la definición operativa del campo:

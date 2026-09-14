@@ -7,6 +7,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Ejecuta** un cierre de sesión limpio con handoff artifact completo (checklist de 7 pasos). | Quiz M4; plantillas `templates/session-close-checklist.md` y `templates/handoff.md`. |
+| 2. | **Decide** entre compactar, cerrar sesión o hacer handoff según el estado del contexto (umbrales 60/70/83.5). | Quiz M4; §4.2. |
+| 3. | **Reconstruye** el estado de un proyecto en una sesión nueva leyendo solo archivos (progress, state.json, git log). | Quiz M4; §4.7. |
+| 4. | **Planifica** una división two-agent (initializer → coding) para un feature largo. | Quiz M4; §4.4-4.5. |
+
+**Práctica recomendada:** interrumpe una sesión real a propósito y retómala desde el handoff artifact.
+
+---
+
 ## 4.0 Por qué este módulo existe
 
 El M1 dijo que el agente es `modelo + harness`. El M2 te dio la metodología

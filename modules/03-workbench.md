@@ -5,6 +5,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Redacta** un AGENTS.md efectivo: qué incluir, qué excluir, límite de ~150-200 slots, progressive disclosure. | Quiz M3; plantilla `templates/AGENTS.md`. |
+| 2. | **Asigna** cada tipo de conocimiento a la capa de memoria correcta (CLAUDE.md / auto-memoria / memory tool / subagent). | Quiz M3; §3.8. |
+| 3. | **Diseña** una skill o un hook para un flujo repetitivo, distinguiendo advisory (prompt) de determinístico (hook). | Quiz M3; §3.2-3.4. |
+| 4. | **Audita** la portabilidad cross-tool de tu capa de instrucciones (AGENTS.md vs. CLAUDE.md, compatibilidad por herramienta). | Quiz M3; `templates/cross-tool-compatibility-matrix.md`. |
+
+**Práctica recomendada:** monta el AGENTS.md de TU repo con la plantilla; [`lab-01-baseline-vs-harness`](../labs/lab-01-baseline-vs-harness/) como banco de pruebas.
+
+---
+
 ## 3.0 El workbench como "taller"
 
 Imagina tu repo como un taller donde un colaborador muy capaz pero distraído va a trabajar. Un taller bien montado tiene: un cartel de reglas en la entrada, herramientas colgadas en su lugar, una guía de seguridad junto a cada máquina peligrosa, y un cuaderno de decisiones donde se anota por qué se hizo cada cosa. Eso es el workbench, traducido a archivos.

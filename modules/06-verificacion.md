@@ -9,6 +9,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Reescribe** un AC opinable como un criterio verificable (comando con pass/fail). | Quiz M6; §6.1.2 y §6.5; lab-02. |
+| 2. | **Detecta** phantom verification, hollow report y test gaming en el reporte de un agente, y responde con el sensor correcto. | Quiz M6; §6.1/6.3/6.6. |
+| 3. | **Diseña** el enforcement en 3 capas (hooks > scoped rules > AGENTS.md) para un repo concreto. | Quiz M6; §6.4; `templates/pre-commit-agent-checks.sh` y `templates/verification-pipeline.yaml`. |
+| 4. | **Exige y audita** un reporte DONE/VERIFIED de 4 partes (qué verificó, qué no, supuestos, qué revisa el humano). | Quiz M6; `templates/DONE_VERIFIED.md`. |
+
+**Práctica recomendada:** instala `templates/pre-commit-agent-checks.sh` en TU repo esta semana (verificación en [`lab-02-spec-driven-feature`](../labs/lab-02-spec-driven-feature/); postmortem en [`lab-04-failure-mode-hunt`](../labs/lab-04-failure-mode-hunt/)).
+
+---
+
 ## 6.0 Por qué este módulo existe
 
 El M1 dijo: agent = model + harness. El M2 te dio la metodología spec →

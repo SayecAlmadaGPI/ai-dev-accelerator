@@ -9,6 +9,21 @@
 
 ---
 
+## Evidencia de logro
+
+> Al terminar este módulo debes poder:
+
+| # | Objetivo | Cómo se comprueba |
+|---|----------|-------------------|
+| 1. | **Clasifica** un fallo real en la taxonomía de 5 clases (y su modo concreto de los 12) con evidencia. | Quiz M7; `templates/failure-classes-cheatsheet.md`; lab-04. |
+| 2. | **Aplica** la mitigación correcta por clase usando el árbol de decisión (§7.9) — no "reintentar" universal. | Quiz M7; §7.9. |
+| 3. | **Redacta** un mini-postmortem que convierta el fallo en una mitigación instalada. | lab-04; `templates/incident-postmortem-agent.md`. |
+| 4. | **Anticipa** qué clases son más probables según el tipo de tarea y endurece el harness por adelantado. | Quiz M7; §7.1. |
+
+**Práctica recomendada:** lab-04 — cazar 5 bugs, uno por clase (ver [`lab-04-failure-mode-hunt`](../labs/lab-04-failure-mode-hunt/)).
+
+---
+
 ## 7.0 Por qué este módulo existe
 
 El M6 te enseñó a verificar el output. Este módulo te enseña qué hacer
