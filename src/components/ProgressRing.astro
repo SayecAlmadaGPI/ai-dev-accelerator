@@ -2,7 +2,8 @@
 // Anillo de progreso SVG (rediseño inspirado en timeline e-learning).
 // Reemplaza el dot simple de ProgressMark. Muestra porcentaje basado en:
 //   - 100% = completado (aida:done:<slug>)
-//   - quiz% = score del quiz / total preguntas (aida:quiz:<slug>)
+//   - quiz% = mejor pct de dominio del historial (aida:quizhist:<slug>);
+//     fallback legacy: score crudo / total del banco (aida:quiz:<slug>)
 //   - 0%   = pendiente
 // Hidrata client-side desde localStorage. Se usa en PageTitle (grande) y
 // en cards del dashboard (pequeño, via CSS scale).
@@ -35,6 +36,17 @@ const hasQuiz = Boolean(quiz);
     const total = Number(el.getAttribute('data-pr-total') || '0');
     const done = localStorage.getItem(`aida:done:${slug}`) === '1';
     const score = parseInt(localStorage.getItem(`aida:quiz:${slug}`) || '0', 10);
+    // Dominio v2: mejor pct del historial. Fallback legacy: score/banco.
+    let bestPct: number | null = null;
+    const histRaw = localStorage.getItem(`aida:quizhist:${slug}`);
+    if (histRaw) {
+      try {
+        const hist = JSON.parse(histRaw) as { bestPct?: unknown };
+        if (typeof hist.bestPct === 'number') bestPct = hist.bestPct;
+      } catch {
+        // JSON corrupto: cae al cálculo legacy.
+      }
+    }
 
     let pct = 0;
     let label = 'Pendiente';
@@ -44,13 +56,17 @@ const hasQuiz = Boolean(quiz);
       pct = 100;
       label = 'Completado';
       arcColor = 'var(--pr-clr-done)';
+    } else if (bestPct !== null) {
+      pct = bestPct;
+      label = `Quiz ${bestPct}%`;
+      arcColor = 'var(--pr-clr-progress)';
     } else if (total > 0 && score > 0) {
       pct = Math.round((score / total) * 100);
       label = `Quiz ${score}/${total}`;
       arcColor = 'var(--pr-clr-progress)';
     }
-
     const arc = el.querySelector<SVGCircleElement>('[data-pr-arc]');
+
     if (arc) {
       arc.style.strokeDashoffset = String(CIRC * (1 - pct / 100));
       arc.style.stroke = arcColor;

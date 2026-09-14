@@ -14,6 +14,10 @@ export interface BadgeContext {
   quizScores: Record<string, number>;
   /** Totales de quizzes: slug -> puntaje máximo posible. */
   quizTotals: Record<string, number>;
+  /** Módulos con dominio demostrado (bestPct ≥ 80 desde localStorage). */
+  masteryCount: number;
+  /** Repasos espaciados completados (aida:review:count). */
+  reviewCount: number;
   /** Total de ítems trackeables (módulos + labs). */
   total: number;
 }
@@ -81,7 +85,7 @@ export const BADGES: Badge[] = [
   {
     id: 'first-quiz',
     name: 'Primer quiz',
-    description: 'Aprueba 1 quiz (score > 0)',
+    description: 'Tu primer intento honesto de un quiz',
     icon: '✅',
     check: (ctx) => Object.values(ctx.quizScores).some((s) => s > 0),
   },
@@ -95,6 +99,34 @@ export const BADGES: Badge[] = [
         const total = ctx.quizTotals[slug];
         return typeof total === 'number' && total > 0 && score >= total;
       }),
+  },
+  {
+    id: 'mastery-first',
+    name: 'Dominio demostrado',
+    description: 'Logra ≥80% en el quiz de 1 módulo',
+    icon: '🏅',
+    check: (ctx) => ctx.masteryCount >= 1,
+  },
+  {
+    id: 'mastery-five',
+    name: 'Media maratón',
+    description: 'Logra ≥80% en los quizzes de 5 módulos',
+    icon: '🏃',
+    check: (ctx) => ctx.masteryCount >= 5,
+  },
+  {
+    id: 'mastery-all',
+    name: 'El kit completo',
+    description: 'Logra ≥80% en los quizzes de los 11 módulos',
+    icon: '🎒',
+    check: (ctx) => ctx.masteryCount >= MODULES_TOTAL,
+  },
+  {
+    id: 'review-streak',
+    name: 'Memoria de hierro',
+    description: 'Completa 3 repasos espaciados',
+    icon: '🧠',
+    check: (ctx) => ctx.reviewCount >= 3,
   },
 ];
 

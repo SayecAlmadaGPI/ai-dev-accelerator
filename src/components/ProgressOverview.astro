@@ -2,8 +2,8 @@
 // Card "Tu progreso" del landing. Isle vanilla: el estado se hidrata
 // client-side desde localStorage (sin backend). La lista de ítems
 // trackeables viene de src/data/trackable.json (generado por build-content
-// desde modules/ + labs/). Escucha el evento `aida:progress` para
-// actualizarse en vivo al marcar/desmarcar desde cualquier página.
+// desde modules/ + labs/). Escucha `aida:progress`, `aida:quiz` y `storage`
+// para actualizarse en vivo (conteo, barra y línea de dominio).
 import trackable from '../data/trackable.json';
 import ProgressRing from './ProgressRing.astro';
 import Badges from './Badges.astro';
@@ -11,6 +11,8 @@ import Badges from './Badges.astro';
 const total = trackable.length;
 const base = import.meta.env.BASE_URL;
 const modules = trackable.filter((t) => t.group === 'modules');
+// Total de módulos (11): para la línea de dominio del quiz.
+const moduleTotal = modules.length;
 const labs = trackable.filter((t) => t.group === 'labs');
 ---
 
@@ -26,6 +28,9 @@ const labs = trackable.filter((t) => t.group === 'labs');
         <p class="aida-progress__count">
           <strong data-progress-count>0</strong>
           <span>/ {total} completados</span>
+        </p>
+        <p class="aida-progress__dominio">
+          Dominio: <strong data-progress-mastery>0</strong>/{moduleTotal} módulos (quiz ≥80%)
         </p>
       </div>
     </div>
@@ -74,9 +79,9 @@ const labs = trackable.filter((t) => t.group === 'labs');
 
   <Badges />
 </aside>
-
 <script>
   import { listDone } from '../scripts/progress';
+  import { readMasteryCount } from '../scripts/badges';
 
   const root = document.querySelector('[data-progress]');
   if (root) {
@@ -85,6 +90,7 @@ const labs = trackable.filter((t) => t.group === 'labs');
     const countEl = root.querySelector('[data-progress-count]');
     const arcEl = root.querySelector('[data-progress-arc]') as SVGCircleElement | null;
     const barEl = root.querySelector('[data-progress-bar]') as HTMLElement | null;
+    const masteryEl = root.querySelector('[data-progress-mastery]');
 
     const render = () => {
       const done = listDone();
@@ -92,10 +98,13 @@ const labs = trackable.filter((t) => t.group === 'labs');
       if (countEl) countEl.textContent = String(n);
       if (arcEl) arcEl.style.strokeDashoffset = String(CIRC * (1 - (total ? n / total : 0)));
       if (barEl) barEl.style.width = `${total ? (n / total) * 100 : 0}%`;
+      // Dominio: módulos con bestPct ≥ 80 (re-leído de localStorage).
+      if (masteryEl) masteryEl.textContent = String(readMasteryCount());
     };
 
     render();
     window.addEventListener('aida:progress', render);
+    window.addEventListener('aida:quiz', render);
     window.addEventListener('storage', render);
   }
 </script>
@@ -156,6 +165,14 @@ const labs = trackable.filter((t) => t.group === 'labs');
   .aida-progress__count strong {
     color: var(--sl-color-text-accent);
     font-size: var(--sl-text-lg);
+  }
+  .aida-progress__dominio {
+    margin: 0.3rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+  .aida-progress__dominio strong {
+    color: var(--sl-color-text-accent);
   }
   .aida-progress__bar {
     margin-top: 0.9rem;

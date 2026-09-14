@@ -14,6 +14,13 @@ import {
 import { quizzes } from '../data/quizzes';
 
 const QUIZ_PREFIX = 'aida:quiz:';
+const HIST_PREFIX = 'aida:quizhist:';
+
+/** Repasos espaciados completados; lo incrementa quiz.ts por bloque terminado. */
+export const REVIEW_COUNT_KEY = 'aida:review:count';
+
+/** Mismo umbral de dominio que el motor del quiz (src/scripts/quiz.ts). */
+const MASTERY_PCT = 80;
 
 /** Lee los IDs de badges ya ganadas desde localStorage. */
 export function getEarnedBadges(): string[] {
@@ -72,6 +79,43 @@ function readQuizTotals(): Record<string, number> {
   return w.__AIDA_QUIZ_TOTALS__ ?? derived;
 }
 
+/**
+ * Mejor pct de dominio del módulo. Fuente de verdad: el historial del
+ * motor v2 (aida:quizhist:<slug>). Fallback legacy (usuarios v1): sin
+ * historial, se aproxima desde el mejor score crudo sobre el banco.
+ */
+export function readBestPct(slug: string, total: number): number {
+  if (typeof localStorage === 'undefined') return 0;
+  const raw = localStorage.getItem(HIST_PREFIX + slug);
+  if (raw) {
+    try {
+      const hist = JSON.parse(raw) as { bestPct?: unknown };
+      if (typeof hist.bestPct === 'number') return hist.bestPct;
+    } catch {
+      // JSON corrupto: cae al fallback legacy.
+    }
+  }
+  const score = Number(localStorage.getItem(QUIZ_PREFIX + slug) || 0);
+  return total > 0 ? Math.round((score / total) * 100) : 0;
+}
+
+/** Cuántos módulos (de los 11 con quiz) tienen dominio demostrado (≥80%). */
+export function readMasteryCount(): number {
+  if (typeof localStorage === 'undefined') return 0;
+  let count = 0;
+  for (const quiz of quizzes) {
+    if (readBestPct(quiz.slug, quiz.questions.length) >= MASTERY_PCT) count++;
+  }
+  return count;
+}
+
+/** Repasos espaciados completados (aida:review:count). */
+function readReviewCount(): number {
+  if (typeof localStorage === 'undefined') return 0;
+  const n = Number(localStorage.getItem(REVIEW_COUNT_KEY) || 0);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
 /** Muestra un toast efímero anunciando una badge recién ganada. */
 function showToast(badgeId: string): void {
   if (typeof document === 'undefined') return;
@@ -109,6 +153,8 @@ export function evaluateAndNotify(): void {
     done,
     quizScores: readQuizScores(),
     quizTotals: readQuizTotals(),
+    masteryCount: readMasteryCount(),
+    reviewCount: readReviewCount(),
     total: done.length,
   };
 
