@@ -74,11 +74,15 @@ Usa `templates/benchmark-your-task.py` como esqueleto:
 
 1. Define 5-10 tareas **reales** de tu codebase (un bug fix, una
    feature, un refactor, un test). No HumanEval; TUS tareas.
-2. Integra los 3 modelos (los `run()` del script). Los nombres son
-   ciegos (M_A, M_B, M_C) hasta el final.
-3. Corre la prueba. Evalúa cada output **sin saber qué modelo lo
+2. Antes de integrar clientes, corre
+   `python benchmark-your-task.py --dry-run` para ver el reporte con
+   datos sintéticos.
+3. Integra los 3 modelos (los `run()` del script: `_run_model_a`,
+   `_run_model_b`, `_run_model_c`). Los nombres son ciegos (M_A, M_B,
+   M_C) hasta el final.
+4. Corre la prueba. Evalúa cada output **sin saber qué modelo lo
    produjo** (la verificación es computacional, no por opinión).
-4. Lee el revelado al final: cuál ganó en TUS tareas.
+5. Lee el revelado al final: cuál ganó en TUS tareas.
 
 > La parte que más se salta: la prueba es **ciega**. Si sabes cuál es
 > cuál al evaluar, introduces sesgo. La verificación computacional
