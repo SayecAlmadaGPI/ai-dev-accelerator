@@ -30,16 +30,22 @@
 
 ## El proyecto
 
-Un mini "todo app" (o el del `lab-02` extendido) con 5 bugs inyectados a
-propósito. Cada bug representa una clase distinta de falla. No te
-decimos cuáles son — el lab es cazarlos.
+El proyecto YA está listo en `starter/`, dentro de este lab: cópialo a
+tu workspace (`cp -r starter/ ../mi-lab-04` o similar) o trabaja
+directamente ahí. Entra al directorio y corre `./init.sh` para
+verificar el entorno (node >= 18) y correr la suite.
 
-Estructura mínima del proyecto:
-- `src/` con la lógica.
+Es un mini "todo app" en Node puro (sin dependencias) con 5 bugs
+inyectados a propósito. Cada bug representa una clase distinta de
+falla. No te decimos cuáles son — el lab es cazarlos.
+
+Estructura del starter:
+- `src/` con la lógica (`todo.js`).
 - `tests/` con tests que **pasan** (algunos bugs no rompen tests; rompen
   comportamiento no cubierto).
 - `init.sh` que reproduce el entorno.
 - `BUGS.md` vacío — lo llenas tú con la cacería.
+- `package.json` con `npm test` = `node --test` (sin deps).
 
 ## Las 5 clases a cazar (una por bug)
 

@@ -1,0 +1,9 @@
+{
+  "name": "lab-04-failure-mode-hunt-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mini todo app del Lab 04 — Failure Mode Hunt. Node puro, sin dependencias.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
