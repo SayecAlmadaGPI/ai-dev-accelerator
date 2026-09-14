@@ -124,6 +124,22 @@ En la sección 10, cada item marcado `[NEEDS CLARIFICATION]` es **bloqueante por
 
 > Si al escribir la spec descubres que una sección no puedes completarla sin inventar, no inventes: marca `[NEEDS CLARIFICATION]`. Ese es el momento en el que la spec te está avisando de un riesgo *antes* de que cueste dinero.
 
+### Las constitutional articles de Spec Kit
+
+[GitHub Spec Kit](https://github.com/github/spec-kit) — el toolkit de SDD de GitHub — lleva la idea del contrato un paso más allá: cada proyecto tiene una **constitution**, un archivo de principios inmutables que gobierna toda spec, plan y task (se crea una vez con `/speckit.constitution`). Su núcleo son **nueve artículos** (documentados en el repo, `spec-driven.md` — "The Nine Articles of Development"), cada uno con su porqué operativo:
+
+| Artículo | Qué manda | Por qué te importa |
+|---|---|---|
+| **I. Library-First** | Toda feature nace como librería standalone, con fronteras claras y dependencias mínimas | Modularidad forzada desde el spec → menos bugs de integración en el código generado |
+| **II. CLI Interface Mandate** | Toda librería se expone por CLI: texto in, texto out, JSON para datos estructurados | Nada queda escondido en clases opacas → todo es observable y testeable |
+| **III. Test-First Imperative** | No hay código antes de los tests: primero se escriben, se aprueban y se confirman fallando (ROJO) | Los AC son ejecutables desde el día 0 — este módulo entero convertido en regla constitucional |
+| **IV-VI. Project-Defined** | Slots que cada proyecto define con sus no negociables (p. ej. seguridad, observabilidad, versionado, breaking changes) | El template no decide tus estándares: los hereda de tu constitution y los audita igual que los built-in |
+| **VII. Simplicity** | Máximo 3 proyectos; nada de future-proofing; toda capa extra se justifica | YAGNI con dientes: la complejidad hay que documentarla, no solo escribirla |
+| **VIII. Anti-Abstraction** | Usa el framework directamente, sin wrappers; una sola representación por modelo | YAGNI frente al agente que "mejora" el código con abstracciones que nadie pidió |
+| **IX. Integration-First Testing** | Bases de datos reales sobre mocks; contract tests obligatorios antes de implementar | El código funciona en la práctica, no solo en la teoría del test unitario |
+
+Lo notable no es la lista sino el **enforcement**: el template de plan de Spec Kit tiene *gates* de pre-implementación (Simplicity Gate, Anti-Abstraction Gate, Integration-First Gate) que el agente debe pasar antes de codear — o documentar la excepción. Es el mismo patrón del Módulo 1: reglas *advisory* convertidas en checks mecánicos. Y el flujo llega completo como comandos — `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement` — con `/speckit-converge` (desde la 1.0) auditando el codebase contra spec/plan/tasks y convirtiendo el trabajo faltante en tasks nuevas.
+
 ---
 
 ## 2.3 De la spec al plan: GSD (Get Shit Done Redux)
@@ -176,6 +192,21 @@ Por qué archivos y no "memoria de la conversación":
 El detalle notable: **Verify contra los objetivos originales**, no contra "lo que el agente hizo". Esa es la diferencia entre auditar intención (GSD) y auditar output (lo que harías en vibe coding).
 
 GSD trae 33 agentes especializados (`gsd-planner`, `gsd-executor`, `gsd-verifier`...) y 67 slash commands, y es **multi-runtime**: el mismo `.planning/` funciona en Claude Code, Codex, Cursor, Gemini, Augment. El plan no se ata a una herramienta.
+
+### Self-specs: el agente redacta SU spec
+
+El patrón: en lugar de redactar tú la spec desde cero, le pasas el ticket al agente y le pides que redacte *su* spec de la tarea — la que él va a ejecutar — marcando `[NEEDS CLARIFICATION]` donde tu descripción no alcance. Tú no la aceptas tal cual: la revisas con **grilling** (M0, §0.7): cada supuesto, cada no-objetivo, cada AC que parezca obvio.
+
+- **Cuándo sirve:** tareas medias, donde escribir la spec tú cuesta más que corregir la del agente. El draft es barato; tu revisión hostil es el valor.
+- **El riesgo:** *sycophancy* en espejo — la spec auto-escrita hereda los supuestos tuyos que el agente infirió sin auditar, y te la devuelve pulida como si fuera validación. Una spec que solo confirma lo que ibas a hacer igual no te protege de nada.
+- **La regla:** self-spec sí; auto-aprobada, nunca. El agente propone el contrato; el humano firma. Si no encuentras nada que corregir, es señal de que no revisaste con suficiente hostilidad.
+
+### Paralelismo con SDD
+
+Si el contrato está cerrado, el plan se puede paralelizar: specs con **interfaces estables** (ACs + invariantes fijos) se descomponen en phases/tasks **no superpuestas** ejecutables por agentes en paralelo — cada subagente con contexto fresco, como en el M4. Spec Kit lo hace explícito: `/speckit.tasks` marca las tasks independientes `[P]` y agrupa las que pueden correr en paralelo sin pisarse.
+
+- **El requisito:** el contrato (ACs + invariantes) cierra *antes* de abrir el paralelismo. Dos agentes paralelizando sobre una spec con ambigüedades no producen el doble de trabajo: producen el doble de integración que reconciliar a mano.
+- **La frontera:** paraleliza lo que no comparte archivos. Si dos tasks tocan el mismo módulo, son una task o son secuenciales — no importa cuánto contexto fresco tengan.
 
 ---
 
@@ -297,6 +328,8 @@ El directorio `examples/m2-unified-workflow/` contiene el caso de punta a punta.
 
 El punto del ejemplo no es el código en sí (no hay código, son las plantillas aplicadas). El punto es que **el mismo ticket vago, procesado con esta metodología, no tiene ni una sola decisión tomada en silencio**. Cada ambigüedad del ticket es una casilla ✅ verificable en el resultado.
 
+**Ejercicios de completación sobre este caso:** `examples/m2-unified-workflow/EJERCICIOS.md` (fading: completa la spec → el plan → el prompt).
+
 ---
 
 ## 2.8 Cómo adoptarlo sin morir en el intento
@@ -351,7 +384,8 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 
 ## Referencias de este módulo
 
-- **SDD — metodología:** [GitHub Spec Kit (blog)](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/), [repo](https://github.com/github/spec-kit), [paper AIWare 2026](https://arxiv.org/pdf/2602.00180), [SDD Flow comunitario](https://github.com/Ataden/SDD_Flow).
+- **SDD — metodología:** [GitHub Spec Kit (blog)](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/), [repo](https://github.com/github/spec-kit) (1.0, con `/speckit-converge`), [paper AIWare 2026](https://arxiv.org/pdf/2602.00180), [SDD Flow comunitario](https://github.com/Ataden/SDD_Flow).
+- **Análisis del ecosistema SDD:** [Böckeler — Understanding SDD: Kiro, spec-kit, and Tessl](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html) — de dónde salen los tres niveles de rigor de §2.2, con crítica honesta (verbosidad, revisar markdown en vez de código).
 - **GSD:** [overview de GSD Redux](https://deepwiki.com/open-gsd/get-shit-done-redux/1-overview).
 - **Superpowers:** [repo obra/superpowers](https://github.com/obra/superpowers).
 - **Sobre context rot y por qué el filesystem como base de datos:** [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/).

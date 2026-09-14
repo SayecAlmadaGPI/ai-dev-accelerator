@@ -18,7 +18,7 @@
 | 3. | **Reconstruye** el estado de un proyecto en una sesión nueva leyendo solo archivos (progress, state.json, git log). | Quiz M4; §4.7. |
 | 4. | **Planifica** una división two-agent (initializer → coding) para un feature largo. | Quiz M4; §4.4-4.5. |
 
-**Práctica recomendada:** interrumpe una sesión real a propósito y retómala desde el handoff artifact.
+**Práctica recomendada:** lab-07 — interrumpe una sesión real a propósito y retómala desde el handoff artifact (ver [`lab-07-handoff-restore`](../labs/lab-07-handoff-restore/)).
 
 ---
 

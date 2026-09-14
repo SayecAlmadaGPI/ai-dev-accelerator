@@ -16,7 +16,7 @@
 | 3. | **Diagnostica** síntomas de dumb zone en una sesión y **prescribe** la respuesta (clear, compact o handoff). | Quiz M0; §0.4/0.5. |
 | 4. | **Clasifica** el conocimiento involucrado en parametric vs. contextual para predecir cuándo el agente usará información desactualizada. | Quiz M0; §0.4. |
 
-**Práctica recomendada:** ninguno todavía (M0 es prerrequisito); revisa tu última sesión real y diagnostica un fallo con este vocabulario.
+**Práctica recomendada:** lab-06 — diagnostica una sesión real con este vocabulario (ver [`lab-06-diagnostico-sesion`](../labs/lab-06-diagnostico-sesion/)).
 
 ---
 
@@ -420,6 +420,56 @@ Tabla compacta para consulta durante una sesión. Cuando oyes / ves X, piensa Y.
 3. **Mide lo que cuesta.** Vigila cache tokens vs input fresco, turnos por sesión, cuándo compactas. Si no lo mides, lo pagas sin saberlo.
 4. **Elige el modo correcto.** HITL para alto riesgo, AFK solo con spec + verificación, vibe coding solo en verde.
 5. **Cuando dudes del vocabulario, vuelve aquí.** Los módulos 1-10 usan estos términos sin volver a definirlos. Este módulo es tu diccionario de todo el curso.
+
+---
+
+## 0.11 Niveles de adopción del vocabulario
+
+Como en el M1 y el M2, no intentas dominar el glosario completo el primer día. Tres niveles:
+
+### Nivel 1 — Mínimo: el kit de diagnóstico
+Los ~15 términos que necesitas para diagnosticar una sesión: *smart/dumb zone*, *handoff*, *compaction*, *factuality/faithfulness*, *parametric/contextual*, *sycophancy*, *context window*, *turn*, *token*, *subagent*, *primary source*.
+- **Ganancia:** puedes diagnosticar un fallo con nombre y elegir la mitigación correcta, en vez de reabrir y rezar.
+
+### Nivel 2 — Medio: costo y control
+Todo lo del Nivel 1, más el vocabulario de costo (token, *prefix cache*, *cache tokens*, el crecimiento cuadrático por turnos) y el de tools/permisos (*tool call*, *permission mode*, *sandbox*).
+- **Ganancia:** puedes razonar sobre *cuánto* cuesta una sesión y *qué* puede hacer tu agente — no solo sobre qué falló.
+
+### Nivel 3 — Completo: el glosario entero
+Todo el glosario de §0.9, más los términos de criterio: *DX vs. AX*, *grilling*, *design concept*, *progressive disclosure*.
+- **Ganancia:** el vocabulario deja de ser diagnóstico y se vuelve diseño: puedes *elegir* la modalidad (HITL/AFK), la estructura de contexto y el harness antes de que fallen.
+
+> **Consejo de adopción:** el Nivel 1 se alcanza con una lectura atenta de §0.4-0.5 y ya cambia cómo cierras tus sesiones. La trampa común es aprenderse el glosario de memoria sin diagnosticar una sesión real: vocabulario sin evidencia citada es trivia, no habilidad — para eso existe el [lab-06](../labs/lab-06-diagnostico-sesion/).
+
+---
+
+## 0.12 Anti-patrones del vocabulario
+
+Nombrar mal es peor que no nombrar: te da la sensación de haber diagnosticado y la mitigación equivocada. Los cuatro más comunes, cada uno con su síntoma, su daño y su corrección:
+
+- **"Alucinó" para todo.** *Síntoma:* todo fallo del agente se reporta como alucinación. *Por qué daña:* confunde *factuality* (inventó un hecho) con *faithfulness* (se desvió del alcance) — y se corrigen al revés: grounding la una, spec la otra. → Primero clasifica: ¿el contenido es falso, o es verdadero pero no es lo que pediste? Recién entonces elige la mitigación.
+- **"Se puso raro".** *Síntoma:* la sesión "deja de funcionar" y la única respuesta es reabrir. *Por qué daña:* sin nombre no hay prescripción — reabrir te devuelve el mismo contexto saturado y el mismo agente degradado. → Diagnostica: ¿ignora instrucciones que respetaba, repite correcciones, olvida constraints? Eso es *dumb zone*: compacta o haz handoff.
+- **"Memoria mágica".** *Síntoma:* "el agente ya conoce mi codebase" / "ya aprendió cómo trabajo". *Por qué daña:* en inference el modelo no aprende nada; lo que no está en el contexto de esta sesión no existe. La confianza en conocimiento inexistente produce errores que nadie audita. → Todo lo que deba sobrevivir vive en archivos (AGENTS.md, MEMORY.md, specs); lo demás, asúmelo perdido.
+- **"Promptear más fuerte".** *Síntoma:* ante la degradación, repetir la instrucción con más énfasis y más contexto. *Por qué daña:* el problema no es que el modelo no leyó; es que su atención ya se degradó — y más texto satura más. → Si la instrucción ya se diste y se perdió, la palanca es estructural: compactar (~60%), hacer handoff, o mover la regla a un archivo que se recargue.
+
+---
+
+## 0.13 Preguntas frecuentes (y trampas comunes)
+
+**— ¿Puedo saltarme M0 y arrancar por el M2, que es "lo importante"?**
+No. Los módulos 1 a 10 usan estos términos sin volver a definirlos. Saltarte M0 no te ahorra tiempo: te hace leer el resto con palabras sueltas y perder justamente las secciones que las usan con precisión.
+
+**— ¿Por qué mantener los términos en inglés en vez de traducirlos?**
+Porque son el vocabulario operativo del campo: los vas a encontrar en la documentación de las tools, en los issues y en los papers, en inglés. Regla del curso: usa el término en inglés y glosa en español la primera vez que lo introduces en una conversación o documento.
+
+**— ¿Dónde consulto un término que olvidé?**
+En el glosario compacto de §0.9 (una línea por término, con su trampa) y en las cheatsheets del curso. Si ahí no está, vuelve a la sección temática (§0.1-0.7) que lo desarrolla completo.
+
+**— ¿Cuándo está "bien" la degradación de una sesión?**
+Nunca está *bien* — pero es inevitable en sesiones largas, y el curso lo contempla. La gestión correcta es compactar proactivamente al ~60% de contexto, antes de que la degradación sea visible; esperar al autocompact (~83%) ya es estar un rato largo trabajando en dumb zone.
+
+**— ¿Basta con leer el glosario para "saber" el vocabulario?**
+No. El vocabulario se vuelve habilidad cuando diagnosticas una sesión real con citas y evidencia, no con impresiones. Para eso existe el [lab-06](../labs/lab-06-diagnostico-sesion/): "se puso raro" no es diagnóstico.
 
 ---
 
