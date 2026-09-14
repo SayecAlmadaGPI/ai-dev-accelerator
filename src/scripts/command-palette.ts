@@ -22,6 +22,7 @@ let index: SearchEntry[] = [];
 let filtered: SearchEntry[] = [];
 let selectedIdx = 0;
 let base = '/';
+let lastFocused: HTMLElement | null = null;
 
 // --- Fuzzy search simple (subsecuencia + scoring por cercanía) ---
 function fuzzyScore(query: string, text: string): number {
@@ -66,27 +67,38 @@ function search(query: string): SearchEntry[] {
   return scored.map((x) => x.entry);
 }
 
+// Escapa texto/atributos inyectados vía innerHTML (title, group, url).
+function esc(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function render() {
   if (!resultsEl) return;
   filtered = search(input?.value || '');
-  selectedIdx = 0;
   resultsEl.innerHTML = filtered
     .map(
       (e, i) => `
-      <li class="cp-result${i === 0 ? ' cp-result--active' : ''}" data-url="${e.url}" data-idx="${i}">
-        <span class="cp-result__group">${e.group}</span>
-        <span class="cp-result__title">${e.title}</span>
+      <li class="cp-result" role="option" id="cp-opt-${i}" aria-selected="false" data-url="${esc(e.url)}" data-idx="${i}">
+        <span class="cp-result__group">${esc(e.group)}</span>
+        <span class="cp-result__title">${esc(e.title)}</span>
         <span class="cp-result__type">${e.type === 'action' ? 'acción' : 'página'}</span>
       </li>`,
     )
     .join('');
+  setActive(filtered.length > 0 ? 0 : -1);
 }
 
 function navigate(url: string) {
   close();
   // Usar navigate() de Astro si está disponible (view transitions), sino location
-  if (typeof window !== 'undefined' && (window as any).navigate) {
-    (window as any).navigate(url);
+  const w = window as unknown as { navigate?: (url: string) => void };
+  if (w.navigate) {
+    w.navigate(url);
   } else {
     window.location.href = url;
   }
@@ -94,26 +106,45 @@ function navigate(url: string) {
 
 function open() {
   if (!palette) return;
+  lastFocused = document.activeElement as HTMLElement | null;
   palette.classList.add('cp-is-open');
   input?.focus();
   input?.select();
   render();
+  input?.setAttribute('aria-expanded', 'true');
 }
 
 function close() {
   if (!palette) return;
   palette.classList.remove('cp-is-open');
   if (input) input.value = '';
+  input?.setAttribute('aria-expanded', 'false');
+  input?.removeAttribute('aria-activedescendant');
+  // Devolver el foco al elemento que abrió la paleta
+  lastFocused?.focus();
+  lastFocused = null;
+}
+
+// Marca la opción idx como activa: clase visual, aria-selected y
+// aria-activedescendant sobre el combobox (patrón WAI-ARIA).
+function setActive(idx: number) {
+  selectedIdx = Math.max(0, idx);
+  const items = resultsEl?.querySelectorAll('.cp-result');
+  items?.forEach((el, i) => {
+    el.classList.toggle('cp-result--active', i === selectedIdx);
+    el.setAttribute('aria-selected', i === selectedIdx ? 'true' : 'false');
+  });
+  const activeId = items?.[selectedIdx]?.id;
+  if (input) {
+    if (activeId) input.setAttribute('aria-activedescendant', activeId);
+    else input.removeAttribute('aria-activedescendant');
+  }
+  items?.[selectedIdx]?.scrollIntoView({ block: 'nearest' });
 }
 
 function moveSelection(delta: number) {
   if (filtered.length === 0) return;
-  selectedIdx = (selectedIdx + delta + filtered.length) % filtered.length;
-  const items = resultsEl?.querySelectorAll('.cp-result');
-  items?.forEach((el, i) => {
-    el.classList.toggle('cp-result--active', i === selectedIdx);
-  });
-  items?.[selectedIdx]?.scrollIntoView({ block: 'nearest' });
+  setActive((selectedIdx + delta + filtered.length) % filtered.length);
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -154,10 +185,10 @@ function buildPalette() {
         <svg class="cp__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
-        <input class="cp__input" type="text" placeholder="Buscar páginas, módulos, acciones…" autocomplete="off" spellcheck="false" />
+        <input class="cp__input" type="text" role="combobox" id="cp-input" placeholder="Buscar páginas, módulos, acciones…" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="cp-listbox" aria-autocomplete="list" />
         <kbd class="cp__esc">Esc</kbd>
       </div>
-      <ul class="cp__results"></ul>
+      <ul class="cp__results" id="cp-listbox" role="listbox" aria-label="Resultados"></ul>
       <div class="cp__foot">
         <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
         <span><kbd>↵</kbd> abrir</span>
@@ -173,6 +204,20 @@ function buildPalette() {
   input?.addEventListener('input', render);
   input?.addEventListener('keydown', handleKeydown);
 
+  // Focus trap: el input es el único elemento enfocable del modal, así que
+  // Tab/Shift+Tab vuelven a él y Escape cierra desde cualquier punto.
+  palette.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && e.target !== input) {
+      e.preventDefault();
+      close();
+      return;
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      input?.focus();
+    }
+  });
+
   palette.querySelector('[data-cp-close]')?.addEventListener('click', close);
   resultsEl?.addEventListener('click', (e) => {
     const target = (e.target as HTMLElement).closest('.cp-result');
@@ -185,12 +230,7 @@ function buildPalette() {
     const target = (e.target as HTMLElement).closest('.cp-result');
     if (target) {
       const idx = Number(target.getAttribute('data-idx'));
-      if (idx !== selectedIdx) {
-        selectedIdx = idx;
-        resultsEl.querySelectorAll('.cp-result').forEach((el, i) => {
-          el.classList.toggle('cp-result--active', i === selectedIdx);
-        });
-      }
+      if (idx !== selectedIdx) setActive(idx);
     }
   });
 }

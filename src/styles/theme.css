@@ -5,7 +5,7 @@
    `starlight.base|core|components` de Starlight en la cascada.
    Las fuentes se cargan vía `customCss` en astro.config.mjs
    (@fontsource-variable/inter, @fontsource-variable/jetbrains-mono);
-   acá solo referenciamos los family names.
+   aquí solo referenciamos los family names.
    ========================================================================== */
 
 /* ---------- Tokens: dark (default) ---------- */
@@ -368,6 +368,10 @@ aside[data-aside-type] {
   overflow: hidden;
   clip: rect(0 0 0 0);
   pointer-events: none;
+}
+.aida-quiz__opt:focus-within {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
 }
 .aida-quiz__opt-mark {
   flex-shrink: 0;
@@ -1298,4 +1302,33 @@ aside[data-aside-type] {
   border-radius: 5px;
   background: var(--sl-color-bg-inline-code);
   color: var(--sl-color-text-accent);
+}
+
+/* =============================================================================
+   Accesibilidad — prefers-reduced-motion
+   Usuarios con "reduce motion" activado: sin transiciones ni animaciones
+   decorativas (toast, sidebar 0.3s, arcos SVG, hover transforms, reading-bar).
+   Los transforms que codifican estado (toast oculto, drawer de notas) quedan
+   intactos: solo se elimina la parte animada. Scroll instantáneo.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .aida-toast,
+  .aida-notes-drawer,
+  .aida-readbar__fill,
+  .main-frame,
+  .main-pane,
+  .sidebar-pane {
+    transition: none !important;
+  }
 }
