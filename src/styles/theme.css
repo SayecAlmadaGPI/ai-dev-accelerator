@@ -1234,3 +1234,68 @@ aside[data-aside-type] {
   border-color: var(--sl-color-accent);
   background: color-mix(in srgb, var(--sl-color-accent) 8%, transparent);
 }
+
+/* =============================================================================
+   F2 — Quiz v2: repaso espaciado, chip de dominio y correctivos.
+   .aida-quiz__review* → details colapsable de repaso ANTES del quiz (borde
+   ámbar punteado). .aida-quiz__mastery → chip verde-ok de dominio.
+   .aida-quiz__remedy → refs a releer, monospace pequeño. Sin @layer.
+   ========================================================================== */
+.aida-quiz__review {
+  margin-bottom: 1.2rem;
+  border: 1px dashed color-mix(in srgb, var(--sl-color-accent) 55%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
+}
+.aida-quiz__review summary {
+  padding: 0.65rem 0.9rem;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  color: var(--sl-color-text-accent);
+  cursor: pointer;
+  user-select: none;
+}
+.aida-quiz__review[open] summary {
+  border-bottom: 1px solid color-mix(in srgb, var(--sl-color-accent) 25%, transparent);
+}
+.aida-quiz__review-when,
+.aida-quiz__review-count {
+  margin: 0.6rem 0.9rem 0;
+  font-size: var(--sl-text-sm);
+  opacity: 0.8;
+}
+.aida-quiz__review-body {
+  padding: 0.9rem 0.9rem 0;
+}
+.aida-quiz__review-foot {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem 0.9rem;
+}
+.aida-quiz__review-line {
+  margin: 0.25rem 0 0;
+  font-size: var(--sl-text-sm);
+}
+.aida-quiz__mastery {
+  display: inline-block;
+  margin-top: 0.45rem;
+  padding: 0.15rem 0.65rem;
+  border: 1px solid #22c55e;
+  border-radius: 999px;
+  background: color-mix(in srgb, #22c55e 12%, transparent);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.aida-quiz__remedy {
+  margin: 0.5rem 0 0;
+  font-size: var(--sl-text-sm);
+  opacity: 0.9;
+}
+.aida-quiz__remedy code {
+  font-family: var(--sl-font-mono);
+  font-size: 0.82em;
+  padding: 0.08rem 0.35rem;
+  border-radius: 5px;
+  background: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-text-accent);
+}
