@@ -1,0 +1,15 @@
+<!--
+  pyproject.toml — instalable con `pip install -e .` desde este directorio.
+  Tras copiar la plantilla: cambia `name` y el mismo nombre en server.py
+  (FastMCP("<...>")). La dependencia `mcp` (Python SDK oficial) trae pydantic.
+-->
+
+[project]
+name = "mcp-server-template"
+version = "0.1.0"
+description = "Esqueleto de servidor MCP (FastMCP, SDK oficial de Python). Ver M5 §5.5."
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0",
+]
+

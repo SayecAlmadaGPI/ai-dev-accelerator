@@ -10,11 +10,13 @@
   3. Múltiples equipos/tools lo quieren (el estándar vale por reutilización).
 
   Cómo usar este esqueleto:
-  1. Copia este directorio y renómbralo.
-  2. Reemplaza <work-tracker> por el nombre de tu integración.
+  1. Copia este directorio completo (README, `server.py`, `pyproject.toml`)
+     y renómbralo.
+  2. Reemplaza `<work-tracker>` por el nombre de tu integración (en
+     `server.py` y en `pyproject.toml`).
   3. Decide primitivas con templates/mcp-primitives-cheatsheet.md.
-  4. Implementa, prueba con un cliente real (Claude Code) antes de declararlo listo.
-
+  4. Instala con `pip install -e .`, implementa, y prueba con un cliente
+     real (Claude Code) antes de declararlo listo.
   Stack: Python + MCP Python SDK (mcp). Es el más maduro y documentado.
 -->
 
@@ -42,69 +44,33 @@
 ```bash
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install "mcp[cli]"
+pip install -e .            # instala deps (mcp) desde pyproject.toml
 ```
 
-## `server.py` — esqueleto
+`pyproject.toml` declara la dependencia `mcp` (SDK oficial de Python),
+que a su vez trae `pydantic`. Ejecuta el server con:
 
-```python
-"""
-MCP server: <work-tracker>
-Ver M5 §5.5 y templates/mcp-primitives-cheatsheet.md para la decisión de
-primitivas.
-"""
-from mcp.server.fastmcp import FastMCP
-from pydantic import BaseModel, Field
-
-mcp = FastMCP("<work-tracker>")
-
-# --- Tool: acción con side effect ---
-@mcp.tool()
-def get_deployment_status(service: str) -> dict:
-    """Devuelve el estado del último deploy del servicio indicado.
-
-    Args:
-        service: nombre del servicio, ej "billing-api".
-    """
-    # TODO: reemplazar por la llamada real a tu sistema de deploys.
-    return {"service": service, "status": "healthy", "version": "1.4.2"}
-
-# --- Tool: escritura sensible (idempotente + gate humano en el host) ---
-@mcp.tool()
-def redeploy(service: str, idempotency_key: str) -> dict:
-    """Re-lanza el deploy de un servicio. Idempotente por idempotency_key.
-
-    Requiere confirmación humana en el host antes de ejecutarse.
-    Args:
-        service: servicio a re-deployar.
-        idempotency_key: clave para de-duplicar reintentos (UUID por intento).
-    """
-    # TODO: llamar a tu pipeline. Usar idempotency_key para de-duplicar.
-    return {"service": service, "redeployed": True, "key": idempotency_key}
-
-# --- Resource: dato referenciable ---
-@mcp.resource("deployments://latest/{service}")
-def latest_deployment(service: str) -> str:
-    """Expone el estado del último deploy como Resource (dato, no acción)."""
-    # TODO: devolver el payload crudo referenciable.
-    return f"latest deployment of {service}: healthy@1.4.2"
-
-# --- Prompt: flujo que el usuario dispara ---
-@mcp.prompt()
-def triage_deploy_failure(service: str) -> str:
-    """Flujo de diagnóstico cuando un deploy de `service` falló."""
-    return f"""
-Estás diagnosticando un deploy fallido de {service}.
-Pasos:
-1. Lee deployments://latest/{service} para el estado actual.
-2. Usa get_deployment_status para el detalle.
-3. Propón un fix con base en el error; NO redeploy sin confirmación.
-"""
-
-if __name__ == "__main__":
-    # stdio para uso local. Para remoto, cambia a HTTP transport del SDK.
-    mcp.run(transport="stdio")
+```bash
+python server.py
 ```
+
+## `server.py`
+
+El esqueleto es código real en este directorio: [`server.py`](server.py).
+No lo dupliques aquí; ábrelo y edítalo directamente. Contiene, con el
+patrón de cada primitiva:
+
+- **Tool de lectura con side effect** — `get_deployment_status`.
+- **Tool de escritura sensible** — `redeploy` (idempotente por
+  `idempotency_key`, con confirmación humana en el host).
+- **Resource** — `deployments://latest/{service}` (dato, no acción).
+- **Prompt** — `/triage-deploy-failure` (flujo que el usuario dispara).
+
+Cada función es un TODO marcado con la llamada real a tu integración;
+las descripciones (docstrings) son lo que el modelo lee para decidir
+cuándo invocar: escríbelas para el modelo, no para ti. Corre con
+`python server.py` (stdio para uso local; para remoto, cambia al
+transporte HTTP del SDK).
 
 ## Conectar a Claude Code (ejemplo de config)
 
@@ -124,8 +90,10 @@ Agrega a `.claude/settings.json` (o el mecanismo equivalente de tu tool):
 
 ## Seguridad (no opcional)
 
-- **Credenciales:** el server NO retiene tokens. Delega credenciales al
-  host (env vars inyectadas, OAuth vía el host). Ver M5 §5.2.6.
+- **Credenciales:** las credenciales de los servicios *upstream* viven en
+  el server (env vars), pero nunca se exponen al modelo ni se devuelven
+  en tool results. Las credenciales del usuario final las maneja el host
+  (OAuth 2.1 en transportes remotos), con scopes reducidos. Ver M5 §5.2.6.
 - **Scopes mínimos:** si el server toca prod, el token debe tener el
   alcance más chico que permita el flujo. No "admin" si basta "read+deploy".
 - **Roots:** acota qué servicios/rutas puede tocar el server.
@@ -141,7 +109,7 @@ Agrega a `.claude/settings.json` (o el mecanismo equivalente de tu tool):
 - [ ] Schemas con nombres verbo+objeto, descripciones, enums, unidades.
 - [ ] Escrituras idempotentes o marcadas explícitamente como no idempotentes.
 - [ ] Errores estructurados (JSON), no strings libres.
-- [ ] Sin credenciales retenidas; scopes mínimos; roots acotados.
+- [ ] Credenciales upstream solo en el server, nunca en tool results; usuario final vía host (OAuth); scopes mínimos; roots acotados.
 - [ ] Probado con un cliente real (Claude Code): el modelo invoca bien.
 - [ ] Documentado en el system of record del harness (qué expone, permisos, qué NO hace).
 
