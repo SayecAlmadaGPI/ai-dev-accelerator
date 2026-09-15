@@ -472,6 +472,7 @@ APÉNDICES ── Kit de Supervivencia
 8. `init.sh` — script de inicialización de sesión.
 9. `.claude/skills/SKILL.md` — plantilla de skill.
 10. `.claude/rules/RULE.md` — plantilla de rule con frontmatter.
+11. `sdd-tdd-vanilla.md` — el flujo SDD + TDD sin framework (reglas de AGENTS.md + prompts del ciclo RED/GREEN/REFACTOR; Nivel 1.5 de adopción).
 
 ### B. Cheatsheets de Decisión
 - "¿Modo AFK o human-in-the-loop?"
@@ -617,6 +618,8 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [Scrimba — Claude Code vs Codex vs Cursor](https://scrimba.com/articles/claude-code-vs-codex-vs-cursor/)
 - [Agent Harness Comparison — DEV Community](https://dev.to/arihantdeva/agent-harness-comparison-claude-code-aider-cursor-agent-codex-cli-33n5)
 - [Claude Code vs Cursor vs Aider — DEV Community](https://dev.to/sameer_saleem/claude-code-vs-cursor-vs-aider-the-2026-battle-for-your-terminal-and-ide-3cb4)
+- **Configuradores de ecosistema:**
+  - [Gentle-AI — Gentleman Programming](https://github.com/Gentleman-Programming/gentle-ai) · [docs en español](https://gentle-ai-wiki.gentlemanprogramming.com/es/) — configurador MIT (16 agentes): Engram (memoria), SDD de 10 fases, **Strict TDD Mode** (detección de framework de testing + verificación bloqueante), permisos con lista de negación. La versión instalada del flujo SDD + TDD vanilla (M2 §2.8 Nivel 1.5).
 - **Herramientas open-source multi-proveedor (BYO modelo):**
   - [OpenCode — opencode.ai](https://opencode.ai) · [repo anomalyco/opencode](https://github.com/anomalyco/opencode) · [docs](https://opencode.ai/docs) — agente open-source multi-interfaz (terminal + IDE + desktop), 75+ proveedores vía Models.dev, MCP nativo, lee `AGENTS.md`.
   - [Pi — pi.dev](https://pi.dev) · [repo earendil-works/pi](https://github.com/earendil-works/pi) — chasis mínimo extensible (MIT); MCP/subagents/permisos se añaden como extensiones TS. Caso límite del M1.
@@ -644,6 +647,24 @@ entrada lista qué se modificó y en qué archivo, para auditar la evolución
 del material. El sitio se regenera por copy-on-build desde la raíz del
 repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados aquí
 se propaga al sitio sin tocar `src/content/docs/`.
+
+
+### 2026-09-14 (b) — Nivel 1.5: SDD + TDD vanilla (sin framework) + Gentle-AI
+
+**Tesis del cambio:** entre el Nivel 1 (solo spec) y el Nivel 2 (+GSD) falta
+el escalón para quien quiere TDD disciplinado SIN instalar nada: la disciplina
+vive en las reglas de AGENTS.md y en prompts que le piden al modelo configurar
+y confirmar la metodología. Se añade el kit copy-paste (`templates/sdd-tdd-
+vanilla.md`), el sub-bloque en M2 §2.8, y Gentle-AI (Gentleman Programming,
+MIT) como la versión instalada del mismo flujo (Strict TDD Mode con detección
+de framework de testing y verificación bloqueante en sdd-verify).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `templates/sdd-tdd-vanilla.md` | nuevo | Kit: reglas AGENTS.md + prompt de arranque + prompt por tarea (RED/GREEN/REFACTOR) + prompt de cierre DONE/VERIFIED + tabla cuándo vanilla vs framework |
+| `modules/02-spec-plan-execute.md` | §2.8 | Nivel 1.5 con la trampa advisory y Gentle-AI como versión instalada; referencias nuevas |
+| `src/data/quizzes.ts` | M2 | +2 preguntas (flujo vanilla; /sdd-init y detección de capacidades) |
+| `BLUEPRINT.md` | Apéndice A + refs | Plantilla 11 y links de Gentle-AI |
 
 ### 2026-09-14 — F2 aprendizaje constructivo + F3 sustancia de práctica
 

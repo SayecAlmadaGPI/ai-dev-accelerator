@@ -478,9 +478,36 @@ export const quizzes: Quiz[] = [
         explain: 'Cada dato tiene su portador: la spec es la verdad sobre intención, state.json sobre progreso y el código sobre implementación. La conversación es efímera y jamás es fuente de verdad de nada.',
         ref: '§2.6',
         objective: 4,
-      }
+      },
+          {
+            q: 'Quieres SDD + TDD SIN instalar GSD, Superpowers ni ningún framework. ¿Dónde vive la disciplina?',
+            options: [
+              'En el propio modelo, que ya conoce la metodología de fábrica.',
+              'En reglas de AGENTS.md + un prompt por tarea que fuerza RED → GREEN → REFACTOR y cierra con DONE/VERIFIED.',
+              'En la spec misma: los ACs fuerzan el TDD automáticamente.',
+              'Instalando los hooks del framework que quieras imitar.'
+            ],
+            answer: 1,
+            explain: 'El flujo vanilla (Nivel 1.5) es contractual, no mágico: las reglas viven en AGENTS.md (siempre en contexto) y cada tarea se arranca con un prompt que exige mostrar el test fallando antes de codear. Es advisory: si salta el RED, tu gate (pre-commit) es el que lo bloquea.',
+            ref: '§2.8',
+            objective: 2
+          },
+          {
+            q: 'Corres /sdd-init de Gentle-AI en un proyecto con Vitest. ¿Qué hace respecto a Strict TDD?',
+            options: [
+              'Instala el framework de testing que falte en el proyecto.',
+              'Activa Strict TDD siempre, sin preguntar, y escribe los tests por vos.',
+              'Detecta el framework de testing del proyecto y te pregunta si activar Strict TDD Mode.',
+              'Nada: Strict TDD se configura a mano en AGENTS.md.'
+            ],
+            answer: 2,
+            explain: 'sdd-init escanea package.json/go.mod/pyproject/etc. buscando framework de testing; si encuentra uno, pregunta "¿Querés activar Strict TDD Mode?" y guarda tdd + test_command en la config. sdd-verify luego bloquea el archive si un requisito quedó sin test.',
+            ref: '§2.8',
+            objective: 2
+          }
     ],
   },
+
   {
     slug: 'modules/03-workbench',
     title: 'Módulo 3 — Diseño del Entorno de Trabajo',

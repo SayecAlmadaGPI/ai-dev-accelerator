@@ -334,13 +334,21 @@ El punto del ejemplo no es el código en sí (no hay código, son las plantillas
 
 ## 2.8 Cómo adoptarlo sin morir en el intento
 
-No intentes montar los tres frameworks el primer día. Hay tres niveles de adopción, y cada uno ya te hace mejor que el anterior:
+No intentes montar los tres frameworks el primer día. Hay niveles de adopción (1, 1.5, 2 y 3), y cada uno ya te hace mejor que el anterior:
 
 ### Nivel 1 — Mínimo viable
 - Escribe `spec.md` antes de pedirle código al agente.
 - Pídele que ejecute contra los AC, no contra su imaginación.
 - Resuelve los `[NEEDS CLARIFICATION]` antes de codear.
 - **Costo:** 15-20 minutos por feature. **Ganancia:** eliminas gran parte de los errores más comunes (hasta un 50% según el estudio citado en §2.2).
+
+### Nivel 1.5 — SDD + TDD vanilla (sin framework)
+- El Nivel 1 cubre el QUÉ (la spec). Este nivel añade el CÓMO disciplinado (TDD) **sin instalar nada**: la disciplina vive en tu `AGENTS.md` y en el prompt de arranque — literalmente le pides al modelo que configure y confirme la metodología.
+- El ciclo por tarea: **RED** (test que falla, mostrado) → **GREEN** (código mínimo) → **REFACTOR** (sin cambiar comportamiento) → **DONE/VERIFIED** con evidencia. Es el mismo TDD de Superpowers, aplicado por prompt en vez de por skill.
+- Kit copy-paste completo: [`templates/sdd-tdd-vanilla.md`](../templates/sdd-tdd-vanilla.md) — reglas para `AGENTS.md`, prompt de arranque, prompt por tarea y prompt de cierre.
+- **Cuándo:** tareas que caben en una sesión, repos donde no puedes instalar nada, o cuando quieres entender la disciplina por dentro antes de instalarla.
+- **La trampa:** es advisory — si el agente salta el RED, nada lo bloquea mecánicamente. El gate que lo vuelve determinístico es el pre-commit del Módulo 6… o la versión instalada: **Gentle-AI** (Gentleman Programming, MIT, 16 agentes) hace exactamente este flujo con verificación bloqueante — su `/sdd-init` detecta el framework de testing del proyecto (vitest, pytest, go test…) y ofrece activar **Strict TDD Mode**; `sdd-apply` recibe las instrucciones del ciclo como obligatorias y `sdd-verify` impide archivar si un requisito quedó sin test.
+- **Ganancia:** el código sale con test primero por contrato, y aprendes el flujo que los frameworks empaquetan.
 
 ### Nivel 2 — Medio (sumar GSD)
 - Añade `.planning/roadmap.md` y `state.json` para features que duren más de una sesión.
@@ -388,6 +396,8 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 - **Análisis del ecosistema SDD:** [Böckeler — Understanding SDD: Kiro, spec-kit, and Tessl](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html) — de dónde salen los tres niveles de rigor de §2.2, con crítica honesta (verbosidad, revisar markdown en vez de código).
 - **GSD:** [overview de GSD Redux](https://deepwiki.com/open-gsd/get-shit-done-redux/1-overview).
 - **Superpowers:** [repo obra/superpowers](https://github.com/obra/superpowers).
+- **SDD + TDD sin framework (Nivel 1.5):** plantilla `templates/sdd-tdd-vanilla.md` — reglas de AGENTS.md + prompts del ciclo.
+- **Gentle-AI (Gentleman Programming) — el flujo instalado:** [repo](https://github.com/Gentleman-Programming/gentle-ai) · [documentación en español](https://gentle-ai-wiki.gentlemanprogramming.com/es/) — configurador MIT (16 agentes): Engram (memoria), SDD de 10 fases, **Strict TDD Mode** con detección de capacidades y verificación bloqueante, permisos con lista de negación (`.env*`, llaves, secrets).
 - **Sobre context rot y por qué el filesystem como base de datos:** [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/).
 - **Sobre specs refinadas que reducen errores ~50%:** paper AIWare 2026 (link arriba).
 
