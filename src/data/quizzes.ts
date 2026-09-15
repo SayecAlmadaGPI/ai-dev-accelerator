@@ -504,6 +504,19 @@ export const quizzes: Quiz[] = [
             explain: 'sdd-init escanea package.json/go.mod/pyproject/etc. buscando framework de testing; si encuentra uno, pregunta "¿Querés activar Strict TDD Mode?" y guarda tdd + test_command en la config. sdd-verify luego bloquea el archive si un requisito quedó sin test.',
             ref: '§2.8',
             objective: 2
+          },
+          {
+            q: 'Feature grande con requisitos difusos: nadie sabe todavía qué construir exactamente. Según M2, ¿qué orquestador encaja mejor y por qué?',
+            options: [
+              'GSD: su .planning/ garantiza continuidad entre sesiones aunque los requisitos estén difusos.',
+              'BMAD-METHOD: su fase de agentic planning (analista, PM, arquitecto) produce el PRD y la arquitectura antes de codear.',
+              'SDD + TDD vanilla: el RED/GREEN/REFACTOR resuelve los requisitos difusos al vuelo.',
+              'Spec Kit con /speckit-converge para cerrar sin spec previa.'
+            ],
+            answer: 1,
+            explain: 'GSD modela el estado; BMAD modela el equipo (analista/PM/arquitecto) justo para convertir requisitos difusos en PRD + arquitectura. Con requisitos difusos la spec no puede cerrarse: primero la fase de agentic planning. Y luego el pipeline del curso se aplica encima igual.',
+            ref: '§2.3',
+            objective: 2
           }
     ],
   },
@@ -813,6 +826,19 @@ export const quizzes: Quiz[] = [
         explain: 'La regla es un commit por unidad coherente, cada uno con tests verdes: F1 lo es, F2 no. El mensaje de commit es parte del system of record (dice qué hizo, qué verificó y qué no), y el bloqueante de F2 va al handoff — es lo más valioso para quien retome.',
         ref: '§4.6',
         objective: 1,
+      },
+      {
+        q: 'Quieres delegar una tarea a un agente cloud AFK (Jules, Codex Cloud, Devin). ¿Qué condición hace que el brief sea seguro?',
+        options: [
+          'Que el agente tenga acceso a tus secretos para poder instalar dependencias.',
+          'Un brief autosuficiente por contrato: spec con ACs, alcance, rollback y comandos de verificación.',
+          'Que la tarea sea ambigua pero reversible: el agente decide sobre la marcha.',
+          'Ninguna: los agentes cloud son seguros por defecto.'
+        ],
+        answer: 1,
+        explain: 'El extremo AFK del M4: el brief debe ser autosuficiente por contrato (spec + ACs + alcance + rollback). Si el brief necesita una conversación, no es AFK. Y el PR que vuelve pasa por tu revisión humana (gate del M6), con los accesos del sandbox vigiliados por M10.',
+        ref: '§4.5.4',
+        objective: 2
       }
     ],
   },

@@ -300,6 +300,25 @@ puntos de control HITL**:
 > trabaja 40 minutos, se desvía en el minuto 5, y vuelves a un diff que no
 > es lo que pediste. Los puntos de control son baratos; el rework no.
 
+### 4.5.4 Agentes cloud AFK: Jules, Codex Cloud y Devin
+
+Existe un extremo más a la derecha del espectro: los **agentes cloud
+asíncronos**. No corren en tu máquina — delegas la tarea a una VM/sandbox
+remota, trabajan solos y vuelven con un PR (Jules de Google, Codex Cloud de
+OpenAI, Devin de Cognition, los agents nativos de GitHub Copilot).
+
+- **Qué cambia:** la sesión ya no es tuya — el brief debe ser **autosuficiente
+  por contrato**: spec con ACs, alcance, rollback y comandos de verificación
+  (M2). Si el brief necesita una conversación, no es AFK: es tu próxima sesión
+  local.
+- **Qué aporta:** paralelizar tareas acotadas y bien especificadas mientras
+  haces otra cosa; el PR vuelve con el diff para tu revisión humana (el gate
+  del M6 no se negocia).
+- **Qué vigilar:** accesos y secretos del sandbox (M10 §10.5), costo por tarea
+  (M9) y que el repo de destino tenga los sensores del M6 antes de delegar.
+- El mapa completo de la categoría (y cuándo cada producto encaja) está en
+  [`cheatsheets/mapa-del-ecosistema.md`](../cheatsheets/mapa-del-ecosistema.md) §2.
+
 ---
 
 ## 4.6 Commit discipline: cada sesión termina en verde
@@ -523,6 +542,8 @@ racionalmente querrías retomar" es la correcta.
 ---
 
 ## 4.12 Referencias
+
+- **Agentes cloud AFK:** [Jules](https://jules.google) · [Codex Cloud](https://openai.com/codex/) · [Devin](https://devin.ai) — el mapa completo en [`cheatsheets/mapa-del-ecosistema.md`](../cheatsheets/mapa-del-ecosistema.md) §2.
 
 - **Learn Harness Engineering — WalkingLabs**
   (https://walkinglabs.github.io/learn-harness-engineering/en/) — módulos

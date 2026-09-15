@@ -1,7 +1,7 @@
 # Cheatsheets de decisión y árboles
 
 Quick-reference para decisiones frecuentes con agentes de IA. El apéndice
-reúne en total 13 ficheros: los 9 de este directorio (6 cheatsheets de
+reúne en total 14 ficheros (10 en esta carpeta + 4 de llenado en templates/): los 9 de este directorio (6 cheatsheets de
 decisión + 3 árboles de decisión, indexados en las tablas de abajo) y 4
 cheatsheets que viven en `templates/` — `model-comparison-cheatsheet`,
 `mcp-primitives-cheatsheet`, `failure-classes-cheatsheet` y

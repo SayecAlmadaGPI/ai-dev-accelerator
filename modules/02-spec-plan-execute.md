@@ -208,6 +208,19 @@ Si el contrato está cerrado, el plan se puede paralelizar: specs con **interfac
 - **El requisito:** el contrato (ACs + invariantes) cierra *antes* de abrir el paralelismo. Dos agentes paralelizando sobre una spec con ambigüedades no producen el doble de trabajo: producen el doble de integración que reconciliar a mano.
 - **La frontera:** paraleliza lo que no comparte archivos. Si dos tasks tocan el mismo módulo, son una task o son secuenciales — no importa cuánto contexto fresco tengan.
 
+### Alternativa de orquestación: BMAD-METHOD
+
+GSD orquesta el **estado** (`.planning/`); **BMAD-METHOD** orquesta el **equipo**: modela un grupo ágil virtual de agentes especializados (analista → PM → arquitecto → scrum master → dev → QA) en dos fases — *agentic planning* (los agentes de producto construyen PRD y arquitectura contigo) y *context-engineered development* (el scrum master fragmenta historias; dev y QA implementan con revisión adversarial).
+
+| Criterio | GSD | BMAD-METHOD |
+|---|---|---|
+| Lo que modela | El **estado** del trabajo en archivos | Un **equipo** de roles con handoffs entre agentes |
+| Punto fuerte | Continuidad entre sesiones, anti-context-rot | Requisitos difusos → PRD y arquitectura antes de codear; QA adversarial nativo |
+| Costo por feature | Bajo (archivos + comandos) | Mayor ceremonia (roles y artefactos por fase) |
+| Encaja cuando | Tú solo, features medianos, el contexto rot | Features grandes con requisitos difusos, o equipos que quieren el proceso ágil completo con IA |
+
+No son excluyentes: BMAD produce el PRD y la arquitectura que *son* tu spec — luego el pipeline de este módulo (tareas atómicas + TDD + DONE/VERIFIED) se aplica igual encima.
+
 ---
 
 ## 2.4 De la spec al código: Superpowers
@@ -397,6 +410,7 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 - **GSD:** [overview de GSD Redux](https://deepwiki.com/open-gsd/get-shit-done-redux/1-overview).
 - **Superpowers:** [repo obra/superpowers](https://github.com/obra/superpowers).
 - **SDD + TDD sin framework (Nivel 1.5):** plantilla `templates/sdd-tdd-vanilla.md` — reglas de AGENTS.md + prompts del ciclo.
+- **BMAD-METHOD — orquestación por equipo ágil virtual:** [repo](https://github.com/bmad-code-org/BMAD-METHOD) · [docs](https://docs.bmad-method.org/) — analista, PM, arquitecto, scrum master, dev y QA con revisión adversarial (M2 §2.3).
 - **Gentle-AI (Gentleman Programming) — el flujo instalado:** [repo](https://github.com/Gentleman-Programming/gentle-ai) · [documentación en español](https://gentle-ai-wiki.gentlemanprogramming.com/es/) — configurador MIT (16 agentes): Engram (memoria), SDD de 10 fases, **Strict TDD Mode** con detección de capacidades y verificación bloqueante, permisos con lista de negación (`.env*`, llaves, secrets).
 - **Sobre context rot y por qué el filesystem como base de datos:** [Anthropic — Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/en/).
 - **Sobre specs refinadas que reducen errores ~50%:** paper AIWare 2026 (link arriba).

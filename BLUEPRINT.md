@@ -480,6 +480,7 @@ APÉNDICES ── Kit de Supervivencia
 - "¿RAG o long-context?"
 - "¿Claude Code, Cursor, Codex o Aider?"
 - "¿Cuándo cambiar de modelo?"
+- "¿Qué herramienta del ecosistema tapa el hueco de mi pipeline?" — **mapa por función** (orquestadores, agentes cloud AFK, IDEs, memoria, revisión, specs versionadas)
 - "¿Benchmark importa para mi caso de uso?"
 
 ### C. Decision Trees
@@ -648,6 +649,23 @@ del material. El sitio se regenera por copy-on-build desde la raíz del
 repo (ver `docs/HANDOFF.md` §1), así que editar los archivos listados aquí
 se propaga al sitio sin tocar `src/content/docs/`.
 
+
+### 2026-09-14 (c) — El mapa del ecosistema: BMAD, agentes cloud AFK y más
+
+**Tesis del cambio:** el curso mencionaba herramientas sueltas; ahora hay un
+**mapa del ecosistema por función** (cheatsheet anti-envejecimiento) que
+organiza orquestadores, agentes cloud, IDEs, memoria y revisión según el
+hueco del pipeline que tapan. Además entran BMAD-METHOD (alternativa de
+orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
+(Jules/Codex Cloud/Devin, M4 §4.5.4 — el extremo derecho del espectro HITL↔AFK).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `cheatsheets/mapa-del-ecosistema.md` | nuevo | El ecosistema 2026 por función (6 categorías), con criterios de decisión y fecha de verificación |
+| `modules/02-spec-plan-execute.md` | §2.3 | Alternativa de orquestación: BMAD-METHOD (tabla vs GSD) + refs |
+| `modules/04-handoffs.md` | §4.5.4 | Agentes cloud AFK: el brief autosuficiente por contrato + refs |
+| `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
+| `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
 ### 2026-09-14 (b) — Nivel 1.5: SDD + TDD vanilla (sin framework) + Gentle-AI
 
