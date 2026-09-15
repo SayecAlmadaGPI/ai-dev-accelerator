@@ -403,6 +403,19 @@ const widgets = widgetsBySlug[slug] ?? [];
         backdrop.className = 'rp-practice__backdrop';
         backdrop.addEventListener('click', () => (d.open = false));
         document.body.appendChild(backdrop);
+        // botón de cierre visible en la esquina del modal
+        if (!d.querySelector('.rp-practice__close')) {
+          const close = document.createElement('button');
+          close.type = 'button';
+          close.className = 'rp-practice__close';
+          close.setAttribute('aria-label', 'Cerrar práctica');
+          close.innerText = '✕';
+          close.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            d.open = false;
+          });
+          d.appendChild(close);
+        }
       } else {
         closeExpanded(d);
       }

@@ -1344,15 +1344,46 @@ aside[data-aside-type] {
   max-height: 88vh;
   overflow: auto;
   z-index: 1000;
+  background: var(--sl-color-bg-sidebar);
+  border: 1px solid var(--sl-color-accent);
+  border-radius: 12px;
+  box-shadow: var(--sl-shadow-lg), 0 0 0 6px rgb(0 0 0 / 0.08);
+  padding: 1rem 1.25rem;
+}
+.rp-practice__item.rp-practice--expanded > summary {
+  margin-bottom: 0.75rem;
+  padding-right: 2.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rp-practice__close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--sl-color-text);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.rp-practice__close:hover {
+  background: var(--sl-color-bg-inline-code);
+}
+.rp-practice__item.rp-practice--expanded .rp-practice__body {
   background: var(--sl-color-bg);
   border: 1px solid var(--sl-color-hairline);
-  border-radius: 10px;
-  box-shadow: var(--sl-shadow-lg);
-  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  padding: 0.75rem;
 }
 .rp-practice__backdrop {
   position: fixed;
   inset: 0;
   z-index: 999;
-  background: rgb(0 0 0 / 0.55);
+  background: rgb(0 0 0 / 0.5);
+}
+:root[data-theme='light'] .rp-practice__backdrop {
+  background: rgb(64 44 18 / 0.3);
 }
