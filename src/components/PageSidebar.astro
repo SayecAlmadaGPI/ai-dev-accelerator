@@ -98,8 +98,9 @@ const widgets = widgetsBySlug[slug] ?? [];
           {widgets.length > 0 && (
             <div class="rp-card rp-practice">
               <p class="rp-card__title">Práctica en línea</p>
+              <p class="rp-practice__hint">Haz clic en un ejercicio para abrirlo en grande.</p>
               {widgets.map((w) => (
-                <details class="rp-practice__item" open={widgets.length === 1}>
+                <details class="rp-practice__item">
                   <summary class="rp-practice__summary">{w.label}</summary>
                   <div class="rp-practice__body">
                     {w.kind === 'terminal' ? (
@@ -377,3 +378,43 @@ const widgets = widgetsBySlug[slug] ?? [];
     }
   }
 </style>
+
+<script>
+  // Práctica embebida: al abrir un ejercicio, se expande a un modal centrado
+  // (el panel derecho es demasiado angosto para un terminal cómodo).
+  // Delegación en document con capture: el evento `toggle` no burbujea.
+  function closeExpanded(details: HTMLDetailsElement) {
+    details.classList.remove('rp-practice--expanded');
+    document.querySelectorAll('.rp-practice__backdrop').forEach((b) => b.remove());
+  }
+  document.addEventListener(
+    'toggle',
+    (e) => {
+      const d = e.target as HTMLElement;
+      if (!(d instanceof HTMLDetailsElement) || !d.classList.contains('rp-practice__item')) return;
+      if (d.open) {
+        // cerrar cualquier otro ejercicio expandido antes de abrir este
+        document.querySelectorAll('details.rp-practice__item.rp-practice--expanded').forEach((x) => {
+          if (x !== d) (x as HTMLDetailsElement).open = false;
+        });
+        document.querySelectorAll('.rp-practice__backdrop').forEach((b) => b.remove());
+        d.classList.add('rp-practice--expanded');
+        const backdrop = document.createElement('div');
+        backdrop.className = 'rp-practice__backdrop';
+        backdrop.addEventListener('click', () => (d.open = false));
+        document.body.appendChild(backdrop);
+      } else {
+        closeExpanded(d);
+      }
+    },
+    true,
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const d = document.querySelector('details.rp-practice__item.rp-practice--expanded');
+    if (d instanceof HTMLDetailsElement && d.open) d.open = false;
+  });
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.rp-practice__backdrop').forEach((b) => b.remove());
+  });
+</script>

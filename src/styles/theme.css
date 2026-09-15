@@ -1332,3 +1332,27 @@ aside[data-aside-type] {
     transition: none !important;
   }
 }
+/* Práctica embebida: expandir a modal al abrir (2026-09-14).
+   El panel derecho (~256px) es demasiado angosto para un terminal; al abrir
+   el ejercicio desde la sidebar, el details se promueve a modal centrado. */
+.rp-practice__item.rp-practice--expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(760px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  z-index: 1000;
+  background: var(--sl-color-bg);
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 10px;
+  box-shadow: var(--sl-shadow-lg);
+  padding: 1rem 1.25rem;
+}
+.rp-practice__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgb(0 0 0 / 0.55);
+}
