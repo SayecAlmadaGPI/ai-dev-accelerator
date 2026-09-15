@@ -103,6 +103,7 @@ const widgets = widgetsBySlug[slug] ?? [];
                 <details class="rp-practice__item">
                   <summary class="rp-practice__summary">{w.label}</summary>
                   <div class="rp-practice__body">
+                    <p class="rp-practice__desc">{w.desc}</p>
                     {w.kind === 'terminal' ? (
                       <div data-term-mount data-scenario={w.id} ></div>
                     ) : (
@@ -383,9 +384,19 @@ const widgets = widgetsBySlug[slug] ?? [];
   // Práctica embebida: al abrir un ejercicio, se expande a un modal centrado
   // (el panel derecho es demasiado angosto para un terminal cómodo).
   // Delegación en document con capture: el evento `toggle` no burbujea.
-  function closeExpanded(details: HTMLDetailsElement) {
+  interface RpModal extends HTMLDetailsElement {
+    _rpPlaceholder?: Comment;
+  }
+  function closeExpanded(details: RpModal) {
     details.classList.remove('rp-practice--expanded');
     document.querySelectorAll('.rp-practice__backdrop').forEach((b) => b.remove());
+    // devolver el details a su lugar en la sidebar
+    const ph = details._rpPlaceholder;
+    if (ph) {
+      if (ph.isConnected) ph.replaceWith(details);
+      else details.remove();
+      details._rpPlaceholder = undefined;
+    }
   }
   document.addEventListener(
     'toggle',
@@ -399,6 +410,14 @@ const widgets = widgetsBySlug[slug] ?? [];
         });
         document.querySelectorAll('.rp-practice__backdrop').forEach((b) => b.remove());
         d.classList.add('rp-practice--expanded');
+        // mover el details al body: el panel derecho crea un stacking context
+        // que deja el modal DEBAJO del backdrop (lo opaca y le roba los clicks)
+        if (!(d as RpModal & { _rpPlaceholder?: Comment })._rpPlaceholder) {
+          const ph = document.createComment('rp-practice-slot');
+          d.after(ph);
+          (d as RpModal & { _rpPlaceholder?: Comment })._rpPlaceholder = ph;
+        }
+        document.body.appendChild(d);
         const backdrop = document.createElement('div');
         backdrop.className = 'rp-practice__backdrop';
         backdrop.addEventListener('click', () => (d.open = false));

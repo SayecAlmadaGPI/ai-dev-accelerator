@@ -1369,6 +1369,13 @@ aside[data-aside-type] {
   border-radius: 6px;
   cursor: pointer;
 }
+.rp-practice__desc {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--sl-color-text);
+  opacity: 0.85;
+}
 .rp-practice__close:hover {
   background: var(--sl-color-bg-inline-code);
 }
