@@ -1607,6 +1607,32 @@ export const quizzes: Quiz[] = [
         explain: 'Heurística de §9.4.4: no cambies si el único argumento es \'gana en X benchmark\' sin prueba en tu dominio, y espera si el release es muy nuevo: el costo de ser early adopter a veces supera el beneficio.',
         ref: '§9.4.4',
         objective: 4,
+      },
+      {
+        q: 'Un vendor anuncia un modelo nuevo que "revoluciona el coding". Aplicando el radar del M9, ¿qué capa decide la adopción?',
+        options: [
+          'Capa 0: el anuncio del vendor, si viene de una fuente confiable.',
+          'Capa 2: los benchmarks independientes con fecha de medición.',
+          'Capa 3: los estudios empíricos y papers académicos.',
+          'Capa 4: tu prueba ciega con 5-10 tareas reales de tu repo.'
+        ],
+        answer: 3,
+        explain: 'El filtro de capas tiene confianza decreciente: el anuncio es marketing (capa 0), los benchmarks independientes dan contexto fuerte (capa 2) y los estudios, confianza (capa 3) — pero la única capa que DECIDE es tu prueba ciega sobre tareas reales de tu dominio (§9.4.2, lab-05).',
+        ref: '§9.4.5',
+        objective: 4
+      },
+      {
+        q: 'En 2025, un RCT midió que devs experimentados eran ~19% MÁS LENTOS con IA. En 2026, el propio METR revisa y encuentra posible aceleración. ¿Cuál es la lección para tu autonomía de evaluación?',
+        options: [
+          'El RCT de 2025 era definitivo: la IA frena a los seniors y punto.',
+          'Los surveys de autoreporte (1.4-2x) son más confiables que un RCT.',
+          'Un estudio es un punto de una línea del tiempo: se cita con fecha y revisión posterior, y el autoreporte no sustituye la medición.',
+          'Los estudios de productividad no sirven para nada; solo los benchmarks.'
+        ],
+        answer: 2,
+        explain: 'El caso METR (§9.3.5): autoreporte ≠ medición, y un solo estudio es un punto de una línea del tiempo con hipótesis que evolucionan. La disciplina es citar el estudio con su fecha y revisión posterior — y desconfiar en ambas direcciones.',
+        ref: '§9.3.5',
+        objective: 4
       }
     ],
   },

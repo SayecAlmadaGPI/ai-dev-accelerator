@@ -401,7 +401,7 @@ APÉNDICES ── Kit de Supervivencia
 - Dashboard: "Model Comparison Cheat Sheet 2026" — decisión de diseño: template anti-envejecimiento (`templates/model-comparison-cheatsheet.md`) con ordinales direccionales y fecha de medición explícita, no una "tabla viva" mantenida a mano. CUMPLIDO.
 - Checklist: "10 preguntas antes de adoptar un nuevo modelo" — CUMPLIDO: `templates/10-preguntas-antes-adoptar.md`.
 - Script: `benchmark-your-task.py` — evaluar un modelo en TU codebase, no en HumanEval. CUMPLIDO: `templates/benchmark-your-task.py` (3 modelos, modo `--dry-run`).
-- Guía: "De la publicación del paper a tu repo: cómo filtrar el hype" — pendiente (Notas para Futuras Versiones).
+- Guía: "De la publicación del paper a tu repo" — CUMPLIDA: M9 §9.4.5 (el radar de capas) + `templates/radar-de-releases.md` (protocolo operativo con registro de decisiones).
 
 ### Referencias Clave
 - [SWE-bench — Princeton NLP](https://github.com/princeton-nlp/SWE-bench/) — benchmark estándar de repo-level.
@@ -625,6 +625,12 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
   - [OpenCode — opencode.ai](https://opencode.ai) · [repo anomalyco/opencode](https://github.com/anomalyco/opencode) · [docs](https://opencode.ai/docs) — agente open-source multi-interfaz (terminal + IDE + desktop), 75+ proveedores vía Models.dev, MCP nativo, lee `AGENTS.md`.
   - [Pi — pi.dev](https://pi.dev) · [repo earendil-works/pi](https://github.com/earendil-works/pi) — chasis mínimo extensible (MIT); MCP/subagents/permisos se añaden como extensiones TS. Caso límite del M1.
   - Desglose por dimensión del harness (comandos, extensiones, hooks, memoria, subagents, MCP, permisos, modelo, open-source): `templates/cross-tool-compatibility-matrix.md` §3.
+
+### Evaluación de Modelos y Claims de Productividad
+- [METR — RCT original](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (jul 2025) · [uplift update](https://metr.org/blog/2026-02-24-uplift-update/) (feb 2026) · [survey de autoreporte](https://metr.org/blog/2026-05-11-ai-usage-survey/) (may 2026) — la línea del tiempo citada con fecha.
+- [Anthropic — Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) · [OpenAI Evals](https://developers.openai.com/learn/evals) — evals como disciplina.
+- [Scale Labs Leaderboard](https://labs.scale.com/leaderboard) (SWE-bench Pro público+privado) · [Terminal-Bench 4.0](https://www.tbench.ai/) — jerarquía de leaderboards 2026.
+- `templates/radar-de-releases.md` — el protocolo operativo (M9 §9.4.5).
 
 ### Surveys Académicos y Revisiones Sistemáticas
 - [LLM-Based Multi-Agent Systems for Code Generation — Tampere University](https://arxiv.org/html/2604.16321v1) — 114 estudios, 37 benchmarks.

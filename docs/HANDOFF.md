@@ -330,7 +330,7 @@ src/scripts/
   playground.ts               # isla playground (iframe sandbox)
   notes.ts                    # isla notas (IndexedDB)
 src/data/
-  quizzes.ts                  # 136 preguntas (M2 15, M4 5; resto 12), con ref/objective
+  quizzes.ts                  # 138 preguntas (M2 15, M4 5, M9 7; resto 12), con ref/objective
   terminal-scenarios.ts       # 8 escenarios del simulador (autorado)
   widgets.ts                  # mapa slug -> widgets de práctica (autorado)
   playground-examples.ts      # ejemplos del playground (autorado)

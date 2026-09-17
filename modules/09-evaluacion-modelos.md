@@ -176,6 +176,35 @@ Un modelo puede optimizarse contra un benchmark específico (selección
 
 ---
 
+### 9.3.5 Los claims de productividad: autoreporte ≠ medición (el caso METR)
+
+Los benchmarks miden modelos; los estudios de productividad miden *a las
+personas usando los modelos* — y ahí el rigor se lee distinto. El caso más
+citado (y peor citado) del campo es METR:
+
+- **Jul 2025 — el RCT original:** 16 desarrolladores open-source
+  experimentados, tareas reales de su propio repo. Esperaban acelerarse
+  ~24% con IA; la medición objetiva dio **~19% más lento**. Se viralizó
+  como "la IA frena a los seniors".
+- **Feb 2026 — el uplift update del propio METR:** con los mismos devs en
+  late-2025, el estimador muestra posible aceleración — pero con intervalo
+  amplio y sesgos de selección que impiden publicarlo como resultado.
+  La conclusión honesta de la línea: *"no sabemos, y el experimento original
+  ya no describe el presente"*.
+- **May 2026 — el survey:** 349 trabajadores técnicos reportan 1.4–2× de
+  mejora **autoreportada** — con escepticismo metodológico explícito del
+  propio METR sobre los autoreportes.
+
+Tres lecciones para tu autonomía:
+1. **Un estudio es un punto de una línea del tiempo**, no un hecho eterno. Cita el estudio *con su fecha y su revisión posterior* — exactamente la disciplina que aplicaste a los benchmarks en §9.3.
+2. **Autoreporte ≠ medición.** La gente *siente* 1.4–2×; los RCT miden otra cosa. Un claim de productividad exige el tipo de evidencia que el claim necesita: ciego, controlado, medido.
+3. **El sesgo va en ambas direcciones.** Desconfía del "la IA frena a los seniors" de 2025 con la misma fuerza que del "todos somos 2× con IA" de un survey. Ambos venden certezas que los datos no sostienen.
+
+Ver `templates/radar-de-releases.md` §Capa 3 para el registro de estudios.
+
+---
+
+
 ## 9.4 Cómo evaluar un nuevo release
 
 El protocolo, no la intuición.
@@ -253,6 +282,32 @@ harness flojo puede rendir menos que uno inferior en un harness afilado
 > supera el beneficio.
 
 ---
+
+### 9.4.5 El radar: de la publicación a tu repo (sin ahogarte en el hype)
+
+Los releases llegan más rápido de lo que puedes evaluarlos. La respuesta no
+es leerlo todo — es un **filtro de capas** con confianza decreciente, donde
+una sola capa decide:
+
+| Capa | Señal | Qué hacer con ella |
+|------|-------|--------------------|
+| 0 — Anuncio | Tweet, keynote, demo del vendor | Anota la fecha y qué afirman. **No extraigas números**: es marketing, no medición. |
+| 1 — Fuente primaria | Release notes, changelog, paper real | Extrae lo verificable: qué cambió, cutoff del conocimiento, precio, breaking changes de API. |
+| 2 — Benchmarks independientes fechados | La jerarquía de 2026: SWE-bench Pro (público **y privado** — anti-overfitting) en Scale Labs, Terminal-Bench 4.0, llm-stats | Contexto fuerte. Desconfía de tablas sin fecha de medición y de leaderboards estancados (los hay: verifica que la última entrada sea de este trimestre). |
+| 3 — Estudios empíricos | METR, papers académicos, surveys | Contexto de confianza, nunca decisión (§9.3.5). |
+| 4 — **Tu prueba ciega** | 5-10 tareas reales de tu repo con `benchmark-your-task.py` | **La única capa que decide** (§9.4.2, lab-05). |
+
+**El protocolo operativo** (cadencia trimestral, alineada con la caducidad
+de este curso — no semana 1 del release, cf. §9.4.4):
+1. Entra la señal (capa 0-1) → registro en tu radar con fecha.
+2. Filtro de capas 2-3 → ¿sobrevive? Si no, archiva con nota ("hype sin medición") y listo.
+3. Si sobrevive y te duele su dimensión → prueba ciega (capa 4) con las 10 preguntas de §9.4.1.
+4. **Registra la decisión** con fecha y evidencia: la próxima evaluación arranca con línea de base en vez de desde cero.
+
+Cuando el volumen de decisiones lo justifique, formaliza tu prueba ciega en
+un **eval suite** permanente (dataset de tus tareas + scoring automático +
+integración en CI): ver [Anthropic — Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
+y `templates/radar-de-releases.md` para el protocolo completo.
 
 ## 9.5 Context windows, pricing y caching
 
@@ -428,6 +483,9 @@ afilado (M1).
 - **Million-Token Era — LeetLLM**
   (https://leetllm.com/blog/million-token-context-windows) — qué
   cambian las ventanas de 1M.
+- **METR — la línea del tiempo de productividad:** [RCT original](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (jul 2025), [uplift update](https://metr.org/blog/2026-02-24-uplift-update/) (feb 2026 — el propio METR revisa su resultado), [survey de autoreporte](https://metr.org/blog/2026-05-11-ai-usage-survey/) (may 2026) — citados con fecha, como exige §9.3.5.
+- **Evals como disciplina:** [Anthropic — Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) · [OpenAI Evals](https://developers.openai.com/learn/evals) — cuando tu prueba ciega se vuelve mensual.
+- **Jerarquía de leaderboards 2026:** [Scale Labs](https://labs.scale.com/leaderboard) (SWE-bench Pro público+privado) · [Terminal-Bench 4.0](https://www.tbench.ai/) — datasets privados anti-overfitting.
 - **Context Windows & Cost — MyEngineeringPath**
   (https://myengineeringpath.dev/genai-engineer/context-windows/) —
   guía de budgeting de tokens.
