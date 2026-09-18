@@ -52,7 +52,6 @@ spec + verificación automática** (M4 §4.8; seguridad en M10).
 | **Pi** | Chasis minimalista: todo es extensión | El caso límite del M1 |
 | **Windsurf / Cline / Roo Code** | IDE agéntico / extensión VS Code | Alternativas con modelos propios |
 | **Codex CLI / Gemini CLI** | Terminal de los otros proveedores | Multi-proveedor para no casarte |
-| **TasteCode** | Panel de control **desktop** para múltiples agentes (Codex, Claude Code, Grok) en una sola app: estado, checkpoints, diffs, terminal, browser preview y **Design Mode** para inspeccionar/editar UIs — todo local-first (Apache 2.0) | Beta temprana (0.1.0-beta.7, Windows-first + macOS arm64); capacidades degradan honestamente por proveedor. Es un *outer harness* como app: conecta con M1/M3 |
 
 ## 4. Memoria y contexto — qué sobrevive a la sesión
 

@@ -673,21 +673,6 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
-### 2026-09-18 (b) — TasteCode en el mapa del ecosistema
-
-**Tesis del cambio:** TasteCode (Leonxlnx, Apache 2.0, beta 0.1.0-beta.7) es
-un panel de control **desktop** para múltiples agentes (Codex, Claude Code,
-Grok) con estado, checkpoints, diffs, terminal, browser preview y Design
-Mode — todo local-first. No es una metodología: es un *outer harness* como
-app, y entra al mapa del ecosistema §3 (IDEs y harnesses locales). Su propio
-repo practica lo que predica el curso (AGENTS.md, HANDOFF.md, budgets de
-performance en CI).
-
-| Archivo | Sección | Cambio |
-|---|---|---|
-| `cheatsheets/mapa-del-ecosistema.md` | §3 | Fila TasteCode con nota de beta y local-first |
-| `BLUEPRINT.md` | Comparativas de Herramientas | Link al repo |
-
 ### 2026-09-18 — El taller: de [NEEDS CLARIFICATION] a decisión con confianza
 
 **Tesis del cambio:** el curso enseñaba a MARCAR la ambigüedad (bloqueante)
