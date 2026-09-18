@@ -124,6 +124,59 @@ En la sección 10, cada item marcado `[NEEDS CLARIFICATION]` es **bloqueante por
 
 > Si al escribir la spec descubres que una sección no puedes completarla sin inventar, no inventes: marca `[NEEDS CLARIFICATION]`. Ese es el momento en el que la spec te está avisando de un riesgo *antes* de que cueste dinero.
 
+
+### El taller: de `[NEEDS CLARIFICATION]` a decisión con confianza
+
+Marcar es la mitad del truco. La otra mitad es **resolver bien** — porque
+un `[NEEDS CLARIFICATION]` no se *borra*: se **convierte en una decisión
+registrada**. Borrarlo sin registrar es exactamente lo que el marker existe
+para evitar: decidir en silencio.
+
+**Paso 1 — Clasifica la ambigüedad.** Cada tipo tiene una vía de resolución
+distinta, y la vía barata casi nunca es "preguntar a un humano":
+
+| Tipo de ambigüedad | Ejemplo | Vía de resolución más barata |
+|---|---|---|
+| **Dato faltante** | ¿Qué campo es: `created_at` o `updated_at`? | **Medir u observar**: el código existente, el log, la DB, el ticket de origen. Casi siempre la respuesta ya está en el sistema. |
+| **Decisión de producto** | ¿Inclusivo o exclusivo en los extremos? | **Default razonable + reversible** (convención del dominio, lo que espera el usuario). Si es irreversible, ahí sí: stakeholder. |
+| **Decisión técnica** | ¿Patrón? ¿Librería? ¿Dónde vive el código? | **Tú** — es tu dominio. Decides y documentas; casi siempre es reversible. |
+| **Alcance** | ¿Las vistas guardadas entran? | **No-objetivo por defecto** (YAGNI). Agregar después es barato; quitar de un agente que ya lo implementó, no. |
+| **Riesgo** | ¿Qué pasa si estaba mal? | Esto no es un tipo: es el **filtro** que elige la vía. Coste bajo + reversible → decide tú y registra. Coste alto + irreversible → escálate al humano correcto, con las opciones ya pesadas. |
+
+**Paso 2 — Conviértela en decisión registrada.** El formato mínimo de una
+`D-x` resuelta:
+
+```markdown
+- [x] **D-1:** ¿El rango de fechas es inclusivo o exclusivo?
+  → **Decisión:** inclusivo en ambos extremos.
+  → **Por qué:** convención de filtros de listados (lo que espera el
+    usuario al elegir "hasta el 15" es ver el 15).
+  → **Coste si estaba mal:** bajo — cambiar 2 comparadores + 1 test.
+  → **Reversible:** sí.
+```
+
+**Paso 3 — El test de confianza** (las tres preguntas; sí×3 y eliminas el
+marker):
+1. ¿Puedo defender esta decisión en el review sin decir "me pareció"?
+2. ¿El coste si estaba mal es conocido y asumible?
+3. ¿Está registrada donde el agente (y el próximo humano) la van a leer?
+
+**Tres anti-patrones del taller:**
+- **Decidir en silencio:** borrar el marker y codear. Es el bug de
+  producción que el marker evita — solo que ahora con tu firma.
+- **Delegársela al agente:** "tú decides" es sycophancy servida en bandeja
+  (M0 §0.4): validará lo que sugieras y nunca escalará lo que importa.
+- **Escalar todo:** preguntar al PM si `created_at` o `updated_at` cuando
+  el grep lo resuelve en 2 minutos. La burocracia mata la spec: la vía
+  barata primero, el humano solo para lo irreversible.
+
+**Ejemplo worked:** la D-1 del ejemplo del M2 (`examples/m2-unified-
+workflow/spec.md`) es la versión mínima ("confirmado con PM"). Con el
+taller completo, la misma decisión queda con opciones consideradas, coste
+y reversibilidad — y el formato estándar vive en
+[`templates/decision-record.md`](../templates/decision-record.md).
+Práctica guiada: [`examples/m2-unified-workflow/EJERCICIOS.md`](../examples/m2-unified-workflow/EJERCICIOS.md) Ejercicio 1.
+
 ### Las constitutional articles de Spec Kit
 
 [GitHub Spec Kit](https://github.com/github/spec-kit) — el toolkit de SDD de GitHub — lleva la idea del contrato un paso más allá: cada proyecto tiene una **constitution**, un archivo de principios inmutables que gobierna toda spec, plan y task (se crea una vez con `/speckit.constitution`). Su núcleo son **nueve artículos** (documentados en el repo, `spec-driven.md` — "The Nine Articles of Development"), cada uno con su porqué operativo:

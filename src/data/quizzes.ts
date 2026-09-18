@@ -517,6 +517,19 @@ export const quizzes: Quiz[] = [
             explain: 'GSD modela el estado; BMAD modela el equipo (analista/PM/arquitecto) justo para convertir requisitos difusos en PRD + arquitectura. Con requisitos difusos la spec no puede cerrarse: primero la fase de agentic planning. Y luego el pipeline del curso se aplica encima igual.',
             ref: '§2.3',
             objective: 2
+          },
+          {
+            q: 'Tu spec tiene un [NEEDS CLARIFICATION]: "¿el endpoint acepta filtros combinados o solo uno a la vez?". Aplicando el taller del M2, ¿cuál es la vía correcta?',
+            options: [
+              'Escalar al PM: toda decisión de contrato la aprueba producto.',
+              'Borrar el marker y dejar que el agente elija la opción más simple.',
+              'Clasificarla (es de producto), aplicar el default razonable reversible (filtros combinables con AND) y registrarla con el formato de decisión.',
+              'Pedirle al agente que proponga dos alternativas y elegir la que suene mejor.'
+            ],
+            answer: 2,
+            explain: 'El taller (§2.2): clasifica el tipo (producto), aplica la vía barata — default razonable reversible — y la registra con el formato D-x (decisión, por qué, coste si estaba mal, reversibilidad). Escalar todo es burocracia; borrar sin registrar es decidir en silencio; y "tú decides" al agente es sycophancy servida.',
+            ref: '§2.2',
+            objective: 1
           }
     ],
   },

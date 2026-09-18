@@ -673,6 +673,22 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
+### 2026-09-18 — El taller: de [NEEDS CLARIFICATION] a decisión con confianza
+
+**Tesis del cambio:** el curso enseñaba a MARCAR la ambigüedad (bloqueante)
+pero no a RESOLVERLA. Nuevo taller en M2 §2.2: clasificar el tipo de
+ambigüedad (dato/producto/técnica/alcance), aplicar la vía de resolución más
+barata, convertirla en decisión registrada con el formato D-x completo
+(decisión, por qué, opciones, coste si estaba mal, reversibilidad) y el test
+de confianza de tres preguntas. + `templates/decision-record.md` y quiz de
+clasificación en M2.
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `modules/02-spec-plan-execute.md` | §2.2 | El taller (clasificación, formato D-x, test de confianza, 3 anti-patrones) |
+| `templates/decision-record.md` | nuevo | El formato mínimo de una D-x resuelta + ejemplo completo |
+| `src/data/quizzes.ts` | M2 | +1 (clasificar ambigüedad -> vía correcta) |
+
 ### 2026-09-14 (b) — Nivel 1.5: SDD + TDD vanilla (sin framework) + Gentle-AI
 
 **Tesis del cambio:** entre el Nivel 1 (solo spec) y el Nivel 2 (+GSD) falta
