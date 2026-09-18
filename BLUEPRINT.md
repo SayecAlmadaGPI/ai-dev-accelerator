@@ -632,6 +632,8 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [Scale Labs Leaderboard](https://labs.scale.com/leaderboard) (SWE-bench Pro público+privado) · [Terminal-Bench 4.0](https://www.tbench.ai/) — jerarquía de leaderboards 2026.
 - `templates/radar-de-releases.md` — el protocolo operativo (M9 §9.4.5).
 
+- [OpenSpec — openspec.dev](https://openspec.dev) · [repo Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) — framework ligero de specs vivas versionadas con CLI (`/opsx:propose → apply → verify → archive`), MIT, compatible con 38+ agentes.
+
 ### Surveys Académicos y Revisiones Sistemáticas
 - [LLM-Based Multi-Agent Systems for Code Generation — Tampere University](https://arxiv.org/html/2604.16321v1) — 114 estudios, 37 benchmarks.
 - [A Survey on Code Generation with LLM-based Agents](https://arxiv.org/html/2508.00083v2)
@@ -672,6 +674,20 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `modules/04-handoffs.md` | §4.5.4 | Agentes cloud AFK: el brief autosuficiente por contrato + refs |
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
+
+### 2026-09-18 (b) — OpenSpec en el mapa del ecosistema
+
+**Tesis del cambio:** corrección del 2026-09-18 (repo equivocado: se había
+referenciado TasteCode y se revertió). La referencia correcta es **OpenSpec**
+([openspec.dev](https://openspec.dev), Fission-AI, MIT, 68k⭐): el framework
+ligero de specs vivas versionadas — el patrón Spec-Anchored del M2 §2.2 con
+CLI. Workflow: `/opsx:explore → propose → apply → verify → archive`.
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `cheatsheets/mapa-del-ecosistema.md` | §6 | Entrada OpenSpec con URL oficial y workflow |
+| `modules/02-spec-plan-execute.md` | Referencias | OpenSpec como herramienta concreta del patrón Spec-Anchored |
+| `BLUEPRINT.md` | refs | Bloque Evaluación: link a OpenSpec |
 
 ### 2026-09-18 — El taller: de [NEEDS CLARIFICATION] a decisión con confianza
 

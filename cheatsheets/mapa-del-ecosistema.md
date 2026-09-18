@@ -74,7 +74,7 @@ spec + verificación automática** (M4 §4.8; seguridad en M10).
 
 ## 6. Specs versionadas en el repo
 
-- **OpenSpec** — delta-specs + sync con specs principales (el patrón Spec-Anchored del M2 §2.2, automatizado).
+- **OpenSpec** ([openspec.dev](https://openspec.dev) · Fission-AI, MIT, 68k⭐) — framework ligero y configurable de specs vivas: crea, refina y verifica especificaciones que sobreviven a la evolución del trabajo (el patrón Spec-Anchored del M2 §2.2, con CLI). Workflow: `/opsx:explore` → `/opsx:propose` (proposal.md, specs/, design.md, tasks.md) → `/opsx:apply` → `/opsx:verify` → `/opsx:archive`. Compatible con Claude Code, Codex, Cursor, Copilot, Gemini CLI, OpenCode +33 (npm i -g @fission-ai/openspec).
 - **Spec Kit** — constitución + `/speckit-converge` para cerrar implementación contra la spec.
 - **Kiro** — specs como ciudadano de primera clase en el IDE (M2 §2.2).
 
