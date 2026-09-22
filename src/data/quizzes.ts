@@ -543,7 +543,33 @@ export const quizzes: Quiz[] = [
             explain: '"BDD macro, TDD micro": un workflow SDD + BDD puede satisfacer todos los escenarios de aceptación y aun así dejar el interior acoplado. El TDD estricto aporta los tests angostos que fuerzan contratos pequeños y el refactoring que mantiene desacopladas las unidades.',
             ref: '§2.5',
             objective: 2
-          }
+          },
+          {
+            q: 'En la conciliación de las cuatro D, ¿qué papel juega BDD respecto a tu spec SDD?',
+            options: [
+              'BDD reemplaza a la spec: los escenarios Given/When/Then la sustituyen.',
+              'BDD es el formato que hace los ACs entendibles por el negocio y ejecutables por el agente: cada escenario es el RED de una tarea.',
+              'BDD es Cucumber, y solo aplica si el cliente exige informes automatizados.',
+              'BDD es lo mismo que SDD con otro nombre: se elige una u otra.'
+            ],
+            answer: 1,
+            explain: 'BDD no es una metodología aparte en el pipeline: es el FORMATO de los ACs. El escenario habla el lenguaje del dominio (DDD), es un AC del contrato (SDD) y es ejecutable como test (el RED del ciclo TDD). Tres alturas, un solo artefacto.',
+            ref: '§2.10',
+            objective: 2
+          },
+          {
+            q: 'En DDD, ¿qué definen los bounded contexts y por qué te importan cuando trabajas con agentes?',
+            options: [
+              'Las carpetas donde el agente debe guardar sus reportes de sesión.',
+              'Las fronteras explícitas del sistema: delimitan dónde termina una spec y habilitan el paralelismo sin pisarse.',
+              'Los niveles de permisos que el agente necesita para operar en producción.',
+              'El tamaño máximo del contexto que puede consumir el agente por tarea.'
+            ],
+            answer: 1,
+            explain: 'Los bounded contexts delimitan partes del sistema con su propio modelo y lenguaje. Para agentes: cada contexto delimita una spec (y su paralelización, §2.3) y evita que el agente cruce fronteras con traducciones que nadie pidió.',
+            ref: '§2.10',
+            objective: 2
+          },
     ],
   },
 

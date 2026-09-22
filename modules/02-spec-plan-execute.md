@@ -500,6 +500,121 @@ Bienvenido a Spec-Anchored: la spec y el código se mantienen alineados a la fue
 **— ¿Esto sirve para algo que no sea backend web?**
 Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infra como código, migraciones de DB. Los AC siempre pueden escribirse como "este comando devuelve esto" o "este archivo tiene esta forma".
 
+## 2.10 Las cuatro D: SDD, TDD, BDD y DDD en un solo flujo
+
+Todo lo que este módulo enseña forma parte de una pila con **cuatro
+metodologías que comparten la letra D y cuatro altitudes distintas de la
+misma intención**. Este cierre las presenta desde cero, las concilia y las
+convierte en un solo flujo agéntico.
+
+### 2.10.1 Las cuatro, desde su origen
+
+| Metodología | Año | El dolor del que nace | Qué propone | Cómo funciona |
+|---|---|---|---|---|
+| **DDD** (Domain-Driven Design) — Eric Evans, 2003 | Los sistemas no reflejan el negocio: cada equipo llama a lo mismo con nombres distintos y el código se convierte en una traducción sin dueño | Modelar el dominio **con los expertos** usando un **lenguaje ubicuo** (un vocabulario único, compartido por código, spec y conversación) y **bounded contexts** (fronteras explícitas entre partes del sistema) | Escribes un glosario de términos acordados y delimitas contextos; el código usa EXACTAMENTE esas palabras |
+| **TDD** (Test-Driven Development) — Kent Beck, 2002 | Código sin red de protección: los tests llegan tarde y prueban lo que el código ya hace | Escribir el **test primero** (RED), el código mínimo que lo pasa (GREEN), y refactorizar sin cambiar comportamiento (REFACTOR) | Un ciclo corto por unidad: test falla → código mínimo → verde → refactor |
+| **BDD** (Behavior-Driven Development) — Dan North, 2006 | TDD mal aplicado: tests que prueban la implementación y que nadie del negocio entiende | Expresar el comportamiento como **escenarios Given/When/Then** en el lenguaje del negocio — los ACs en formato ejecutable | Negocio + dev + QA escriben los escenarios juntos (*three amigos*); el escenario se automatiza como test |
+| **SDD** (Spec-Driven Development) — AIWare 2026 | Con agentes de IA el código ya no es la fuente de verdad: el agente necesita un **contrato** y tú necesitas verificarlo | La **spec como fuente de verdad**: ACs binarios, no-objetivos, decisiones registradas — el código es el artefacto | Este módulo entero: spec → plan → tareas → implementación → verificación |
+
+**El dato que une la historia:** BDD no es un tercero celoso — North creó
+BDD al aplicar el **lenguaje ubicuo de DDD** al TDD. La conciliación no es
+un truco moderno: es el diseño original del campo, reunido.
+
+### 2.10.2 Cómo se complementan: la pila de altitudes
+
+La pila (de arriba hacia abajo, con el feedback que cierra Spec-Anchored):
+
+```mermaid
+flowchart TB
+    subgraph DDD["DDD — nombra el dominio"]
+        UL["Lenguaje ubicuo"]
+        BC["Bounded contexts (fronteras de spec)"]
+    end
+    subgraph S["SDD — el contrato"]
+        SPEC["spec.md: ACs verificables + no-objetivos"]
+    end
+    subgraph B["BDD — el comportamiento"]
+        GH["ACs como escenarios Given/When/Then"]
+    end
+    subgraph T["TDD — el ciclo"]
+        RGR["RED → GREEN → REFACTOR por tarea"]
+    end
+    MT["Mutation testing: protege las decisiones"]
+    UL --> SPEC
+    BC --> SPEC
+    SPEC --> GH
+    GH --> RGR
+    RGR --> MT
+    RGR -.->|"los tests revelan decisiones de dominio: actualiza spec"| UL
+```
+
+- **DDD nombra** — el lenguaje ubicuo define qué significan las palabras; los bounded contexts definen dónde termina cada spec (y la frontera del paralelismo de §2.3).
+- **SDD contrata** — cada spec captura el comportamiento en ACs binarios con ese lenguaje.
+- **BDD comunica** — cada AC se expresa como escenario Given/When/Then: el negocio lo entiende y el test que lo automatiza es tu RED.
+- **TDD protege** — el ciclo por tarea implementa y refactoring protege las unidades; mutation testing audita que las decisiones estén cubiertas.
+- **El feedback cierra el círculo** (línea punteada): los tests y las mutantes revelan decisiones de dominio faltantes — actualizas lenguaje y spec (Spec-Anchored, §2.2) y la pila vuelve a correr.
+
+El insight del 2026 (*"BDD macro, TDD micro"*): un workflow SDD + BDD
+puede satisfacer todos los escenarios y aun así dejar el interior acoplado
+— el TDD estricto es lo que mantiene las unidades desacopladas. Y sin DDD,
+los escenarios hablan el idioma del implementador, no del dominio.
+
+### 2.10.3 El flujo completo agéntico (las cuatro D, paso a paso)
+
+El flujo que este módulo construye, ahora con las cuatro D explícitas:
+
+| Paso | Qué haces | La D | Evidencia |
+|---|---|---|---|
+| 1. **Nombra el dominio** | Acuerdas el lenguaje ubicuo con los expertos y delimitas el bounded context. Registrar una decisión ambigua como D-x (§2.2 taller) | DDD | Glosario + D-x registradas |
+| 2. **Contrata** | Escribes la spec: RFs, ACs, no-objetivos — en el lenguaje del paso 1 | SDD | `spec.md` aprobada |
+| 3. **Convierte** | Cada AC se expresa como escenario Given/When/Then | BDD | Sección de ACs/escenarios de la spec |
+| 4. **Implementa** | Por tarea: el agente hace RED → GREEN → REFACTOR contra el escenario (Nivel 1.5, §2.8) | TDD | Tests en verde con las salidas mostradas |
+| 5. **Protege y cierra** | Mutation testing + DONE/VERIFIED con evidencia (M6) | Las cuatro | Reporte + mutantes capturados |
+
+**Tecnologías por D** (lo mínimo para cada capa — elige una por fila):
+
+| D | Tecnología | Cuándo |
+|---|---|---|
+| DDD | El lenguaje ubicuo documentado en tu `AGENTS.md` + ADRs (M3 §3.6) | Siempre — es tu idioma de specs |
+| SDD | `spec.md` de este módulo; **Spec Kit** u **OpenSpec** para specs versionadas con CLI | Features que un agente implementará |
+| BDD | Escenarios Gherkin **dentro de la spec** (recomendado: un formato menos) o Cucumber si necesitas escenarios ejecutables por no-developers | ACs que un stakeholder deba leer |
+| TDD | El runner de tu stack (`vitest`, `pytest`, `go test`) + **mutation testing** (Stryker o similar) cuando la calidad sea crítica | Siempre en tareas de producción |
+| SDD (configurado) | **Gentle-AI** o **GSD** cuando el flujo cruza sesiones y quieres el estado machine-readable | Features largos, equipos |
+
+### 2.10.4 El ejemplo aterrizado: préstamos de biblioteca
+
+El ejemplo ejecutable en [`examples/m2-cuatro-d/`](../examples/m2-cuatro-d/)
+aplica las cuatro D a un feature mínimo, con los prompts literales y el
+código corriendo. El fragmento que muestra la conciliación en una sola
+pieza — un AC de la spec (escenario BDD) y su test (el RED del ciclo):
+
+**El escenario (BDD — en la spec y en `escenarios.feature`):**
+
+```gherkin
+Escenario: límite alcanzado
+  Dado un socio con 3 préstamos activos
+  Cuando el socio pide prestado otro libro
+  Entonces la solicitud se rechaza con la razón "límite alcanzado"
+```
+
+**El test que lo automatiza (TDD — el RED de la tarea):**
+
+```js
+test('AC-2: Given socio con 3 préstamos activos, when pide otro, then se rechaza con "límite alcanzado"', () => {
+  for (const id of ['L1', 'L2', 'L3']) {
+    solicitarPrestamo({ socioId: UN_SOCIO, libro: libroDisponible(id) });
+  }
+  const resultado = solicitarPrestamo({ socioId: UN_SOCIO, libro: libroDisponible('L4') });
+  assert.deepEqual(resultado, { ok: false, razon: 'límite alcanzado' });
+});
+```
+
+Fíjate en las tres alturas en juego al mismo tiempo: el escenario habla el
+**lenguaje del dominio** (socio, préstamos activos — DDD), es un **AC del
+contrato** (SDD) y es **ejecutable como test** (el RED del TDD). BDD no es
+una metodología aparte: es el formato que hace que tu spec SDD sea
+entendible por el negocio y ejecutable por el agente.
+
 ---
 
 > **Practica esto:** el [Playground](../playground/) ejecuta en el navegador los
@@ -516,6 +631,8 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 - **BDD:** Dan North, [Introducing BDD](https://dannorth.net/blog/introducing-bdd/) · [Cucumber docs](https://cucumber.io/docs/bdd/) — los ACs como escenarios Given/When/Then (el puente spec ↔ tests).
 - **DDD:** Eric Evans, *Domain-Driven Design* (2003) — lenguaje ubicuo y bounded contexts: el idioma de tus ACs y la frontera de cada spec.
 - **Las cuatro D conciliadas:** [cheatsheets/las-cuatro-d.md](../cheatsheets/las-cuatro-d.md) — la cadena DDD → SDD → BDD → TDD y los 4 hackeos del TDD por agentes.
+- **El taller de [NEEDS CLARIFICATION]:** §2.2 y [](../templates/decision-record.md) — de la ambigüedad a la decisión registrada.
+- **Las cuatro D en un flujo agéntico (ejemplo ejecutable):** [](../examples/m2-cuatro-d/) — lenguaje ubicuo, spec con escenarios BDD, ciclo TDD y auditoría de mutación.
 - **SDD + TDD sin framework (Nivel 1.5):** plantilla `templates/sdd-tdd-vanilla.md` — reglas de AGENTS.md + prompts del ciclo.
 - **BMAD-METHOD — orquestación por equipo ágil virtual:** [repo](https://github.com/bmad-code-org/BMAD-METHOD) · [docs](https://docs.bmad-method.org/) — analista, PM, arquitecto, scrum master, dev y QA con revisión adversarial (M2 §2.3).
 - **Gentle-AI (Gentleman Programming) — el flujo instalado:** [repo](https://github.com/Gentleman-Programming/gentle-ai) · [documentación en español](https://gentle-ai-wiki.gentlemanprogramming.com/es/) — configurador MIT (16 agentes): Engram (memoria), SDD de 10 fases, **Strict TDD Mode** con detección de capacidades y verificación bloqueante, permisos con lista de negación (`.env*`, llaves, secrets).
