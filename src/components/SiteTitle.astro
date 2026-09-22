@@ -115,7 +115,7 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
     bootFeature('[data-playground-mount]', () =>
       import('../scripts/playground.ts').then((m) => m.initPlayground()),
     );
-    bootFeature('code.language-mermaid', () =>
+    bootFeature('code.language-mermaid, pre[data-language="mermaid"]>code', () =>
       import('../scripts/mermaid.ts').then((m) => m.initMermaid()),
     );
   }
