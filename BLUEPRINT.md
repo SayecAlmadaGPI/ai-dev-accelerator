@@ -675,6 +675,24 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
+### 2026-09-22 — Las cuatro D conciliadas: DDD, SDD, BDD y TDD
+
+**Tesis del cambio:** el curso enseña SDD y TDD pero no explicita cómo
+concilian con BDD y DDD. Nuevo cheatsheet `las-cuatro-d.md` (cuatro
+altitudes de la misma intención: el dominio nombra, la spec contrata, el
+escenario comunica, el test protege), el insight "BDD macro, TDD micro"
+en M2 §2.5, y en M6 §6.6.5 los 4 hackeos del TDD por agentes con sus
+contadores mecánicos (vertical slice por commit, branch coverage,
+mutation testing, detección de duplicación). Fuentes: Krishnan
+(intent-driven.dev, ago-2026, libro Manning), complementa M6 §6.6.
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `cheatsheets/las-cuatro-d.md` | nuevo | La cadena de altitudes + los 4 hackeos + cuándo aporta cada una |
+| `modules/02-spec-plan-execute.md` | §2.5 | Las cuatro D conciliadas en el pipeline |
+| `modules/06-verificacion.md` | §6.6.5 | Los 4 hackeos del TDD por agentes + contadores |
+| `src/data/quizzes.ts` | M2/M6 | +1 altitudes +1 mutation |
+
 ### 2026-09-18 (b) — OpenSpec en el mapa del ecosistema
 
 **Tesis del cambio:** corrección del 2026-09-18 (repo equivocado: se había

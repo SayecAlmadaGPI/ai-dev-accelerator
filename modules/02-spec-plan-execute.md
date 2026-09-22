@@ -352,6 +352,17 @@ Así se encadenan los tres en un flujo real:
 
 **Lo importante del flujo:** cada fase produce un **artefacto de archivo** que la siguiente fase consume. Nada vive solo en la conversación. Si tu laptop se apaga entre la Fase B y la C, no pierdes nada: `roadmap.md` y `state.json` están en el repo, y un agente nuevo puede continuar.
 
+### Las cuatro D conciliadas: DDD, SDD, BDD y TDD
+
+El workflow de este módulo es una capa de una pila con cuatro altitudes de la misma intención:
+
+- **DDD** te da el **lenguaje ubicuo** y las fronteras (bounded contexts): el idioma en que se escriben tus ACs y la frontera natural de cada spec (y del paralelismo de §2.3).
+- **SDD** captura el **contrato** por contexto: la spec de este módulo.
+- **BDD** convierte los ACs en **escenarios ejecutables** (Given/When/Then) que un stakeholder entiende — el comportamiento observable. Sin BDD, los ACs pueden quedar en el idioma del implementador.
+- **TDD** implementa cada tarea con el ciclo disciplinado — y fuerza el diseño micro (contratos angostos) que los escenarios macro no garantizan.
+
+El insight del 2026 ("BDD macro, TDD micro"): un workflow SDD + BDD puede satisfacer todos los escenarios y aun así dejar el interior acoplado. El TDD estricto es lo que mantiene las unidades desacopladas. Y el feedback sube: los tests revelan decisiones de dominio que actualizan la spec (Spec-Anchored, §2.2). El mapa completo, con los 4 hackeos del TDD por agentes y sus contadores, está en [`cheatsheets/las-cuatro-d.md`](../cheatsheets/las-cuatro-d.md).
+
 ---
 
 ## 2.6 Tipos de archivos y sus secciones (kit completo)

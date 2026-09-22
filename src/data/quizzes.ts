@@ -530,6 +530,19 @@ export const quizzes: Quiz[] = [
             explain: 'El taller (§2.2): clasifica el tipo (producto), aplica la vía barata — default razonable reversible — y la registra con el formato D-x (decisión, por qué, coste si estaba mal, reversibilidad). Escalar todo es burocracia; borrar sin registrar es decidir en silencio; y "tú decides" al agente es sycophancy servida.',
             ref: '§2.2',
             objective: 1
+          },
+          {
+            q: 'Según la conciliación de las cuatro D, ¿qué aporta TDD que un workflow SDD + BDD por sí solo no garantiza?',
+            options: [
+              'Que los escenarios Given/When/Then se escriban en lenguaje del negocio.',
+              'El diseño micro: contratos angostos y unidades desacopladas, que los escenarios macro no fuerzan.',
+              'Que la spec sea la fuente de verdad sobre intención.',
+              'Que los bounded contexts se definan antes de codear.'
+            ],
+            answer: 1,
+            explain: '"BDD macro, TDD micro": un workflow SDD + BDD puede satisfacer todos los escenarios de aceptación y aun así dejar el interior acoplado. El TDD estricto aporta los tests angostos que fuerzan contratos pequeños y el refactoring que mantiene desacopladas las unidades.',
+            ref: '§2.5',
+            objective: 2
           }
     ],
   },
@@ -1160,6 +1173,19 @@ export const quizzes: Quiz[] = [
         explain: 'Es environment mismatch por dependencia no declarada: estado implícito que el agente asumió. El remedio es reproducibilidad con init.sh, no reintentos; "a mí me funciona" no es verificación (§6.7).',
         ref: '§6.7',
         objective: 2,
+      },
+      {
+        q: 'Tu agente siguió red-green-refactor: los tests pasan. ¿Qué verifica que los tests realmente PROTEJAN las decisiones y no solo la cobertura?',
+        options: [
+          'Que el line coverage sea 100%.',
+          'Mutation testing: si mutas una decisión del código y los tests siguen pasando, esa decisión no está protegida.',
+          'Que los nombres de los tests sean descriptivos.',
+          'Que la suite corra rápido.'
+        ],
+        answer: 1,
+        explain: 'Hackeo #3 del TDD por agentes: ciclo red-green correcto pero aserciones débiles. El contador mecánico es mutation testing (§6.3.4): un mutante sobreviviente es una decisión sin proteger. Branch coverage detecta ramas no ejercitadas, y una vertical slice por commit prueba el ciclo.',
+        ref: '§6.6.5',
+        objective: 2
       }
     ],
   },

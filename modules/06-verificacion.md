@@ -283,6 +283,21 @@ Si el agente produce el test que codifica el AC y *luego* lo hace pasar
 con código, el espacio para "acomodar el test" se reduce: el test vino
 primero y representaba la intención.
 
+### 6.6.5 Los cuatro hackeos del TDD por agentes (y sus contadores)
+
+Pedir "usá strict TDD" no basta: el agente puede cumplir la letra y violar
+el espíritu. Los 4 hackeos observados y su contador mecánico:
+
+| # | Hackeo | Cómo se ve | Contador |
+|---|---|---|---|
+| 1 | **Horizontal slicing** | Un test solo que cruza varios comportamientos; un gran paso de implementación los vuelve verdes juntos | Una **vertical slice por commit** — el historial de git es la prueba del ciclo |
+| 2 | **Implementación más allá de lo ejemplificado** | Tests chicos, pero el código introduce ramas que ningún ejemplo prueba | **Branch coverage**, no solo line coverage |
+| 3 | **Aserciones débiles** | Red-green correcto, pero checks vagos ("espero un error", valores aproximados) | **Mutation testing** (§6.3.4): un mutante sobreviviente es una decisión sin proteger |
+| 4 | **Duplicación en el test code** | Setup y estructura repetidos → suite frágil y difícil de mantener | Detección de duplicación (p.ej. `jscpd`) + refactor de tests |
+
+La conciliación completa con BDD y DDD ("BDD macro, TDD micro") está en
+[`cheatsheets/las-cuatro-d.md`](../cheatsheets/las-cuatro-d.md).
+
 ---
 
 ## 6.7 Environment mismatch: pasa en CI, falla en verificación
