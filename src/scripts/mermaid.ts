@@ -1,7 +1,7 @@
 // =============================================================================
 // mermaid.ts — Isla de renderizado de diagramas Mermaid para Starlight.
 // -----------------------------------------------------------------------------
-// Carga Mermaid v11 (ESM) desde CDN solo si la página tiene bloques
+// Carga Mermaid v11 (dependencia local, bundled) solo si la página tiene bloques
 // `language-mermaid` generados por Expressive Code, los reemplaza por SVG y
 // re-inicializa en cada `astro:page-load` (view transitions).
 // Paleta ámbar del design system (ver theme.css).
@@ -14,8 +14,9 @@
 //     --sl-color-text:        #e6e0d6  (texto base)
 // =============================================================================
 
-/** URL del build ESM de Mermaid v11 en CDN. */
-const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+import type Mermaid from 'mermaid';
+
+/** Mermaid v11 ahora es dependencia local (bundled por Vite) — sin CDN. */
 
 /**
  * Variables de tema para Mermaid (dark + paleta ámbar del sitio).
@@ -34,19 +35,20 @@ const MERMAID_THEME_VARS = {
 /** true si Mermaid ya fue cargado e inicializado en esta sesión. */
 let loaded = false;
 /** Promise en vuelo de carga del módulo Mermaid (evita doble import). */
-let loadPromise: Promise<typeof import('mermaid').default> | null = null;
+let loadPromise: Promise<Mermaid> | null = null;
 
 /**
- * Carga Mermaid desde el CDN (ESM dinámico) una sola vez por sesión y lo
- * inicializa con el tema del sitio. Es seguro llamarlo en cada page-load:
- * las llamadas subsiguientes devuelven la misma promesa cacheada.
+ * Carga Mermaid v11 (dependencia local, bundled por Vite) una sola vez por
+ * sesión y lo inicializa con el tema del sitio. El import dinámico mantiene
+ * el code-splitting: el chunk solo se descarga en páginas con diagramas.
+ * Es seguro llamarlo en cada page-load: las llamadas subsiguientes
+ * devuelven la misma promesa cacheada.
  */
-async function loadMermaid(): Promise<typeof import('mermaid').default> {
+async function loadMermaid(): Promise<Mermaid> {
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
-    // import dinámico: el bundler de Astro respeta la URL absoluta.
-    const mod = await import(/* @vite-ignore */ MERMAID_URL);
+    const mod = await import('mermaid');
     const mermaid = mod.default;
 
     mermaid.initialize({
@@ -69,8 +71,11 @@ async function loadMermaid(): Promise<typeof import('mermaid').default> {
   return loadPromise;
 }
 
-/** Selector de los bloques de código que Expressive Code renderiza como Mermaid. */
-const BLOCK_SELECTOR = 'pre>code.language-mermaid';
+/** Selector de los bloques que Expressive Code renderiza como Mermaid.
+ * EC moderno emite `<pre data-language="mermaid"><code>` (sin clase); el
+ * selector de clase `language-mermaid` se conserva por retrocompatibilidad
+ * (bloques antiguos y la página /simulador/ de Starlight clásico). */
+const BLOCK_SELECTOR = 'pre[data-language="mermaid"], pre>code.language-mermaid';
 
 /** Contador para generar ids estables y únicos por diagrama. */
 let diagramCounter = 0;
@@ -124,7 +129,9 @@ function attachErrorNote(pre: HTMLPreElement, message: string): void {
  * Si algo falla (carga o render), deja el bloque original y añade una nota.
  */
 async function renderBlock(pre: HTMLPreElement): Promise<void> {
-  const codeEl = pre.querySelector<HTMLElement>('code.language-mermaid');
+  // Idempotencia: si el pre ya fue renderizado (oculto con su SVG), skip.
+  if (pre.style.display === 'none') return;
+  const codeEl = pre.querySelector<HTMLElement>('code.language-mermaid, code');
   if (!codeEl) return;
 
   const code = codeEl.textContent ?? '';

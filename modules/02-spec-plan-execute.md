@@ -361,7 +361,46 @@ El workflow de este módulo es una capa de una pila con cuatro altitudes de la m
 - **BDD** convierte los ACs en **escenarios ejecutables** (Given/When/Then) que un stakeholder entiende — el comportamiento observable. Sin BDD, los ACs pueden quedar en el idioma del implementador.
 - **TDD** implementa cada tarea con el ciclo disciplinado — y fuerza el diseño micro (contratos angostos) que los escenarios macro no garantizan.
 
-El insight del 2026 ("BDD macro, TDD micro"): un workflow SDD + BDD puede satisfacer todos los escenarios y aun así dejar el interior acoplado. El TDD estricto es lo que mantiene las unidades desacopladas. Y el feedback sube: los tests revelan decisiones de dominio que actualizan la spec (Spec-Anchored, §2.2). El mapa completo, con los 4 hackeos del TDD por agentes y sus contadores, está en [`cheatsheets/las-cuatro-d.md`](../cheatsheets/las-cuatro-d.md).
+El insight del 2026 ("BDD macro, TDD micro"): un workflow SDD + BDD puede satisfacer todos los escenarios y aun así dejar el interior acoplado. El TDD estricto es lo que mantiene las unidades desacopladas. Y el feedback sube: los tests revelan decisiones de dominio que actualizan la spec (Spec-Anchored, §2.2). El mapa completo, con los 4 hackeos del TDD por agentes y sus contadores, está en [`cheatsheets/las-cuatro-d.md`](../cheatsheets/las-cuatro-d.md). La pila (de abajo hacia arriba, con el feedback que cierra Spec-Anchored):
+
+```
+        ┌─────────────────────────────────────────────────┐
+        │  DDD — nombra el dominio                        │
+        │  lenguaje ubicuo + bounded contexts             │
+        │  (cada frontera = una spec = una tarea paralela)│
+        └───────────────────────┬─────────────────────────┘
+                                │ nombra
+                                ▼
+        ┌─────────────────────────────────────────────────┐
+        │  SDD — contrata                                 │
+        │  spec.md: ACs verificables + no-objetivos       │
+        └───────────────────────┬─────────────────────────┘
+                                │ convierte
+                                ▼
+        ┌─────────────────────────────────────────────────┐
+        │  BDD — comunica                                 │
+        │  ACs como escenarios Given/When/Then            │
+        └───────────────────────┬─────────────────────────┘
+                                │ automatiza
+                                ▼
+        ┌─────────────────────────────────────────────────┐
+        │  TDD — protege                                  │
+        │  RED → GREEN → REFACTOR por tarea               │
+        └───────────────────────┬─────────────────────────┘
+                                │ audita
+                                ▼
+                 Mutation testing (protege las decisiones)
+                                │
+        ┌───────────────────────┴─────────────────────────┐
+        │  feedback: los tests revelan decisiones de      │
+        │  dominio que faltaban -> actualiza lenguaje y   │
+        │  spec (Spec-Anchored) y la pila vuelve a correr │
+        └─────────────────────────────────────────────────┘
+```
+
+La versión renderizada como diagrama vive en [`cheatsheets/las-cuatro-d.md`](../cheatsheets/las-cuatro-d.md).
+
+**Ejemplo sencillo y ejecutable del flujo completo:** `examples/m2-cuatro-d/` — un mini-dominio de préstamos de biblioteca llevado por las cuatro D con un agente: el lenguaje ubicuo (DDD) → la spec con ACs como escenarios BDD → el ciclo TDD con prompts literales → la auditoría de mutación medida (4/4 tests, mutante capturado).
 
 ---
 

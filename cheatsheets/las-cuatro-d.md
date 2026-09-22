@@ -62,6 +62,10 @@ observados y su contador mecánico:
 
 Fondo: M6 §6.6 — la defensa es estructural, no retórica.
 
+## Un ejemplo sencillo de punta a punta
+
+El flujo completo aplicado a un mini-dominio real (préstamos de biblioteca) con prompts literales y código que corre: [`examples/m2-cuatro-d/`](../../examples/m2-cuatro-d/) — DDD (lenguaje ubicuo) → SDD (spec con ACs como escenarios) → TDD (ciclo anotado) → mutation testing medido.
+
 ## Cuándo aporta cada una
 
 | Situación | Qué activas |

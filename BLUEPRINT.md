@@ -675,6 +675,20 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
+### 2026-09-22 (c) — Ejemplo trabajado: las cuatro D en un flujo agéntico
+
+**Tesis del cambio:** las cuatro D no son solo teoría conciliada: hay un
+**ejemplo sencillo y ejecutable** (`examples/m2-cuatro-d/`) que las aplica
+en un flujo agéntico completo — dominio (lenguaje ubicuo + D-x) → spec
+(ACs como escenarios Gherkin) → TDD (ciclo anotado, prompts literales) →
+auditoría de mutación medida (4/4 tests, mutante capturado).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `examples/m2-cuatro-d/` | nuevo | README (recorrido) + 1-domínio + 2-spec (spec + escenarios.feature) + 3-tdd (src + tests) + prompts.md + RESULTADO |
+| `cheatsheets/las-cuatro-d.md` | ejemplo | Link al ejemplo trabajado |
+| `modules/02-spec-plan-execute.md` | §2.5 | Diagrama Mermaid de la metodología integrada + link al ejemplo |
+
 ### 2026-09-22 (b) — Diagrama de la metodología integrada + referencias canónicas
 
 **Tesis del cambio:** la conciliación de las cuatro D ahora tiene diagrama
