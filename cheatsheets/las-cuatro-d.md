@@ -71,8 +71,76 @@ Fondo: M6 §6.6 — la defensa es estructural, no retórica.
 | El agente implementa pero el diseño se degrada | TDD estricto con mocks: contratos angostos por tarea |
 | Sospechas test gaming | Los 4 hackeos de arriba + el pipeline del M6 §6.8 |
 
+## La metodología integrada: un solo flujo que las contiene
+
+La construcción lógica y pedagógica — cómo las cuatro se complementan en
+**una metodología única** (la de este curso, ahora con BDD y DDD dentro):
+
+```mermaid
+flowchart TB
+    subgraph DDD["DDD — nombra el dominio"]
+        UL["Lenguaje ubicuo"]
+        BC["Bounded contexts (fronteras de spec)"]
+    end
+    subgraph SDD["SDD — el contrato"]
+        SPEC["spec.md: ACs verificables + no-objetivos<br/>escritos en el lenguaje ubicuo"]
+    end
+    subgraph BDD["BDD — el comportamiento"]
+        GH["ACs como escenarios Given/When/Then"]
+    end
+    subgraph TDD["TDD — el ciclo"]
+        RGR["RED → GREEN → REFACTOR por tarea"]
+    end
+    MT["Mutation testing: protege las decisiones"]
+    UL --> SPEC
+    BC --> SPEC
+    SPEC --> GH
+    GH --> RGR
+    RGR --> MT
+    RGR -.->|"los tests revelan decisiones<br/>de dominio: actualiza spec"| UL
+```
+
+El resultado es **una metodología que contiene a las cuatro**:
+
+1. **DDD nombra** — el lenguaje ubicuo define qué palabras significan en tu
+   dominio y los bounded contexts definen dónde termina cada spec (y dónde
+   empieza la otra). Es el idioma del contrato.
+2. **SDD contrata** — cada spec captura el comportamiento en ACs binarios,
+   escritos con ese lenguaje, con no-objetivos y `[NEEDS CLARIFICATION]`
+   bloqueantes.
+3. **BDD comunica** — cada AC se expresa como escenario Given/When/Then:
+   el negocio lo entiende, el agente lo puede verificar, y el test que
+   automatiza el escenario es tu RED.
+4. **TDD protege** — el ciclo por tarea implementa y el refactoring protege
+   las unidades; mutation testing audita que los tests protejan las
+   decisiones, no solo las líneas.
+5. **El feedback cierra el círculo** (línea punteada): los tests y las
+   mutantes revelan decisiones de dominio que faltaban — actualizas el
+   lenguaje y la spec, y la pila vuelve a correr. Es Spec-Anchored con
+   DDD debajo.
+
+**La práctica colaborativa** que BDD añade al taller del M2: los
+"three amigos" (negocio + dev + QA) escriben los escenarios juntos — el
+mismo espíritu de tus sesiones de grilling, aplicado a la spec.
+
+## Referencias canónicas de las cuatro D
+
+- **DDD:** Eric Evans, *Domain-Driven Design* (2003) — el origen del
+  lenguaje ubicuo y los bounded contexts. Guía práctica:
+  [Microsoft — DDD](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-microservice/microservice-ddd-microservice)
+  y Vaughn Vernon, *Implementing Domain-Driven Design*.
+- **BDD:** Dan North, [Introducing BDD](https://dannorth.net/blog/introducing-bdd/) (2006) — el origen explícito: TDD + el lenguaje ubicuo de Evans. [Cucumber — docs](https://cucumber.io/docs/bdd/) (Gherkin, three amigos, Given/When/Then).
+- **TDD:** Kent Beck, *Test-Driven Development: By Example* (2002); el ciclo
+  aplicado a agentes está en M2 §2.8 (Nivel 1.5) y M6 §6.6.5.
+- **SDD:** el paper AIWare 2026, Spec Kit, Böckeler y Krishnan — todas las
+  refs de M2 §2.9 y M9 §9.9.
+
+
 > **Veredicto:** no elijas entre las cuatro D — ordénalas por altura. El
 > dominio nombra, la spec contrata, el escenario comunica, el test
 > protege. Discurso verificado el 2026-09-22 (Krishnan, *How TDD and BDD
 > Actually Fit Into SDD*, intent-driven.dev); el ecosistema cambia, la
 > estratificación no.
+
+
+---

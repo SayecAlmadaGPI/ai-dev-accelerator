@@ -474,6 +474,9 @@ Sí. SDD es agnóstico al dominio: sirve para CLI, data pipelines, scripts, infr
 - **GSD:** [overview de GSD Redux](https://deepwiki.com/open-gsd/get-shit-done-redux/1-overview).
 - **Superpowers:** [repo obra/superpowers](https://github.com/obra/superpowers).
 - **OpenSpec — specs vivas versionadas (el patrón Spec-Anchored, con CLI):** [openspec.dev](https://openspec.dev) · [repo Fission-AI](https://github.com/Fission-AI/OpenSpec) — `/opsx:propose` → `apply` → `verify` → `archive` (MIT, 38+ agentes soportados).
+- **BDD:** Dan North, [Introducing BDD](https://dannorth.net/blog/introducing-bdd/) · [Cucumber docs](https://cucumber.io/docs/bdd/) — los ACs como escenarios Given/When/Then (el puente spec ↔ tests).
+- **DDD:** Eric Evans, *Domain-Driven Design* (2003) — lenguaje ubicuo y bounded contexts: el idioma de tus ACs y la frontera de cada spec.
+- **Las cuatro D conciliadas:** [cheatsheets/las-cuatro-d.md](../cheatsheets/las-cuatro-d.md) — la cadena DDD → SDD → BDD → TDD y los 4 hackeos del TDD por agentes.
 - **SDD + TDD sin framework (Nivel 1.5):** plantilla `templates/sdd-tdd-vanilla.md` — reglas de AGENTS.md + prompts del ciclo.
 - **BMAD-METHOD — orquestación por equipo ágil virtual:** [repo](https://github.com/bmad-code-org/BMAD-METHOD) · [docs](https://docs.bmad-method.org/) — analista, PM, arquitecto, scrum master, dev y QA con revisión adversarial (M2 §2.3).
 - **Gentle-AI (Gentleman Programming) — el flujo instalado:** [repo](https://github.com/Gentleman-Programming/gentle-ai) · [documentación en español](https://gentle-ai-wiki.gentlemanprogramming.com/es/) — configurador MIT (16 agentes): Engram (memoria), SDD de 10 fases, **Strict TDD Mode** con detección de capacidades y verificación bloqueante, permisos con lista de negación (`.env*`, llaves, secrets).

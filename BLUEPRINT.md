@@ -675,6 +675,21 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
+### 2026-09-22 (b) — Diagrama de la metodología integrada + referencias canónicas
+
+**Tesis del cambio:** la conciliación de las cuatro D ahora tiene diagrama
+(Mermaid en `cheatsheets/las-cuatro-d.md`: dominio -> contrato -> escenario
+-> ciclo, con el feedback que cierra Spec-Anchored), la construcción de la
+**metodología integrada que las contiene** (DDD nombra, SDD contrata, BDD
+comunica, TDD protege, mutation audita) y las **referencias canónicas** de
+las cuatro: Evans (DDD, 2003), North (BDD, 2006 — nace del lenguaje
+ubicuo de Evans aplicado a TDD), Beck (TDD, 2002), paper AIWare (SDD).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `cheatsheets/las-cuatro-d.md` | nueva | Metodología integrada + diagrama Mermaid + referencias canónicas |
+| `modules/02-spec-plan-execute.md` | refs | BDD (North/Cucumber) + DDD (Evans) + link a las-cuatro-d |
+
 ### 2026-09-22 — Las cuatro D conciliadas: DDD, SDD, BDD y TDD
 
 **Tesis del cambio:** el curso enseña SDD y TDD pero no explicita cómo
