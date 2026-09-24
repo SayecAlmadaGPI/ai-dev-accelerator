@@ -1,4 +1,4 @@
-# Módulo 3 — Diseño del Entorno de Trabajo (Workbench)
+# Módulo 3 — Diseño del Harness: el entorno de trabajo del agente (Workbench)
 
 > **La implementación concreta del harness.**
 > El M1 te dijo *qué* es un harness y *por qué* importa. Este módulo te dice *cómo se construye*: qué archivos crear, qué va en cada uno, cómo se cargan y cómo se mantiene el entorno portable entre herramientas.
@@ -448,6 +448,48 @@ Lo que es portable entre herramientas (invierte primero) vs. lo que no:
 
 ---
 
+### Descomposición comparada: Claude Code vs. Pi (el método de las 6 preguntas)
+
+La serie [Harness Engineering en dev.to](https://dev.to/coderonfleek/harness-engineering-part-10-decomposing-claude-code-3h27)
+cierra descomponiendo Claude Code con un framework de 6 componentes — y
+walkinglabs hace lo propio con [Pi y su harness](https://github.com/walkinglabs/learn-harness-engineering/tree/main/docs/en/harness-designs)
+con las cinco subtareas. Comparar las dos descomposiciones es el ejercicio
+que te da autonomía para evaluar CUALQUIER agente:
+
+| Componente | Claude Code | Pi | Qué implica |
+|---|---|---|---|
+| **Loop** | ReAct clásico: modelo → acción → tool → inspección → modelo; termina por "done" o budget explícito | El mismo while-loop; lo distinto es el runtime **programable** (print/JSON/RPC/SDK) | El loop es commodity; la diferencia está en la capa alrededor |
+| **Tools** | Superficie **pequeña y afilada**: read/edit/bash/glob/grep + task management + MCP — "compone, no enumeres" | Dos capas: skills on-demand (prompt-cache friendly) + extensions con hooks en TODO el ciclo de vida | Claude Code apuesta por primitivas generales; Pi por la superficie programable |
+| **Instrucciones/Contexto** | system prompt + CLAUDE.md + historial + tool results + @referencias | AGENTS.md jerárquico (global → padres → cwd) + SYSTEM.md reemplazable + skills on-demand | Ambos evitan el archivo gigante (§3.1); Pi carga solo lo que dispara el trigger |
+| **Entorno** | Tu máquina real: **bounded pero NO sandboxed** — seguridad por permissioning | El core no decide nada; el sandbox lo declaras tú | Trades opuestos: directez (Claude Code) vs. aislamiento extensible (Codex va al extremo sandbox) |
+| **Memoria** | Dos sabores: short-term = conversación; long-term = CLAUDE.md + `~/.claude` — **gestionada por el usuario** | Session **tree** (`/tree`: replay estructurado, no resúmenes forzados) + compaction **programable** + PROGRESS/LESSONS de la comunidad | Dos filosofías de write triggers: la curación humana vs. el mecanismo extensible |
+| **Observability** | Tool-call log visible en la UI **en tiempo real** — un trace presentado como UX | Session tree exportable + telemetry de la comunidad (pi-agent-harness) | Nada importante ocurre a oscuras — en ambos, por diseño distinto |
+
+**Las tres lecciones de la comparación:**
+
+1. **Todas las cajas tienen algo** — eso es lo que define un harness
+   completo: los seis componentes pensados, no dejados al azar.
+2. **Las decisiones son internamente consistentes**: la superficie de
+   herramientas afilada va con la apuesta por un modelo general; la
+   memoria gestionada por el usuario va con un producto para operadores
+   técnicos; el minimalismo de Pi va con "tú escribes las extensiones".
+3. **No requiere conocimiento interno**: todo lo observado es visible para
+   cualquiera que use el agente y sepa qué mirar. La taxonomía vuelve
+   legibles los productos opacos.
+
+**El método que te queda (la autonomía que pide el M9):** hazle las 6
+preguntas a cualquier agente o framework que evalúes — loop, tools,
+contexto, entorno, memoria, observability. Si no puedes responderlas
+rápido, es señal: o es genuinamente ligero (y espera que TÚ llenes los
+componentes que faltan), o su diseño no es tan pensado como su marketing.
+
+Los 4 diseños de Pi que valen adoptar (walkinglabs): compaction
+**pluggable** (interfaz reemplazable, no constante), session **tree**
+(replay estructurado en vez de resúmenes forzados), **prompt-cache
+friendly** (skills on-demand en vez de todas las reglas en el system
+prompt), y **dejar que el agente modifique su propio harness** (si el
+harness expone suficientes extension points).
+
 ## 3.10 Artefactos de este módulo
 
 > **Para ir más profundo:** las [Frontier Harness Design Breakdowns](https://github.com/walkinglabs/learn-harness-engineering/tree/main/docs/en/harness-designs) de Learn Harness Engineering aplican el marco de las cinco subtareas a cómo lo resuelven en producción Pi, Claude Code, Codex y DeepSeek — la contraparte analítica de la tabla cross-tool de esta sección.
@@ -522,6 +564,8 @@ Corre el skill `/init` como punto de partida, **pero edita cada línea**. El `/i
 - [La capa de comportamiento del AGENTS.md (directrices Karpathy)](https://github.com/multica-ai/andrej-karpathy-skills) — 4 reglas de comportamiento derivadas de modos de falla documentados (M3 §3.1).
 - [Writing a Great AGENTS File — Alex Kurilin](https://www.kuril.in/notes/writing-a-great-agents-file/) — brevedad, progressive disclosure, ~150-200 slots.
 - [dlt-hub/dlthub-ai-workbench](https://github.com/dlt-hub/dlthub-ai-workbench) — workbench multi-tool.
+- [Harness Engineering en dev.to — 10 partes](https://dev.to/coderonfleek/harness-engineering-part-10-decomposing-claude-code-3h27) — la serie completa: 6 componentes, y la descomposición de Claude Code componente por componente (Part 10).
+- [Breaking Down Pi's Harness Design — WalkingLabs](https://github.com/walkinglabs/learn-harness-engineering/tree/main/docs/en/harness-designs/pi) — Pi analizado con las cinco subtareas: core mínimo, extensions programables, session tree.
 - [Harness Engineering — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/) — inner/outer harness, orden de inversión.
 
 ---

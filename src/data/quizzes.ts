@@ -750,6 +750,19 @@ export const quizzes: Quiz[] = [
         explain: 'La posición de mattpocock/skills (M3 §3.2): skills pequeñas, componibles y hackeables — el espectro Nivel 1.5 aplicado a skills. La brecha de alineación (el modo de falla #1: "no hizo lo que yo quería") se cierra con una sesión de grilling antes de tocar código, y el lenguaje compartido (CONTEXT.md) es el lenguaje ubicuo de DDD aplicado a agentes.',
         ref: '§3.2',
         objective: 1
+      },
+      {
+        q: 'Estás evaluando un agente de código nuevo. Según el método de descomposición del M3, ¿cuál es la señal de alerta?',
+        options: [
+          'Que el agente no sea open-source.',
+          'Que no puedas responder rápido las 6 preguntas: loop, tools, contexto, entorno, memoria y observability.',
+          'Que el agente use un modelo distinto al que ya tenías.',
+          'Que el agente no tenga soporte MCP.'
+        ],
+        answer: 1,
+        explain: 'La descomposición de las 6 preguntas (loop, tools, contexto, entorno, memoria, observability) vuelve legible cualquier agente. Si no puedes responderlas rápido: o es genuinamente ligero (y espera que TÚ llenes los componentes) o su diseño no es tan pensado como su marketing dice. Claude Code vs. Pi es el ejemplo trabajado del M3 §3.9.',
+        ref: '§3.9',
+        objective: 2
       }
     ],
   },
