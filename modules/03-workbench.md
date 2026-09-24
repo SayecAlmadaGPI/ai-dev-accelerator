@@ -378,6 +378,44 @@ Para flujos por API (no interactivos), el patrón es: una sesión inicial crea `
 ### Capa 4: memoria del subagent
 Cada subagent puede tener su propio almacén persistente (`memory: project` en el frontmatter). El code-reviewer acumula lo que aprendió sobre el repo en `~/.claude/agent-memory/code-reviewer/MEMORY.md`. Esto permite que un subagent especializado mejore con el tiempo sin contaminar al principal.
 
+### Las dos clases de memoria: dentro de la tarea vs. a través de tareas
+
+La distinción que ordena TODO lo de arriba ([Harness Engineering Part 7:
+The Memory Layer](https://dev.to/coderonfleek/harness-engineering-part-7-the-memory-layer-3oon)
+— Adepoju): la memoria son **dos sistemas distintos, no uno con un dial**.
+
+| Clase | Qué guarda | Fidelidad | Nuestro mapeo |
+|---|---|---|---|
+| **Short-term** (dentro de la tarea) | El historial de la sesión, resultados de tools, archivos tocados esta sesión | **Full-fidelity** — perder detalle aquí es perder coherencia paso a paso | El contexto vivo de la sesión; la capa 3 (on-demand) y los handoffs (M4) protegen su continuidad |
+| **Long-term** (a través de tareas) | Decisiones, convenciones, patrones aprendidos — lo que responde "¿qué decidimos la última vez?" | **Comprimido por diseño**: resúmenes y hechos extraídos, no transcripciones | Capa 1 (AGENTS.md) y capa 2 (MEMORY.md); subagent memory para lo especializado |
+
+**Por qué no se diseñan igual:** el espacio que queda para la memoria
+long-term es pequeño — compite con el system prompt, la conversación activa,
+las tools y los archivos del turno actual. Una memoria long-term de
+fidelidad completa termina inútil (nada se recupera porque no hay espacio)
+o destructiva (empuja lo que el modelo necesita ahora). Por eso la capa 2
+de arriba carga solo ~200 líneas: es presupuesto, no estilo.
+
+### Las tres decisiones de diseño (las que separan memoria real de naive)
+
+1. **Write triggers = una decisión explícita del harness.** Cuándo se
+   guarda algo: al cerrar sesión (sweep), al invocar una tool `remember`,
+   o en eventos concretos (una corrección del usuario, un error del que se
+   aprendió). **El modelo aporta el contenido; el harness controla el
+   gate.** Si dejas "decidir qué recordar" al modelo como parte implícita
+   de cada respuesta, obtienes una memoria que guarda cosas distintas en
+   cada corrida y es imposible de depurar.
+2. **Retrieval acotado.** Al traer de long-term al contexto: rank
+   agresivo, filtro conservador, **envía menos de lo que cabe**. Si tu
+   memoria long-term llena la mitad del contexto, no es memoria — es un
+   acumulador (hoarder).
+3. **Dos sistemas, dos UIs.** Cursor lo hace bien: short-term = el
+   historial del chat (full-fidelity); long-term = las project rules y el
+   `@-memory` — almacenados por separado, recuperados cuando aplican.
+   Nuestra capa 1 y capa 2 replican esa separación.
+
+Fondo: la serie completa de [Harness Engineering en dev.to](https://dev.to/coderonfleek) — 10 partes del modelo crudo a la descomposición de Claude Code (la parte 8, observability, alimenta el M6 §6.8.2).
+
 ### La regla de oro de la memoria
 
 > Lo que importa sobrevive a la compaction solo si está en un archivo que se re-carga. La conversación NO sobrevive a la compaction. Las reglas críticas de seguridad van en `CLAUDE.local.md` (se re-lee tras compaction, a diferencia del historial).
