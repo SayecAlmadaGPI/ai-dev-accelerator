@@ -28,6 +28,31 @@ La pregunta de diseño no es "¿qué quieres que el agente sepa?", sino "¿qué 
 
 > **Principio rector del workbench:** cada cosa que pones aquí le quita un slot de atención al modelo (ver M0: presupuesto de ~150-200 instrucciones efectivas). Por eso el trabajo no es *llenar* el workbench, es *curar* el workbench. Cada línea debe ganar su lugar.
 
+### El marco de las cinco subtareas
+
+Todo lo que este módulo construye se organiza en **cinco subtareas de un
+harness** — la taxonomía de [Learn Harness Engineering](https://github.com/walkinglabs/learn-harness-engineering)
+(L02), que este módulo recorre sección por sección:
+
+| Subtarea | Qué gobierna | Secciones de este módulo | Artefactos |
+|---|---|---|---|
+| **Instrucciones** | Qué hacer, en qué orden, qué leer antes de empezar (progressive disclosure, no un archivo gigante) | §3.1 AGENTS.md · §3.2 skills · §3.6 estructura | `AGENTS.md`, `docs/`, `@imports` |
+| **Estado** | Qué se hizo, qué está en progreso, qué sigue — persistido en disco, no en la conversación | §3.6 · M4 (handoffs) | `progress`, `feature_list.json`, git log |
+| **Verificación** | El agente no declara victoria sin evidencia ejecutable | §3.4 hooks (parcial) · M6 entero | tests, lint, `verification-pipeline` |
+| **Scope** | Un feature a la vez; definición de done explícita; sin reescribir la lista para esconder trabajo incompleto | §3.4 hooks + M7 §7.1.3 | `feature_list.json`, diff-guards |
+| **Session lifecycle** | Inicializar al arrancar; estado limpio al cerrar | §3.5 init.sh · M4 §4.6-4.7 | `init.sh`, `session-close-checklist`, handoff |
+
+> **Cómo usar el marco:** cuando algo falle con tu agente, pregunta *qué
+> subtarea del harness estaba débil* — no "qué prompt reescribir". Es el
+> diagnóstico por subtareas: instrucciones ambiguas (§3.1), estado
+> implícito (M4), verificación ausente (M6), scope abierto (M7) o
+> lifecycle sucio (M4 §4.6).
+
+El complemento natural: las **Frontier Harness Design Breakdowns** de
+walkinglabs — cómo cuatro productos de producción (Pi, Claude Code, Codex,
+DeepSeek) resuelven estas mismas cinco subtareas, analizadas con este
+mismo marco. Úsalas para comparar tu harness contra los de producción.
+
 ---
 
 ## 3.1 AGENTS.md / CLAUDE.md: el contrato base
@@ -368,6 +393,7 @@ Lo que es portable entre herramientas (invierte primero) vs. lo que no:
 | `AGENTS.md` en la raíz | `.cursor/rules/*.mdc` (Claude Code no los lee nativamente) |
 | MCP servers | Skills de Cursor (dependen del runtime de Cursor) |
 | CI checks (build, test, lint, structural, security) | UIs de diff inline de un IDE |
+| Skills y context pointers | El autoarranque y compaction de cada runtime |
 | Pre-commit / pre-push hooks | Review-agents atados a un IDE específico |
 | Code generators / scaffolding | Atajos de teclado de un editor |
 | Test suites y mutation tests | |
@@ -385,6 +411,8 @@ Lo que es portable entre herramientas (invierte primero) vs. lo que no:
 ---
 
 ## 3.10 Artefactos de este módulo
+
+> **Para ir más profundo:** las [Frontier Harness Design Breakdowns](https://github.com/walkinglabs/learn-harness-engineering/tree/main/docs/en/harness-designs) de Learn Harness Engineering aplican el marco de las cinco subtareas a cómo lo resuelven en producción Pi, Claude Code, Codex y DeepSeek — la contraparte analítica de la tabla cross-tool de esta sección.
 
 Este módulo produce cinco artefactos descargables en `templates/`:
 

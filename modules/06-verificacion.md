@@ -341,7 +341,18 @@ verifica contra la spec, no solo contra "los tests pasan".
 
 > Ver `templates/verification-pipeline.yaml`.
 
-### 6.8.2 Fallar temprano y barato
+### 6.8.2 Observability dentro del harness
+
+La lección L11 de Learn Harness Engineering: **si no puedes ver lo que el
+agente hizo, no puedes arreglar lo que rompió**. El pipeline de arriba es
+el filtro; el observability es el registro: cada corrida del agente deja
+huella consultable (qué archivos tocó, qué sensores corrió, qué saltó,
+cuánto gastó). En la práctica: el progress log (M4), los outputs de los
+sensores retenidos por corrida, y el session log de `.planning/` (M2).
+Sin ese registro, el DONE/VERIFIED es una promesa; con él, es una línea
+de base comparable entre corridas.
+
+### 6.8.3 Fallar temprano y barato
 
 El orden importa: typecheck cuesta milisegundos; e2e cuesta minutos. Si
 el typecheck falla, no corras e2e. Es economía básica, pero los pipelines

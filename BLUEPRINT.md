@@ -676,6 +676,22 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
 
+### 2026-09-24 (b) — El marco de las cinco subtareas (M3) + observability (M6)
+
+**Tesis del cambio:** M3 §3.0 adopta la taxonomía de las cinco subtareas
+del harness de walkinglabs (instructions, state, verification, scope,
+session lifecycle) como marco unificador del módulo — cada sección de M3
+mapea a una subtarea, con el diagnóstico por subtareas. M6 §6.8 gana
+§6.8.2 observability (L11 de walkinglabs: si no puedes ver lo que el
+agente hizo, no puedes arreglar lo que rompió). M3 §3.10 enlaza las
+Frontier Harness Design Breakdowns (Pi, Claude Code, Codex, DeepSeek).
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `modules/03-workbench.md` | §3.0 | El marco de las cinco subtareas + diagnóstico por subtareas |
+| `modules/03-workbench.md` | §3.10 | Puntero a las Frontier Harness Design Breakdowns |
+| `modules/06-verificacion.md` | §6.8.2 | Observability dentro del harness |
+
 ### 2026-09-24 — Skills curadas (mattpocock/skills) + loop/graph engineering (walkinglabs)
 
 **Tesis del cambio:** M3 §3.2 añade la biblioteca curada canónica —
