@@ -74,6 +74,39 @@ No hay una spec universal formal, pero hay un consenso práctico:
 
 > **La prueba del ácido (recuperada del M1):** quita una línea. Si al quitarla el agente empieza a equivocarse en algo concreto, ganaba su lugar. Si no notas diferencia, era ruido. Un `AGENTS.md` de alto signal es aquel del que *cada línea se extrañe* cuando se borra.
 
+### La capa de comportamiento: un ejemplo canónico (las directrices Karpathy)
+
+El "Qué SÍ poner" de arriba cubre los **hechos** del proyecto (comandos,
+reglas, gotchas). Hay una segunda capa que la mayoría omite: **reglas de
+comportamiento** que atacan los modos de falla documentados del modelo. El
+ejemplo canónico (215k estrellas, MIT) es el
+[CLAUDE.md inspirado en Karpathy](https://github.com/multica-ai/andrej-karpathy-skills):
+cuatro reglas derivadas de cuatro quejas concretas de Karpathy — "los
+modelos asumen en tu nombre y corren con eso sin verificar; sobre-ingeniería
+y abstracciones hinchadas; cambian código y comentarios que no entienden
+como efectos ortogonales".
+
+| Regla | Ataca | Fondo del curso |
+|---|---|---|
+| **Think Before Coding** — no asumas; muestra interpretaciones; empuja atrás si corres | Suposiciones silenciosas, confusión escondida | M0 §0.4 (sycophancy); el `[NEEDS CLARIFICATION]` del M2 §2.2 es esta regla en formato de spec |
+| **Simplicity First** — el mínimo que resuelve; nada especulativo | Sobre-ingeniería y abstracciones hinchadas | Las articles VII y VIII de Spec Kit (Simplicity, Anti-Abstraction — M2 §2.2) |
+| **Surgical Changes** — toca solo lo que debes; limpia solo tu propio desorden | Cambios ortogonales, "mejoras" no pedidas | El scope creep del M7 y el "lo que no se toca" de esta misma sección |
+| **Goal-Driven Execution** — convierte tareas en metas verificables y itera hasta cumplirlas | Trabajar sin criterios de éxito | Los ACs verificables del M2 y el DONE/VERIFIED del M6 |
+
+**El principio meta** (por qué esta capa gana la prueba del ácido): las
+reglas de comportamiento que funcionan son las que **atacan un modo de
+falla concreto y documentado** — no convenciones genéricas de estilo. Es el
+mismo principio del M7: la mitigación correcta es la que responde a una
+clase de falla. Y la verificación de que funciona es conductual (el propio
+repo lo lista): menos cambios innecesarios en los diffs, preguntas de
+clarificación antes de implementar, PRs mínimos sin refactors de regalo.
+
+**El caveat honesto (M1):** esta capa es advisory — "no toques lo
+ortogonal" se vuelve mecánico con un hook PreToolUse o un diff-guard
+(M3 §3.4, M6 §6.8), y el propio repo advierte que sesga hacia la cautela:
+para un fix trivial de una línea, no apliques el rigor completo. La
+jerarquía del M1 manda: lo crítico a hooks, lo demás a prosa.
+
 ### La jerarquía de carga (multi-nivel)
 
 El `AGENTS.md` no es un archivo solo; es una jerarquía que se carga según dónde estés trabajando:
@@ -388,6 +421,8 @@ Corre el skill `/init` como punto de partida, **pero edita cada línea**. El `/i
 - [Use CLAUDE.md and AGENTS.md to Steer Local Agent Runs — Junction Blog](https://junctionpanel.dev/blog/use-claude-md-and-agents-md-to-steer-local-agent-runs/) — compatibilidad cross-tool.
 - [Claude Code & Agent Memory — orchestrator.dev](https://orchestrator.dev/blog/2026-04-06--claude-code-agent-memory-2026/) — 4 capas de memoria, umbrales de compaction.
 - [How to use AGENTS.md — Benjamin Crozat](https://benjamincrozat.com/agents-md) — soporte por herramienta.
+- [La capa de comportamiento del AGENTS.md (directrices Karpathy)](https://github.com/multica-ai/andrej-karpathy-skills) — 4 reglas de comportamiento derivadas de modos de falla documentados (M3 §3.1).
+- [La capa de comportamiento del AGENTS.md (directrices Karpathy)](https://github.com/multica-ai/andrej-karpathy-skills) — 4 reglas de comportamiento derivadas de modos de falla documentados (M3 §3.1).
 - [Writing a Great AGENTS File — Alex Kurilin](https://www.kuril.in/notes/writing-a-great-agents-file/) — brevedad, progressive disclosure, ~150-200 slots.
 - [dlt-hub/dlthub-ai-workbench](https://github.com/dlt-hub/dlthub-ai-workbench) — workbench multi-tool.
 - [Harness Engineering — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/) — inner/outer harness, orden de inversión.

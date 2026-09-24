@@ -724,6 +724,19 @@ export const quizzes: Quiz[] = [
         explain: 'La prueba del ácido: si al quitar una línea el agente no empieza a equivocarse en algo concreto, era ruido. Lo que el agente puede inferir del código (como el framework de tests en package.json) no pertenece en el AGENTS.md: compite por slots sin aportar signal.',
         ref: '§3.1',
         objective: 1,
+      },
+      {
+        q: 'De estas reglas candidatas para tu AGENTS.md, ¿cuál gana su lugar según la prueba del ácido?',
+        options: [
+          '"Usa camelCase en todas las variables": refuerza la convención del lenguaje.',
+          '"No toques archivos bajo db/migrations a menos que la spec lo pida: el agente aplicó una migración dos veces la semana pasada."',
+          '"Sé cuidadoso con el código legacy y escribe código limpio."',
+          '"Eres un desarrollador senior experto en este framework."'
+        ],
+        answer: 1,
+        explain: 'Las reglas que ganan lugar (prueba del ácido, M3 §3.1) son las que atacan un modo de falla concreto y documentado — el ejemplo real: las directrices Karpathy derivan cada regla de una queja concreta (asumir en tu nombre, sobre-ingeniería, cambios ortogonales). Las convenciones genéricas y los halagos al modelo son ruido que compite por slots.',
+        ref: '§3.1',
+        objective: 1
       }
     ],
   },

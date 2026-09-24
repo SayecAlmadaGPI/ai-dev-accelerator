@@ -142,7 +142,7 @@ parsing (view transitions, streaming). Las islas soportan **múltiples instancia
 
 | Isla | Script | Data source | Mount-point |
 |---|---|---|---|
-| Quiz | `src/scripts/quiz.ts` | `src/data/quizzes.ts` (132 ítems, con `ref` y `objective`) | `<div data-quiz-mount data-slug>` (inyectado por `build-content.mjs` al final de cada módulo) |
+| Quiz | `src/scripts/quiz.ts` | `src/data/quizzes.ts` (144 ítems, con `ref` y `objective`) | `<div data-quiz-mount data-slug>` (inyectado por `build-content.mjs` al final de cada módulo) |
 | Terminal | `src/scripts/term.ts` | `src/data/terminal-scenarios.ts` | `<div data-term-mount data-scenario>` (en `simulador.mdx` y widgets) |
 | Playground | `src/scripts/playground.ts` | `src/data/playground-examples.ts` | `<div data-playground-mount data-example>` (en `playground.mdx` y widgets) |
 | Notas | `src/scripts/notes.ts` | IndexedDB (`idb-keyval`) | se monta en `document.body` (FAB + drawer) |
@@ -215,7 +215,7 @@ en `PageSidebar.astro`) ensancha el panel derecho (`theme.css` ~932).
 | **La card "Tu progreso"** | `ProgressOverview.astro` | incluye línea "Dominio: X/11 módulos (quiz ≥80%)"; depende de `trackable.json` (generado), `progress.ts` y `badges.ts` |
 | **El dashboard de módulos** | `ModuleDashboard.astro` | lee `modules/*.md` en build-time (H1 + primera oración) |
 | **El anillo de progreso** | `ProgressRing.astro` (estructura + hidratación) + su `<style>` | muestra bestPct de `aida:quizhist` ("Quiz 83%") con fallback legacy; re-bind en astro:page-load |
-| **El quiz** | `src/data/quizzes.ts` (132 ítems + ref/objective) + `quiz.ts` (motor v2: muestreo/umbral/repaso) + `.aida-quiz*` en `theme.css` | el mount-point lo inyecta `build-content.mjs`; no lo agregues a mano en `.md`; no bajes el umbral 80% ni cambies `aida:quiz` a pct |
+| **El quiz** | `src/data/quizzes.ts` (144 ítems + ref/objective) + `quiz.ts` (motor v2: muestreo/umbral/repaso) + `.aida-quiz*` en `theme.css` | el mount-point lo inyecta `build-content.mjs`; no lo agregues a mano en `.md`; no bajes el umbral 80% ni cambies `aida:quiz` a pct |
 | **El simulador** | `src/data/terminal-scenarios.ts` (8 escenarios) + `term.ts` (shell) + `.aida-term*` | los widgets embebidos se asignan en `src/data/widgets.ts` |
 | **El playground** | `src/data/playground-examples.ts` (ejemplos) + `playground.ts` (iframe sandbox) + `.aida-pg*` | el iframe es `sandbox="allow-scripts"` sin `allow-same-origin`; valida `event.source`; botón Detener destruye el iframe |
 | **El drawer de notas** | `notes.ts` + `.aida-notes*` | se monta en `body` y persiste entre navegaciones; recarga nota en `astro:page-load` |
@@ -330,7 +330,7 @@ src/scripts/
   playground.ts               # isla playground (iframe sandbox)
   notes.ts                    # isla notas (IndexedDB)
 src/data/
-  quizzes.ts                  # 143 preguntas (M2 19, M4 5, M6 13, M9 7; resto 12), con ref/objective
+  quizzes.ts                  # 144 preguntas (M2 19, M3 13, M4 5, M6 13, M9 7; resto 12), con ref/objective
   terminal-scenarios.ts       # 8 escenarios del simulador (autorado)
   widgets.ts                  # mapa slug -> widgets de práctica (autorado)
   playground-examples.ts      # ejemplos del playground (autorado)
