@@ -319,6 +319,28 @@ OpenAI, Devin de Cognition, los agents nativos de GitHub Copilot).
 - El mapa completo de la categoría (y cuándo cada producto encaja) está en
   [`cheatsheets/mapa-del-ecosistema.md`](../cheatsheets/mapa-del-ecosistema.md) §2.
 
+### 4.5.5 La escalera: prompt → contexto → loop → graph
+
+[Learn Harness Engineering](https://github.com/walkinglabs/learn-harness-engineering)
+(nov 2026: lecturas 13-14 y proyectos 07-08) formaliza la escalera de
+automatización que este módulo recorre:
+
+| Escalón | Qué es | Señal de que lo necesitas |
+|---|---|---|
+| **Prompt** | Una instrucción bien escrita | La tarea cabe en un turno |
+| **Contexto** | Harness completo (M3): AGENTS.md, estado, verificación | El agente falla sin su entorno |
+| **Loop** | Un objetivo con reintentos automáticos (automations, goal loops con generator/evaluator) | Reintentas el mismo prompt a mano |
+| **Graph** | Nodos especializados + routing + estado compartido + recuperación | El "loop" ya tiene paralelismo, verificación y rollback (M2 §2.3; M4 §4.8) |
+
+Las **seis primitivas del loop engineering** (walkinglabs): automations,
+worktrees, skills, connectors, sub-agents y external state — este módulo
+ya usa todas; lo nuevo es verlas como un **diseño de ingeniería** (con
+generador y evaluador separados, y su costo silencioso: deriva de
+objetivos, cieguera hacia arriba, conflictos). Y la regla de cuándo
+dibujar un graph: *un loop es un graph con un solo nodo* — cuando la
+tarea necesita especialización, paralelismo, estado compartido y
+recuperación, dejó de ser un loop.
+
 ---
 
 ## 4.6 Commit discipline: cada sesión termina en verde

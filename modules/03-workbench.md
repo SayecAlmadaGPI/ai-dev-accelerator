@@ -169,6 +169,37 @@ El archivo `SKILL.md` tiene típicamente: nombre, descripción/trigger, pasos, c
 
 Si las dos primeras no se cumplen, deja que el agente lo improvise con el AGENTS.md; meter todo en skills es la otra cara del AGENTS.md hinchado.
 
+### Skills curadas de terceros: mattpocock/skills
+
+Antes de escribir la tuya, revisa las **bibliotecas curadas** — el ejemplo
+canónico es [mattpocock/skills](https://github.com/mattpocock/skills)
+(269k estrellas, MIT): las skills que Matt Pocock usa a diario para
+"real engineering, not vibe coding". Su filosofía contrasta con los
+frameworks del M2: *GSD, BMAD y Spec Kit intentan ayudar apropiándose del
+proceso — pero al hacerlo te quitan el control y hacen difícil arreglar
+los bugs del proceso. Estas skills son pequeñas, fáciles de adaptar y
+componibles.* Es exactamente el espectro Nivel 1.5 (vanilla) ↔ Nivel 2/3
+(framework) del §2.8, aplicado a skills.
+
+Lo pertinente del catálogo: cada skill **ataca un modo de falla concreto
+y documentado** (el mismo principio meta del §3.1):
+
+| Falla del agente | La skill que la ataca | Fondo del curso |
+|---|---|---|
+| "No hizo lo que yo quería" — brecha de alineación | `/grill-me` y `/grill-with-docs`: una sesión de **grilling** donde el agente te interroga antes de tocar código | M0 §0.7 (grilling); el `[NEEDS CLARIFICATION]` del M2 §2.2 |
+| "Es demasiado verboso" — el agente improvisa la jerga | `CONTEXT.md` + ADRs: el **lenguaje ubicuo** documentado (DDD aplicado a agentes) | M2 §2.10 (DDD nombra); M3 §3.1 |
+| "El código no funciona" | `/tdd` (red-green-refactor) y `/diagnosing-bugs` (loop disciplinado por fases) | M2 §2.8 (Nivel 1.5); M6 §6.3.4 |
+| "Construimos una bola de lodo" — la entropía acelerada | `codebase-design`: módulos profundos (Ousterhout) y diseño diario (Beck) | M7; M3 §3.6 |
+
+**El patrón para tu §3.2:** la técnica estrella es el `CONTEXT.md` — un
+**lenguaje compartido** que reduce la verbosidad del agente ("hay un
+problema con la cascada de materialización" en vez de tres frases). Es el
+lenguaje ubicuo de DDD (M2 §2.10) con beneficio medido: nombres
+consistentes, codebase navegable y menos tokens de razonamiento. Instalar
+skills curadas (`npx skills add mattpocock/skills`) te da playbooks
+probados que luego hackeas — el mismo camino del Nivel 1.5: usa, adapta,
+y solo escribe de cero lo que tu repo exija.
+
 ---
 
 ## 3.3 Subagents: contexto aislado para tareas especializadas

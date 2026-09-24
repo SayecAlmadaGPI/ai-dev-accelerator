@@ -737,6 +737,19 @@ export const quizzes: Quiz[] = [
         explain: 'Las reglas que ganan lugar (prueba del ácido, M3 §3.1) son las que atacan un modo de falla concreto y documentado — el ejemplo real: las directrices Karpathy derivan cada regla de una queja concreta (asumir en tu nombre, sobre-ingeniería, cambios ortogonales). Las convenciones genéricas y los halagos al modelo son ruido que compite por slots.',
         ref: '§3.1',
         objective: 1
+      },
+      {
+        q: 'Quieres instalar una biblioteca curada de skills (p.ej. mattpocock/skills). ¿Cuál es la posición de la biblioteca sobre los frameworks y qué skill ataca la brecha de alineación?',
+        options: [
+          'Las bibliotecas compiten con GSD/Superpowers por ser frameworks completos; y la skill de alineación es /to-spec.',
+          'Las skills son pequeñas/componibles/hackeables (no se apropien del proceso); y la brecha de alineación la ataca la sesión de grilling (/grill-me o /grill-with-docs).',
+          'Las bibliotecas reemplazan al AGENTS.md; y la alineación se logra con un hook PreToolUse.',
+          'Las skills son para tareas triviales; y la alineación exige cambiar de modelo.'
+        ],
+        answer: 1,
+        explain: 'La posición de mattpocock/skills (M3 §3.2): skills pequeñas, componibles y hackeables — el espectro Nivel 1.5 aplicado a skills. La brecha de alineación (el modo de falla #1: "no hizo lo que yo quería") se cierra con una sesión de grilling antes de tocar código, y el lenguaje compartido (CONTEXT.md) es el lenguaje ubicuo de DDD aplicado a agentes.',
+        ref: '§3.2',
+        objective: 1
       }
     ],
   },

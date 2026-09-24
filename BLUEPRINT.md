@@ -107,7 +107,7 @@ APÉNDICES ── Kit de Supervivencia
 - Diagrama: arquitectura de un harness mínimo viable.
 
 ### Referencias Clave
-- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo sobre diseño de harnesses (14 lecturas + 8 proyectos).
+- [Learn Harness Engineering — WalkingLabs](https://walkinglabs.github.io/learn-harness-engineering/en/) — curso completo sobre diseño de harnesses (14 lecturas + 8 proyectos; 2026-09: +Frontier Harness Design Breakdowns de Pi/Claude Code/Codex/DeepSeek, loop engineering y graph engineering — lecturas 13-14).
 - [Harness Engineering for Coding Agents — Talk Think Do](https://talkthinkdo.com/guides/ai-and-code/harness-engineering-coding-agents/) — guía completa con inner/outer harness.
 - [Agent harnesses from DIY to product — paddo.dev](https://paddo.dev/blog/agent-harnesses-from-diy-to-product) — desglose real del two-agent pattern y la feature list.
 - [OpenAI — Harness Engineering (Feb 2026)](https://openai.com/index/harness-engineering/) — post de Ryan Lopopolo sobre diseño de harnesses.
@@ -632,6 +632,7 @@ M0 ─┬─> M1 ─┬─> M2 ─┬─> M3 ─┬─> M4 ─┬─> M5 ─┬�
 - [Scale Labs Leaderboard](https://labs.scale.com/leaderboard) (SWE-bench Pro público+privado) · [Terminal-Bench 4.0](https://www.tbench.ai/) — jerarquía de leaderboards 2026.
 - `templates/radar-de-releases.md` — el protocolo operativo (M9 §9.4.5).
 
+- [mattpocock/skills](https://github.com/mattpocock/skills) — biblioteca curada de skills pequeñas/componibles (grilling, CONTEXT.md/lenguaje compartido, TDD, diagnosing-bugs): la posición anti-framework del Nivel 1.5.
 - [OpenSpec — openspec.dev](https://openspec.dev) · [repo Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) — framework ligero de specs vivas versionadas con CLI (`/opsx:propose → apply → verify → archive`), MIT, compatible con 38+ agentes.
 
 ### Surveys Académicos y Revisiones Sistemáticas
@@ -674,6 +675,24 @@ orquestación por equipo ágil virtual, M2 §2.3) y los agentes cloud AFK
 | `modules/04-handoffs.md` | §4.5.4 | Agentes cloud AFK: el brief autosuficiente por contrato + refs |
 | `src/data/quizzes.ts` | M2/M4 | +1 BMAD (cuándo orquesta mejor que GSD) +1 cloud AFK (brief seguro) |
 | `cheatsheets/README.md` | conteo | 14 ficheros (10 + 4) |
+
+### 2026-09-24 — Skills curadas (mattpocock/skills) + loop/graph engineering (walkinglabs)
+
+**Tesis del cambio:** M3 §3.2 añade la biblioteca curada canónica —
+[mattpocock/skills](https://github.com/mattpocock/skills) (269k⭐, MIT): las
+skills diarias de Pocock, pequeñas/componibles/hackeables (la posición
+anti-framework que complementa Gentle-AI/GSD), con 4 skills que atacan 4
+modos de falla (grilling, lenguaje compartido/CONTEXT.md, TDD,
+diagnosing-bugs). M4 §4.5.5 incorpora la escalera prompt→contexto→loop→graph
+de walkinglabs (lecturas 13-14: loop engineering con 6 primitivas y graph
+engineering) + las Frontier Harness Design Breakdowns (Pi, Claude Code,
+Codex, DeepSeek) que complementan la cross-tool matrix.
+
+| Archivo | Sección | Cambio |
+|---|---|---|
+| `modules/03-workbench.md` | §3.2 | Skills curadas de terceros (mattpocock/skills: grilling, CONTEXT.md, tdd, diagnosing-bugs) con refs |
+| `modules/04-handoffs.md` | §4.5.5 | La escalera prompt→contexto→loop→graph (walkinglabs lecturas 13-14) |
+| `BLUEPRINT.md` | refs | mattpocock/skills y walkinglabs actualizado (14+8 + frontier breakdowns + loop/graph) |
 
 ### 2026-09-22 (c) — Ejemplo trabajado: las cuatro D en un flujo agéntico
 
